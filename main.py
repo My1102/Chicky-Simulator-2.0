@@ -454,7 +454,7 @@ def level1(c, lvl, username): # This one easier to read
                     pygame.quit()
                     sys.exit()
 
-                if event.type == pg.USEREVENT:
+                if event.type == pg.USEREVENT + 1:
                     time += 1
 
                 Manager.process_events(event)
@@ -695,7 +695,7 @@ def level2(c, lvl, username):
                     on = False
                     pygame.quit()
                     sys.exit()
-                if event.type == pg.USEREVENT:
+                if event.type == pg.USEREVENT + 1:
                     time += 1
 
                 Manager.process_events(event)
@@ -938,7 +938,7 @@ def level3(c, lvl, username):
                     on = False
                     pygame.quit()
                     sys.exit()
-                if event.type == pg.USEREVENT:
+                if event.type == pg.USEREVENT + 1:
                     time += 1
 
                 Manager.process_events(event)
@@ -1182,7 +1182,7 @@ def level4(c, lvl, username):
                     on = False
                     pygame.quit()
                     sys.exit()
-                if event.type == pg.USEREVENT:
+                if event.type == pg.USEREVENT + 1:
                     time += 1
 
                 Manager.process_events(event)
@@ -1442,7 +1442,7 @@ def level5(c, lvl, username):
                     on = False
                     pygame.quit()
                     sys.exit()
-                if event.type == pg.USEREVENT:
+                if event.type == pg.USEREVENT + 1:
                     time += 1
 
                 Manager.process_events(event)
