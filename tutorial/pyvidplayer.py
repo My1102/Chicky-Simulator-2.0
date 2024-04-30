@@ -1,3 +1,5 @@
+#I learn how to play a video in pygame
+
 import pygame
 import os
 from pyvidplayer2 import Video
@@ -5,7 +7,7 @@ from pyvidplayer2 import Video
 
 # 创建视频对象
 
-FFMPEG_PATH = 'ffmpeg-7.0-essentials_build/bin'
+FFMPEG_PATH = 'ffmpeg-7.0/bin'
 
 os.environ['PATH'] += os.pathsep + FFMPEG_PATH
 
