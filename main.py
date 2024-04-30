@@ -26,7 +26,7 @@ from lock import Lock # library by my
 
 pygame.init()
 
-FFMPEG_PATH = 'ffmpeg-7.0/bin'
+FFMPEG_PATH = 'ffmpeg-7.0-essentials_build/ffmpeg-7.0-essentials_build/bin'
 os.environ['PATH'] += os.pathsep + FFMPEG_PATH
 
 # program setup / screen display
