@@ -51,15 +51,15 @@ def store():
         screen.blit(price_text, text_rect)
         ####x-bow#####
         price_text = font.render(f"{100}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(150,215))
+        text_rect = price_text.get_rect(center =(150,525))
         screen.blit(price_text, text_rect)
         ######hammer#####        
         price_text = font.render(f"{150}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(150,215))
+        text_rect = price_text.get_rect(center =(450,525))
         screen.blit(price_text, text_rect)
         #######axe#########        
         price_text = font.render(f"{150}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(150,215))
+        text_rect = price_text.get_rect(center =(750,525))
         screen.blit(price_text, text_rect)
 
 
@@ -79,8 +79,12 @@ def store():
         #########
 
         #Next page button#
-        next_button = Button('graphic/botton1.png', 840, 40, 0.9, "NEXT")
+        next_button = Button('graphic/botton1.png', 840, 40, 0.8, "NEXT")
         next_button.draw(screen)
+
+        #Back page button#
+        back_button = Button('graphic/botton1.png', 50, 40, 0.8, "Back")
+        back_button.draw(screen)
             
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -150,50 +154,50 @@ def bought() :
 def equipment() :
     on = True
     buy = False
-    sword = pygame.image.load("graphic/sword.png")
-    shield = pygame.image.load("graphic/shield.png")
-    bow = pygame.image.load("graphic/bow.png")
-    x_bow = pygame.image.load("graphic/x-bow.png")
-    hammer= pygame.image.load("graphic/hammer.png")
-    axe= pygame.image.load("graphic/axe.png")
+    hand = pygame.image.load("graphic/hand.png")
+    noob_hand = pygame.image.load("graphic/noob hand.png")
+    armor = pygame.image.load("graphic/armor.png")
+    helmet = pygame.image.load("graphic/helmet.png")
+    leg= pygame.image.load("graphic/leg.png")
+    noob_leg= pygame.image.load("graphic/noob leg.png")
                                
     while on:
         screen.blit(background_image,(0,0))
         pos_mouse = pygame.mouse.get_pos()
 
         #EQUIPMENT DIsPLAY
-        screen.blit(sword,(75,35))
-        screen.blit(shield,(390,35))
-        screen.blit(bow,(680,35))
-        screen.blit(x_bow,(75,370))
-        screen.blit(hammer,(390,370))
-        screen.blit(axe,(680,370))
+        screen.blit(hand,(75,35))
+        screen.blit(armor,(390,35))
+        screen.blit(noob_hand,(680,35))
+        screen.blit(noob_leg,(75,370))
+        screen.blit(helmet,(390,370))
+        screen.blit(leg,(680,370))
         #################
 
         #PRICE
-        #####sword####
+        #####hand####
         price_text = font.render(f"{100}", True, (255,255,255))
         text_rect = price_text.get_rect(center =(150,215))
         screen.blit(price_text, text_rect)
-        ######Shield######
+        ######armor######
         price_text = font.render(f"{150}", True, (255,255,255))
         text_rect = price_text.get_rect(center =(450,215))
         screen.blit(price_text, text_rect)
-        ######bow######
+        ######noob hand######
         price_text = font.render(f"{75}", True, (255,255,255))
         text_rect = price_text.get_rect(center =(750,215))
         screen.blit(price_text, text_rect)
-        ####x-bow#####
+        ####noob leg#####
         price_text = font.render(f"{100}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(150,215))
+        text_rect = price_text.get_rect(center =(150,525))
         screen.blit(price_text, text_rect)
-        ######hammer#####        
+        ######helmet#####        
         price_text = font.render(f"{150}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(150,215))
+        text_rect = price_text.get_rect(center =(450,525))
         screen.blit(price_text, text_rect)
-        #######axe#########        
+        #######leg#########        
         price_text = font.render(f"{150}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(150,215))
+        text_rect = price_text.get_rect(center =(750,525))
         screen.blit(price_text, text_rect)
 
 
@@ -213,7 +217,7 @@ def equipment() :
         #########
 
         #Back page button#
-        back_button = Button('graphic/botton1.png', 60, 40, 0.9, "Back")
+        back_button = Button('graphic/botton1.png', 50, 40, 0.8, "Back")
         back_button.draw(screen)
             
         for event in pygame.event.get():
