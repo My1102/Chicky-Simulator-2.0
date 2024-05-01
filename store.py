@@ -139,7 +139,4 @@ def bought() :
 
     pygame.display.flip()
 
-
-
-
 store()
