@@ -198,6 +198,10 @@ def tutorial4(c, lvl, username, coin):
 
                 if back_button.check_input(pos_mouse):
                     choose_level(c, lvl, username, coin)
+<<<<<<< HEAD
+=======
+                  
+>>>>>>> 634609fe8d47ef6e892d59e4c4dd94f2b12899f1
         pygame.display.update()   
 
 
@@ -235,6 +239,10 @@ def tutorial3(c, lvl, username, coin):
 
                 if back_button.check_input(pos_mouse):
                     choose_level(c, lvl, username, coin)
+<<<<<<< HEAD
+=======
+                  
+>>>>>>> 634609fe8d47ef6e892d59e4c4dd94f2b12899f1
         pygame.display.update()   
 
 
@@ -1503,6 +1511,10 @@ def win5(c, lvl, username, coin):
 
                 if rank_button.check_input(pos_mouse):
                     ranking(username, lvl, coin)
+<<<<<<< HEAD
+=======
+                  
+>>>>>>> 634609fe8d47ef6e892d59e4c4dd94f2b12899f1
         pygame.display.update()
 
 
@@ -1554,6 +1566,10 @@ def win(c, lvl, username, levl, coin):
                         level4(c, lvl, username, coin)
                     elif levl == 5:
                         level5(c, lvl, username, coin)
+<<<<<<< HEAD
+=======
+                  
+>>>>>>> 634609fe8d47ef6e892d59e4c4dd94f2b12899f1
         pygame.display.update()
 
 
@@ -1601,6 +1617,10 @@ def update_level(username, lvl):
 
 
 def results(username, lvl, coin):
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 634609fe8d47ef6e892d59e4c4dd94f2b12899f1
     while True:
         screen.blit(ranking_image,(0,0))
 
@@ -1631,10 +1651,18 @@ def results(username, lvl, coin):
             Manager.process_events(event)
 
         Manager.update(UI_REFRESH_RATE)
+<<<<<<< HEAD
+=======
+
+>>>>>>> 634609fe8d47ef6e892d59e4c4dd94f2b12899f1
         pygame.display.update()
 
 
 def shooting_stars(username, lvl, coin, times):
+<<<<<<< HEAD
+=======
+
+>>>>>>> 634609fe8d47ef6e892d59e4c4dd94f2b12899f1
     while True:
         if times == 1:
             vid = Video('graphic/onegold.mp4')
@@ -1684,10 +1712,18 @@ def shooting_stars(username, lvl, coin, times):
 
             vid.close()
             results(username, lvl, coin)
+<<<<<<< HEAD
+=======
+
+>>>>>>> 634609fe8d47ef6e892d59e4c4dd94f2b12899f1
         pygame.display.update()
 
 
 def wish(username, lvl, coin):
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 634609fe8d47ef6e892d59e4c4dd94f2b12899f1
     while True:
         screen.blit(ranking_image,(0,0))
 
@@ -1755,7 +1791,12 @@ def wish(username, lvl, coin):
 
             Manager.process_events(event)
 
+<<<<<<< HEAD
         Manager.update(UI_REFRESH_RATE)    
+=======
+        Manager.update(UI_REFRESH_RATE)
+
+>>>>>>> 634609fe8d47ef6e892d59e4c4dd94f2b12899f1
         pygame.display.update()
 
 
@@ -1968,7 +2009,11 @@ def choose_level(c, lvl, username, coin):
 
 
 def lobby(username, lvl, coin):
+<<<<<<< HEAD
      # main lobby when user start - my
+=======
+    # main lobby when user start - my
+>>>>>>> 634609fe8d47ef6e892d59e4c4dd94f2b12899f1
 
     while True:
 
@@ -2279,6 +2324,8 @@ def register():
 
 
 def log_or_reg():
+
+
     # login or register screen display - by my
     while True:
         screen.blit(background_image,(0,0))
@@ -2687,7 +2734,12 @@ def equipment2(username, lvl, coin) :
             bought(username, lvl, coin)
 
         pygame.display.flip()
+<<<<<<< HEAD
     pygame.quit()
     sys.exit()
 
 log_or_reg()
+=======
+
+log_or_reg()
+>>>>>>> 634609fe8d47ef6e892d59e4c4dd94f2b12899f1
