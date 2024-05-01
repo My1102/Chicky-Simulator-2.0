@@ -83,7 +83,6 @@ def caution(c, lvl, username, coin):
                 Manager.process_events(event)
 
             Manager.update(UI_REFRESH_RATE)
-                    
         pygame.display.update()
 
 
@@ -123,7 +122,6 @@ def tutorial1(c, lvl, username, coin):
                 Manager.process_events(event)
 
             Manager.update(UI_REFRESH_RATE)
-                  
         pygame.display.update()        
 
 
@@ -163,7 +161,6 @@ def tutorial2(c, lvl, username, coin):
                 Manager.process_events(event)
 
             Manager.update(UI_REFRESH_RATE)
-                    
         pygame.display.update()   
 
 
@@ -201,7 +198,6 @@ def tutorial4(c, lvl, username, coin):
 
                 if back_button.check_input(pos_mouse):
                     choose_level(c, lvl, username, coin)
-                  
         pygame.display.update()   
 
 
@@ -239,7 +235,7 @@ def tutorial3(c, lvl, username, coin):
 
                 if back_button.check_input(pos_mouse):
                     choose_level(c, lvl, username, coin)
-                  
+
         pygame.display.update()   
 
 
@@ -487,7 +483,6 @@ def level1(c, lvl, username, coin): # This one easier to read
                 sys.exit()
 
             Manager.process_events(event)
-
         pygame.display.update()
 
 
@@ -728,7 +723,6 @@ def level2(c, lvl, username, coin):
                 sys.exit()
 
             Manager.process_events(event)
-
         pygame.display.update()
 
 
@@ -970,7 +964,6 @@ def level3(c, lvl, username, coin):
                 sys.exit()
 
             Manager.process_events(event)
-
         pygame.display.update()
 
 
@@ -1213,7 +1206,6 @@ def level4(c, lvl, username, coin):
                 sys.exit()
 
             Manager.process_events(event)
-
         pygame.display.update()
 
 
@@ -1473,7 +1465,6 @@ def level5(c, lvl, username, coin):
                 sys.exit()
 
             Manager.process_events(event)
-
         pygame.display.update()
 
 
@@ -1513,7 +1504,7 @@ def win5(c, lvl, username, coin):
 
                 if rank_button.check_input(pos_mouse):
                     ranking(username, lvl, coin)
-                  
+
         pygame.display.update()
 
 
@@ -1565,7 +1556,7 @@ def win(c, lvl, username, levl, coin):
                         level4(c, lvl, username, coin)
                     elif levl == 5:
                         level5(c, lvl, username, coin)
-                  
+
         pygame.display.update()
 
 
@@ -1591,7 +1582,6 @@ def update_step(username, step):
 
     with open('user_details.txt', 'w') as file:
         file.writelines(lines)
-
     return
 
 
@@ -1610,12 +1600,11 @@ def update_level(username, lvl):
 
     with open('user_details.txt', 'w') as file:
         file.writelines(lines)
-
     return
 
 
 def results(username, lvl, coin):
-    
+
     while True:
         screen.blit(ranking_image,(0,0))
 
@@ -1706,7 +1695,7 @@ def shooting_stars(username, lvl, coin, times):
 
 
 def wish(username, lvl, coin):
-    
+
     while True:
         screen.blit(ranking_image,(0,0))
 
@@ -1774,7 +1763,6 @@ def wish(username, lvl, coin):
 
             Manager.process_events(event)
 
-        Manager.update(UI_REFRESH_RATE)
 
         pygame.display.update()
 
@@ -1823,7 +1811,6 @@ def ranking(username, lvl, coin):
             Manager.process_events(event)
 
         Manager.update(UI_REFRESH_RATE)
-
         pygame.display.update()
 
 
@@ -1877,7 +1864,6 @@ def chick(username, lvl, coin):
                 Manager.process_events(event)
             
             Manager.update(UI_REFRESH_RATE)
-
         pygame.display.update()
 
 
@@ -1986,12 +1972,11 @@ def choose_level(c, lvl, username, coin):
             Manager.process_events(event)
 
         Manager.update(UI_REFRESH_RATE)
-
         pygame.display.update()
 
 
 def lobby(username, lvl, coin):
-    # main lobby when user start - my
+#when user start - my
 
     while True:
 
@@ -2057,7 +2042,6 @@ def lobby(username, lvl, coin):
                 Manager.process_events(event)
 
             Manager.update(UI_REFRESH_RATE)
-
         pygame.display.update()
 
 
@@ -2104,7 +2088,6 @@ def read_userinput(username, password):
                 Manager.process_events(event)
 
             Manager.update(UI_REFRESH_RATE)
-
         pygame.display.update()
 
 
@@ -2171,7 +2154,6 @@ def save_userinput(username, password):
                 Manager.process_events(event)
 
             Manager.update(UI_REFRESH_RATE)
-
         pygame.display.update()
 
 
@@ -2203,7 +2185,6 @@ def welcome_user(username, lvl, coin):
         screen.blit(click_text, click_text_rect)
 
         Manager.update(UI_REFRESH_RATE)
-
         pygame.display.update()
 
 
@@ -2254,7 +2235,6 @@ def login():
             Manager.process_events(event)
 
         Manager.update(UI_REFRESH_RATE)
-
         pygame.display.update()
 
 
@@ -2303,7 +2283,6 @@ def register():
             Manager.process_events(event)
 
         Manager.update(UI_REFRESH_RATE)
-
         pygame.display.update()
 
 
@@ -2341,7 +2320,6 @@ def log_or_reg():
                 Manager.process_events(event)
 
             Manager.update(UI_REFRESH_RATE)
-
         pygame.display.update()
 
 
@@ -2384,15 +2362,15 @@ def store(username, lvl, coin):
         screen.blit(price_text, text_rect)
         ####x-bow#####
         price_text = font.render(f"{100}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(150,215))
+        text_rect = price_text.get_rect(center =(150,525))
         screen.blit(price_text, text_rect)
         ######hammer#####        
         price_text = font.render(f"{150}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(150,215))
+        text_rect = price_text.get_rect(center =(450,525))
         screen.blit(price_text, text_rect)
         #######axe#########        
         price_text = font.render(f"{150}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(150,215))
+        text_rect = price_text.get_rect(center =(750,525))
         screen.blit(price_text, text_rect)
 
 
@@ -2720,4 +2698,8 @@ def equipment2(username, lvl, coin) :
 
         pygame.display.flip()
 
+    pygame.quit()
+    sys.exit()
+
 log_or_reg()
+
