@@ -138,8 +138,8 @@ def store():
 def bought() :
     surface =  pygame.Surface((width,height))
     surface.blit(background_image,(0,0))
-    surface.blit(font.render('You bought an item.',True,'white'),(100,150))
-    surface.blit(font.render('Click anywhere to go back.',True,'white'),(100,200))
+    surface.blit(font.render('You bought an item.',True,'white'),(280,300))
+    surface.blit(font.render('Click again to go back.',True,'white'),(230,350))
     screen.blit(surface,(0,0))
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -219,6 +219,10 @@ def equipment() :
         #Back page button#
         back_button = Button('graphic/botton1.png', 50, 40, 0.8, "Back")
         back_button.draw(screen)
+
+        #Next page button#
+        next_button = Button('graphic/botton1.png', 840, 40, 0.8, "NEXT")
+        next_button.draw(screen)
             
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -259,6 +263,9 @@ def equipment() :
                         buy = True
                 if back_button.check_input(pos_mouse):
                     store()
+                if next_button.check_input(pos_mouse):
+                    equipment2()
+
         if buy :
             bought()
 
@@ -267,5 +274,120 @@ def equipment() :
     pygame.quit()
     sys.exit()
 
+def equipment2() :
+    on = True
+    buy = False
+    noob_helmet = pygame.image.load("graphic/noob helmet.png")
+    noob_armor = pygame.image.load("graphic/noob armor.png")
+    helmet3 = pygame.image.load("graphic/helmet3.png")
+    helmet = pygame.image.load("graphic/helmet.png")
+    leg= pygame.image.load("graphic/leg.png")
+    noob_leg= pygame.image.load("graphic/noob leg.png")
+                               
+    while on:
+        screen.blit(background_image,(0,0))
+        pos_mouse = pygame.mouse.get_pos()
+
+        #EQUIPMENT DIsPLAY
+        screen.blit(noob_armor,(75,35))
+        screen.blit(helmet3,(390,35))
+        screen.blit(noob_helmet,(680,35))
+        screen.blit(noob_leg,(75,370))
+        screen.blit(helmet,(390,370))
+        screen.blit(leg,(680,370))
+        #################
+
+        #PRICE
+        #####noob helmet####
+        price_text = font.render(f"{100}", True, (255,255,255))
+        text_rect = price_text.get_rect(center =(150,215))
+        screen.blit(price_text, text_rect)
+        ######noob armor######
+        price_text = font.render(f"{150}", True, (255,255,255))
+        text_rect = price_text.get_rect(center =(450,215))
+        screen.blit(price_text, text_rect)
+        ######helmet 3######
+        price_text = font.render(f"{75}", True, (255,255,255))
+        text_rect = price_text.get_rect(center =(750,215))
+        screen.blit(price_text, text_rect)
+        ####dunno yet#####
+        price_text = font.render(f"{100}", True, (255,255,255))
+        text_rect = price_text.get_rect(center =(150,525))
+        screen.blit(price_text, text_rect)
+        ######dunno yet#####        
+        price_text = font.render(f"{150}", True, (255,255,255))
+        text_rect = price_text.get_rect(center =(450,525))
+        screen.blit(price_text, text_rect)
+        #######dunno yet#########        
+        price_text = font.render(f"{150}", True, (255,255,255))
+        text_rect = price_text.get_rect(center =(750,525))
+        screen.blit(price_text, text_rect)
+
+
+        # BUY BUTTONS
+        buy_button1 = Button('graphic/botton1.png', 150, 300, 1, "BUY")
+        buy_button1.draw(screen)
+        buy_button2 = Button('graphic/botton1.png', 450, 300, 1, "BUY")
+        buy_button2.draw(screen)
+        buy_button3 = Button('graphic/botton1.png', 750, 300, 1, "BUY")
+        buy_button3.draw(screen)
+        buy_button4 = Button('graphic/botton1.png', 150, 600, 1, "BUY")
+        buy_button4.draw(screen)
+        buy_button5 = Button('graphic/botton1.png', 450, 600, 1, "BUY")
+        buy_button5.draw(screen)
+        buy_button6 = Button('graphic/botton1.png', 750, 600, 1, "BUY")
+        buy_button6.draw(screen)
+        #########
+
+        #Back page button#
+        back_button = Button('graphic/botton1.png', 50, 40, 0.8, "Back")
+        back_button.draw(screen)
+            
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                on = False
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if buy_button1.check_input(pos_mouse):
+                    if buy :
+                        buy = False
+                    else :
+                        buy = True                                        
+                        
+                if buy_button2.check_input(pos_mouse):
+                    if buy :
+                        buy = False
+                    else :
+                        buy = True      
+                if buy_button3.check_input(pos_mouse):
+                    if buy :
+                        buy = False
+                    else :
+                        buy = True
+                if buy_button4.check_input(pos_mouse):
+                    if buy :
+                        buy = False
+                    else :
+                        buy = True                                        
+                        
+                if buy_button5.check_input(pos_mouse):
+                    if buy :
+                        buy = False
+                    else :
+                        buy = True      
+                if buy_button6.check_input(pos_mouse):
+                    if buy :
+                        buy = False
+                    else :
+                        buy = True
+                if back_button.check_input(pos_mouse):
+                    equipment()
+        if buy :
+            bought()
+
+        pygame.display.flip()
+
+    pygame.quit()
+    sys.exit()
 
 store()
