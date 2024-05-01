@@ -198,6 +198,10 @@ def tutorial4(c, lvl, username, coin):
 
                 if back_button.check_input(pos_mouse):
                     choose_level(c, lvl, username, coin)
+<<<<<<< HEAD
+=======
+                  
+>>>>>>> 634609fe8d47ef6e892d59e4c4dd94f2b12899f1
         pygame.display.update()   
 
 
@@ -235,6 +239,10 @@ def tutorial3(c, lvl, username, coin):
 
                 if back_button.check_input(pos_mouse):
                     choose_level(c, lvl, username, coin)
+<<<<<<< HEAD
+=======
+                  
+>>>>>>> 634609fe8d47ef6e892d59e4c4dd94f2b12899f1
         pygame.display.update()   
 
 
@@ -1631,10 +1639,12 @@ def results(username, lvl, coin):
             Manager.process_events(event)
 
         Manager.update(UI_REFRESH_RATE)
+
         pygame.display.update()
 
 
 def shooting_stars(username, lvl, coin, times):
+
     while True:
         if times == 1:
             vid = Video('graphic/onegold.mp4')
@@ -1684,10 +1694,12 @@ def shooting_stars(username, lvl, coin, times):
 
             vid.close()
             results(username, lvl, coin)
+
         pygame.display.update()
 
 
 def wish(username, lvl, coin):
+
     while True:
         screen.blit(ranking_image,(0,0))
 
@@ -1755,7 +1767,6 @@ def wish(username, lvl, coin):
 
             Manager.process_events(event)
 
-        Manager.update(UI_REFRESH_RATE)    
         pygame.display.update()
 
 
@@ -1968,7 +1979,6 @@ def choose_level(c, lvl, username, coin):
 
 
 def lobby(username, lvl, coin):
-     # main lobby when user start - my
 
     while True:
 
@@ -2279,6 +2289,8 @@ def register():
 
 
 def log_or_reg():
+
+
     # login or register screen display - by my
     while True:
         screen.blit(background_image,(0,0))
@@ -2687,7 +2699,9 @@ def equipment2(username, lvl, coin) :
             bought(username, lvl, coin)
 
         pygame.display.flip()
+
     pygame.quit()
     sys.exit()
 
 log_or_reg()
+
