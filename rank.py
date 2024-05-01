@@ -10,7 +10,7 @@ class Ranking():
         self.place_rect = (150, self.pos_y)
         self.name = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(username, True, 'black')
         self.name_rect = (230, self.pos_y)
-        self.time = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{time} steps', True, 'black')
+        self.time = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{time} secs', True, 'black')
         self.time_rect = (550, self.pos_y)
 
     # use to display
