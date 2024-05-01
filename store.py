@@ -1,7 +1,7 @@
 import pygame
 import sys
 from button import Button
-
+# from main import
 pygame.init()
 
 
@@ -125,6 +125,8 @@ def store():
                         buy = True
                 if next_button.check_input(pos_mouse):
                     equipment()
+                # if back_button.check_input(pos_mouse):
+                #     lobby()
 
 
         if buy :
