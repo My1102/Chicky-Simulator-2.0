@@ -1560,7 +1560,7 @@ def win(c, lvl, username, levl, coin):
         pygame.display.update()
 
 
-def update_step(username, step):
+def update_time(username, time):
     # by 'Puo Puo'(Puo Lin)
     # steps used updating
     with open('user_details.txt', 'r') as file:
@@ -1570,13 +1570,10 @@ def update_step(username, step):
     for i, line in enumerate(lines):
         user_details = line.strip().split(", ")
         if user_details[0] == username:
-            if int(user_details[3]) > int(step):
-                user_details[3] = str(step)
+            if int(user_details[3]) > int(time):
+                user_details[3] = str(time)
                 lines[i] = ', '.join(user_details) + '\n'
                 break
-            # user_details[3] = str(step)
-            # lines[i] = ', '.join(user_details) + '\n'
-            # break
             else:
                 break
 
@@ -1603,9 +1600,26 @@ def update_level(username, lvl):
     return
 
 
+def update_coin(username, coin):
+    with open('user_details.txt', 'r') as file:
+        lines = file.readlines()
+
+    for i, line in enumerate(lines):
+        user_details = line.strip().split(", ")
+        if user_details[0] == username:
+            user_details[4] = str(coin)
+            lines[i] = ', '.join(user_details) + '\n'
+            break
+
+    with open('user_details.txt', 'w') as file:
+        file.writelines(lines)
+    return
+
+
 def results(username, lvl, coin):
 
     while True:
+        pygame.display.set_caption('Chicky Simulator - Results')
         screen.blit(ranking_image,(0,0))
 
         wish_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Rubbish', True, 'white')
@@ -1645,7 +1659,7 @@ def shooting_stars(username, lvl, coin, times):
         if times == 1:
             vid = Video('graphic/onegold.mp4')
             screen = pygame.display.set_mode((width,height))
-            pygame.display.set_caption('Chicky Simulator - Wish')
+            pygame.display.set_caption('Chicky Simulator - Wishing')
 
             while vid.active:
                 vid.set_speed(1.0)
@@ -1669,7 +1683,7 @@ def shooting_stars(username, lvl, coin, times):
         else:
             vid = Video('graphic/fivegold.mp4')
             screen = pygame.display.set_mode((width,height))
-            pygame.display.set_caption('Chicky Simulator - Wish')
+            pygame.display.set_caption('Chicky Simulator - Wishing')
 
             while vid.active:
                 vid.set_speed(1.0)
@@ -1697,6 +1711,7 @@ def shooting_stars(username, lvl, coin, times):
 def wish(username, lvl, coin):
 
     while True:
+        pygame.display.set_caption('Chicky Simulator - Wishing')
         screen.blit(ranking_image,(0,0))
 
         wish_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Wishing', True, 'white')
@@ -1722,8 +1737,8 @@ def wish(username, lvl, coin):
         scoin = Lock('graphic/coin2.png', 500, 640, 0.15)
         scoin.draw(screen)
 
-        scoin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('200', True, 'white')
-        scoin_text_rect = coin_text.get_rect(center = (580,650))
+        scoin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('100', True, 'white')
+        scoin_text_rect = scoin_text.get_rect(center = (580,650))
         screen.blit(scoin_text, scoin_text_rect)
 
         five_pull_button = Button('graphic/button2.png', 720, 580, 0.22, "5 Wish")
@@ -1732,9 +1747,9 @@ def wish(username, lvl, coin):
         bcoin = Lock('graphic/coin2.png', 680, 640, 0.15)
         bcoin.draw(screen)
 
-        scoin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('1000', True, 'white')
-        scoin_text_rect = coin_text.get_rect(center = (760,650))
-        screen.blit(scoin_text, scoin_text_rect)
+        bcoin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('500', True, 'white')
+        bcoin_text_rect = bcoin_text.get_rect(center = (760,650))
+        screen.blit(bcoin_text, bcoin_text_rect)
 
         backpack_button = Button('graphic/backpack3.png', 150, 580, 0.3, " ")
         backpack_button.draw(screen)
@@ -1754,12 +1769,22 @@ def wish(username, lvl, coin):
                     lobby(username, lvl, coin)
 
                 if one_pull_button.check_input(pos_mouse):
-                    times = 1
-                    shooting_stars(username, lvl, coin, times)
+                    if coin >= 100:
+                        times = 1
+                        coin -= 100
+                        update_coin(username, coin)
+                        shooting_stars(username, lvl, coin, times)
+                    else:
+                        break
 
                 if five_pull_button.check_input(pos_mouse):
-                    times = 5
-                    shooting_stars(username, lvl, coin, times)
+                    if coin >= 500:
+                        times = 5
+                        coin -= 500
+                        update_coin(username, coin)
+                        shooting_stars(username, lvl, coin, times)
+                    else:
+                        break
 
             Manager.process_events(event)
 
@@ -1772,6 +1797,7 @@ def ranking(username, lvl, coin):
     while True:
 
         # screen display / setup
+        pygame.display.set_caption('Chicky Simulator - Ranking')
         screen.blit(ranking_image,(0,0))
 
         rank_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Ranking', True, 'white')
@@ -1819,6 +1845,7 @@ def chick(username, lvl, coin):
 
     while True:
         # screen display / setup
+        pygame.display.set_caption('Chicky Simulator - Chicky')
         screen.blit(background_image,(0,0))
 
         title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('What chick you like?', True, 'white')
@@ -1873,6 +1900,7 @@ def choose_level(c, lvl, username, coin):
     while True:
         
         # screen display / setup
+        pygame.display.set_caption('Chicky Simulator - Level')
         screen.blit(background_image,(0,0))
 
         title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('LEVEL', True, 'white')
@@ -1981,6 +2009,7 @@ def lobby(username, lvl, coin):
     while True:
 
         #screen display / setup
+        pygame.display.set_caption('Chicky Simulator')
         screen.blit(background_image,(0,0))
 
         title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Chicky Simulator', True, 'white')
@@ -2097,63 +2126,75 @@ def save_userinput(username, password):
         
         file = open('user_details.txt', 'r')
         for i in file:
-            list = i.split(",")
+            #list = i.split(",")
+            Username, Password, Level, Time, Coin = i.strip().split(",")
 
             # check if the name has been used before
-            if username == list[0]:
-                screen.blit(background_image,(0,0))
-                
-                title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Chicky Simulator', True, 'white')
-                title_text_rect = title_text.get_rect(center = (450,150))
-                screen.blit(title_text, title_text_rect)
-
-                incorrect_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render('Someone had used this name.', True, 'white')
-                incorrect_text_rect = incorrect_text.get_rect(center = (width/2,height/2))
-                screen.blit(incorrect_text, incorrect_text_rect)
-
-                tryagain_button = Button('graphic/button2.png', 450, 580, 0.35, "TRY AGAIN")
-                tryagain_button.draw(screen)
-
-                pos_mouse = pygame.mouse.get_pos()
-
+            if username == Username:
+                con = 0
+                break
             # make sure user type their password
-            elif password == '':
-                screen.blit(background_image,(0,0))
-                
-                title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Chicky Simulator', True, 'white')
-                title_text_rect = title_text.get_rect(center = (450,150))
-                screen.blit(title_text, title_text_rect)
-
-                enter_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render('Please enter your password.', True, 'white')
-                enter_text_rect = enter_text.get_rect(center = (width/2,height/2))
-                screen.blit(enter_text, enter_text_rect)
-
-                tryagain_button = Button('graphic/button2.png', 450, 580, 0.35, "TRY AGAIN")
-                tryagain_button.draw(screen)
-
-                pos_mouse = pygame.mouse.get_pos()
-
+            elif password == ' ':
+                con = 1
+                break
             # save user details
             else:
-                file = open('user_details.txt', 'a')
-                file.write(f'{username}, {password}, 1, 10000, 0' + '\n')
-                file.close()
-                lvl = 1
-                coin = 0
-                return lvl, coin
+                con = 2
+                break
             
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
+        if con == 0:
+            screen.blit(background_image,(0,0))
+            
+            title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Chicky Simulator', True, 'white')
+            title_text_rect = title_text.get_rect(center = (450,150))
+            screen.blit(title_text, title_text_rect)
 
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if tryagain_button.check_input(pos_mouse):
-                        register()
+            incorrect_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render('Someone had used this name.', True, 'white')
+            incorrect_text_rect = incorrect_text.get_rect(center = (width/2,height/2))
+            screen.blit(incorrect_text, incorrect_text_rect)
 
-                Manager.process_events(event)
+            tryagain_button = Button('graphic/button2.png', 450, 580, 0.35, "TRY AGAIN")
+            tryagain_button.draw(screen)
 
-            Manager.update(UI_REFRESH_RATE)
+            pos_mouse = pygame.mouse.get_pos()
+
+        elif con == 1:
+            screen.blit(background_image,(0,0))
+            
+            title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Chicky Simulator', True, 'white')
+            title_text_rect = title_text.get_rect(center = (450,150))
+            screen.blit(title_text, title_text_rect)
+
+            enter_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render('Please enter your password.', True, 'white')
+            enter_text_rect = enter_text.get_rect(center = (width/2,height/2))
+            screen.blit(enter_text, enter_text_rect)
+
+            tryagain_button = Button('graphic/button2.png', 450, 580, 0.35, "TRY AGAIN")
+            tryagain_button.draw(screen)
+
+            pos_mouse = pygame.mouse.get_pos()
+
+        else:
+            file = open('user_details.txt', 'a')
+            file.write(f'{username}, {password}, 1, 10000, 0' + '\n')
+            file.close()
+            lvl = 1
+            coin = 0
+            return lvl, coin
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if tryagain_button.check_input(pos_mouse):
+                    register()
+
+            Manager.process_events(event)
+
+        Manager.update(UI_REFRESH_RATE)
+
         pygame.display.update()
 
 
@@ -2170,6 +2211,7 @@ def welcome_user(username, lvl, coin):
 
             Manager.process_events(event)
 
+        pygame.display.set_caption('Chicky Simulator')
         screen.blit(background_image,(0,0))
 
         title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Chicky Simulator', True, 'white')
@@ -2192,6 +2234,7 @@ def login():
     # login page display - by my
     while True:
 
+        pygame.display.set_caption('Chicky Simulator')
         screen.blit(background_image,(0,0))
         
         login_surface = pygame.Surface((400,400))
@@ -2241,6 +2284,7 @@ def login():
 def register():
     # register page display - by my
     while True:
+        pygame.display.set_caption('Chicky Simulator')
         screen.blit(background_image,(0,0))
         
         register_surface = pygame.Surface((400,400))
@@ -2291,6 +2335,7 @@ def log_or_reg():
 
     # login or register screen display - by my
     while True:
+        pygame.display.set_caption('Chicky Simulator')
         screen.blit(background_image,(0,0))
 
         title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Chicky Simulator', True, 'white')
@@ -2335,6 +2380,7 @@ def store(username, lvl, coin):
     font = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50)
                             
     while on:
+        pygame.display.set_caption('Chicky Simulator - Store')
         screen.blit(background_image,(0,0))
         pos_mouse = pygame.mouse.get_pos()
 
@@ -2447,8 +2493,11 @@ def store(username, lvl, coin):
     pygame.quit()
     sys.exit()
 
+
 def bought(username, lvl, coin) :
+
     surface =  pygame.Surface((width,height))
+    pygame.display.set_caption('Chicky Simulator - Store')
     surface.blit(background_image,(0,0))
     surface.blit(font.render('You bought an item.',True,'white'),(280,300))
     surface.blit(font.render('Click again to go back.',True,'white'),(230,350))
@@ -2462,6 +2511,7 @@ def bought(username, lvl, coin) :
 
     pygame.display.flip()
 
+
 def equipment(username, lvl, coin) :
     on = True
     buy = False
@@ -2473,6 +2523,7 @@ def equipment(username, lvl, coin) :
     noob_leg= pygame.image.load("graphic/noob leg.png")
                             
     while on:
+        pygame.display.set_caption('Chicky Simulator - Store')
         screen.blit(background_image,(0,0))
         pos_mouse = pygame.mouse.get_pos()
 
@@ -2585,6 +2636,7 @@ def equipment(username, lvl, coin) :
     pygame.quit()
     sys.exit()
 
+
 def equipment2(username, lvl, coin) :
     on = True
     buy = False
@@ -2596,6 +2648,7 @@ def equipment2(username, lvl, coin) :
     noob_leg= pygame.image.load("graphic/noob leg.png")
                             
     while on:
+        pygame.display.set_caption('Chicky Simulator - Store')
         screen.blit(background_image,(0,0))
         pos_mouse = pygame.mouse.get_pos()
 
@@ -2700,6 +2753,7 @@ def equipment2(username, lvl, coin) :
 
     pygame.quit()
     sys.exit()
+
 
 log_or_reg()
 
