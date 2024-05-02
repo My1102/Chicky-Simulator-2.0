@@ -1274,7 +1274,7 @@ def level5(c, lvl, username, coin):
                             pg.time.set_timer(pg.USEREVENT, 0)
                             # save in list and save in text file
                             time_use.append(time)
-                            update_step(username, time_use[0])
+                            update_time(username, time_use[0])
                             win5(c, lvl, username, coin)
                             
                             
