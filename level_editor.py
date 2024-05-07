@@ -1,5 +1,6 @@
 import pygame
 import pickle
+
 from os import path
 
 
@@ -9,7 +10,7 @@ clock = pygame.time.Clock()
 fps = 60
 
 #game window
-tile_size = 30
+tile_size = 35
 cols = 20
 margin = 100
 screen_width = tile_size * cols
@@ -34,7 +35,9 @@ mon3_img = pygame.image.load('graphic/monster3.png')
 coin_img = pygame.image.load('graphic/coin.png')
 exit_img = pygame.image.load('graphic/bananacat.png')
 save_img = pygame.image.load('graphic/84297.png')
+save_img = pygame.transform.scale(save_img,(50,50))
 load_img = pygame.image.load('graphic/load.png')
+load_img = pygame.transform.scale(load_img,(50,50))
 
 
 #define game variables
@@ -79,45 +82,27 @@ def draw_world():
 		for col in range(20):
 			if world_data[row][col] > 0:
 				if world_data[row][col] == 1:
-					#dirt blocks
+					#blocks
 					img = pygame.transform.scale(block_img, (tile_size, tile_size))
 					screen.blit(img, (col * tile_size, row * tile_size))
-				# if world_data[row][col] == 2:
-				# 	#grass blocks
-				# 	img = pygame.transform.scale(grass_img, (tile_size, tile_size))
-				# 	screen.blit(img, (col * tile_size, row * tile_size))
 				if world_data[row][col] == 2:
-					img = pygame.transform.scale(mon1_img, (tile_size, tile_size))
+					img = pygame.transform.scale(coin_img, (tile_size, tile_size))
 					screen.blit(img, (col * tile_size, row * tile_size ))
 				if world_data[row][col] == 3:
-					img = pygame.transform.scale(mon2_img, (tile_size, tile_size))
+					img = pygame.transform.scale(mon1_img, (tile_size, tile_size))
 					screen.blit(img, (col * tile_size, row * tile_size ))
 				if world_data[row][col] == 4:
+					img = pygame.transform.scale(mon2_img, (tile_size, tile_size))
+					screen.blit(img, (col * tile_size, row * tile_size ))
+				if world_data[row][col] == 5:
 					img = pygame.transform.scale(mon3_img, (tile_size, tile_size))
 					screen.blit(img, (col * tile_size, row * tile_size ))
-				# if world_data[row][col] == 4:
-				# 	#horizontally moving platform
-				# 	img = pygame.transform.scale(platform_x_img, (tile_size, tile_size // 2))
-				# 	screen.blit(img, (col * tile_size, row * tile_size))
-				# if world_data[row][col] == 5:
-				# 	#vertically moving platform
-				# 	img = pygame.transform.scale(platform_y_img, (tile_size, tile_size // 2))
-				# 	screen.blit(img, (col * tile_size, row * tile_size))
-				# if world_data[row][col] == 6:
-				# 	#lava
-				# 	img = pygame.transform.scale(lava_img, (tile_size, tile_size // 2))
-				# 	screen.blit(img, (col * tile_size, row * tile_size + (tile_size // 2)))
-				if world_data[row][col] == 5:
-					#coin
-					img = pygame.transform.scale(coin_img, (tile_size, tile_size))
-					screen.blit(img, (col * tile_size, row * tile_size))
 				if world_data[row][col] == 6:
 					#exit
 					img = pygame.transform.scale(exit_img, (tile_size, tile_size))
 					screen.blit(img, (col * tile_size, row * tile_size))
 
-
-
+#load and save buttons
 class Button():
 	def __init__(self, x, y, image):
 		self.image = image
@@ -144,10 +129,9 @@ class Button():
 		screen.blit(self.image, (self.rect.x, self.rect.y))
 
 		return action
-
-#create load and save buttons
-save_button = Button(screen_width // 2 - 150, screen_height - 80, pygame.transform.scale(save_img,(30,30)))
-load_button = Button(screen_width // 2 + 50, screen_height - 80, pygame.transform.scale(load_img,(30,30)))
+	
+save_button = Button(screen_width // 2 - 150, screen_height - 80, save_img)
+load_button = Button(screen_width // 2 + 50, screen_height - 80, load_img)
 
 #main game loop
 run = True
