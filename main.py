@@ -2378,6 +2378,7 @@ def store(username, lvl, coin):
     ##puo puo did this
     on = True
     buy = False
+    no = False
     sword = pygame.image.load("graphic/sword.png")
     shield = pygame.image.load("graphic/shield.png")
     bow = pygame.image.load("graphic/bow.png")
@@ -2390,6 +2391,14 @@ def store(username, lvl, coin):
         pygame.display.set_caption('Chicky Simulator - Store')
         screen.blit(background_image,(0,0))
         pos_mouse = pygame.mouse.get_pos()
+
+        #Coin Display
+        coinlogo = Lock('graphic/manycoin.png', 700, 675, 0.3)
+        coinlogo.draw(screen)
+        coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'white')
+        coin_text_rect = coin_text.get_rect(center = (780,675))
+        screen.blit(coin_text, coin_text_rect)
+        ###############
 
         #EQUIPMENT DIsPLAY
         screen.blit(sword,(75,35))
@@ -2456,44 +2465,93 @@ def store(username, lvl, coin):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if buy_button1.check_input(pos_mouse):
-                    if buy :
-                        buy = False
+                    if coin >= 100 :
+                        coin -= 100
+                        update_coin(username, coin)
+                        if buy :
+                            buy = False
+                        else :
+                            buy = True
                     else :
-                        buy = True                                        
+                        if no :
+                            no = False
+                        else :
+                            no = True
                         
                 if buy_button2.check_input(pos_mouse):
-                    if buy :
-                        buy = False
+                    if coin >= 150 :
+                        coin -= 150
+                        update_coin(username, coin)
+                        if buy :
+                            buy = False
+                        else :
+                            buy = True
                     else :
-                        buy = True      
+                        if no :
+                            no = False
+                        else :
+                            no = True      
                 if buy_button3.check_input(pos_mouse):
-                    if buy :
-                        buy = False
+                    if coin >= 75 :
+                        coin -= 75
+                        update_coin(username, coin)
+                        if buy :
+                            buy = False
+                        else :
+                            buy = True
                     else :
-                        buy = True
+                            if no :
+                                no = False
+                            else :
+                                no = True
                 if buy_button4.check_input(pos_mouse):
-                    if buy :
-                        buy = False
+                    if coin >= 100 :
+                        coin -= 100
+                        update_coin(username, coin)
+                        if buy :
+                            buy = False
+                        else :
+                            buy = True                                        
                     else :
-                        buy = True                                        
-                        
+                        if no :
+                            no = False
+                        else :
+                            no = True
                 if buy_button5.check_input(pos_mouse):
-                    if buy :
-                        buy = False
+                    if coin >= 150 :
+                        coin -= 150
+                        update_coin(username, coin)
+                        if buy :
+                            buy = False
+                        else :
+                            buy = True
                     else :
-                        buy = True      
+                        if no :
+                            no = False
+                        else :
+                            no = True
                 if buy_button6.check_input(pos_mouse):
-                    if buy :
-                        buy = False
+                    if coin >= 150 :
+                        coin -= 150
+                        update_coin(username, coin)
+                        if buy :
+                            buy = False
+                        else :
+                            buy = True
                     else :
-                        buy = True
+                        if no :
+                            no = False
+                        else :
+                            no = True
                 if next_button.check_input(pos_mouse):
                     equipment(username, lvl, coin)
                 if back_button.check_input(pos_mouse):
                     lobby(username, lvl, coin)           
 
         if buy :
-            bought(username, lvl, coin)
+            bought1(username, lvl, coin)
+        elif no :
+            no_money(username, lvl, coin)
 
         pygame.display.flip()
 
@@ -2501,13 +2559,68 @@ def store(username, lvl, coin):
     sys.exit()
 
 
-def bought(username, lvl, coin) :
+def bought1(username, lvl, coin) :
     #puopuo did this too
 
     surface =  pygame.Surface((width,height))
     pygame.display.set_caption('Chicky Simulator - Store')
     surface.blit(background_image,(0,0))
     surface.blit(font.render('You bought an item.',True,'white'),(280,300))
+    surface.blit(font.render('Click again to go back.',True,'white'),(230,350))
+    screen.blit(surface,(0,0))
+    for event in pygame.event.get():
+        if event.type == pygame.MOUSEBUTTONDOWN:
+                store(username, lvl, coin)
+        if event.type == pygame.quit:
+            pygame.quit()
+            sys.exit()
+
+    pygame.display.flip()
+
+def bought2(username, lvl, coin) :
+    #puopuo did this too
+
+    surface =  pygame.Surface((width,height))
+    pygame.display.set_caption('Chicky Simulator - Store')
+    surface.blit(background_image,(0,0))
+    surface.blit(font.render('You bought an item.',True,'white'),(280,300))
+    surface.blit(font.render('Click again to go back.',True,'white'),(230,350))
+    screen.blit(surface,(0,0))
+    for event in pygame.event.get():
+        if event.type == pygame.MOUSEBUTTONDOWN:
+                equipment(username, lvl, coin)
+        if event.type == pygame.quit:
+            pygame.quit()
+            sys.exit()
+
+    pygame.display.flip()
+
+def bought3(username, lvl, coin) :
+    #puopuo did this too
+
+    surface =  pygame.Surface((width,height))
+    pygame.display.set_caption('Chicky Simulator - Store')
+    surface.blit(background_image,(0,0))
+    surface.blit(font.render('You bought an item.',True,'white'),(280,300))
+    surface.blit(font.render('Click again to go back.',True,'white'),(230,350))
+    screen.blit(surface,(0,0))
+    for event in pygame.event.get():
+        if event.type == pygame.MOUSEBUTTONDOWN:
+                equipment2(username, lvl, coin)
+        if event.type == pygame.quit:
+            pygame.quit()
+            sys.exit()
+
+    pygame.display.flip()
+
+
+def no_money(username, lvl, coin) :
+    #puopuo did this too
+
+    surface =  pygame.Surface((width,height))
+    pygame.display.set_caption('Chicky Simulator - Store')
+    surface.blit(background_image,(0,0))
+    surface.blit(font.render('You do not have enough coin.',True,'white'),(180,300))
     surface.blit(font.render('Click again to go back.',True,'white'),(230,350))
     screen.blit(surface,(0,0))
     for event in pygame.event.get():
@@ -2519,11 +2632,48 @@ def bought(username, lvl, coin) :
 
     pygame.display.flip()
 
+def no_money2(username, lvl, coin) :
+    #puopuo did this too
+
+    surface =  pygame.Surface((width,height))
+    pygame.display.set_caption('Chicky Simulator - Store')
+    surface.blit(background_image,(0,0))
+    surface.blit(font.render('You do not have enough coin.',True,'white'),(180,300))
+    surface.blit(font.render('Click again to go back.',True,'white'),(230,350))
+    screen.blit(surface,(0,0))
+    for event in pygame.event.get():
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            equipment(username, lvl, coin)
+        if event.type == pygame.quit:
+            pygame.quit()
+            sys.exit()
+
+    pygame.display.flip()
+
+def no_money3(username, lvl, coin) :
+    #puopuo did this too
+
+    surface =  pygame.Surface((width,height))
+    pygame.display.set_caption('Chicky Simulator - Store')
+    surface.blit(background_image,(0,0))
+    surface.blit(font.render('You do not have enough coin.',True,'white'),(180,300))
+    surface.blit(font.render('Click again to go back.',True,'white'),(230,350))
+    screen.blit(surface,(0,0))
+    for event in pygame.event.get():
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            equipment2(username, lvl, coin)
+        if event.type == pygame.quit:
+            pygame.quit()
+            sys.exit()
+
+    pygame.display.flip()
+
 
 def equipment(username, lvl, coin) :
     #puopuo did this also
     on = True
     buy = False
+    no = False
     hand = pygame.image.load("graphic/hand.png")
     noob_hand = pygame.image.load("graphic/noob hand.png")
     armor = pygame.image.load("graphic/armor.png")
@@ -2535,6 +2685,14 @@ def equipment(username, lvl, coin) :
         pygame.display.set_caption('Chicky Simulator - Store')
         screen.blit(background_image,(0,0))
         pos_mouse = pygame.mouse.get_pos()
+
+        #Coin Display
+        coinlogo = Lock('graphic/manycoin.png', 700, 675, 0.3)
+        coinlogo.draw(screen)
+        coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'white')
+        coin_text_rect = coin_text.get_rect(center = (780,675))
+        screen.blit(coin_text, coin_text_rect)
+        ###############
 
         #EQUIPMENT DIsPLAY
         screen.blit(hand,(75,35))
@@ -2601,44 +2759,92 @@ def equipment(username, lvl, coin) :
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if buy_button1.check_input(pos_mouse):
-                    if buy :
-                        buy = False
+                    if coin >= 100 :
+                        coin -= 100
+                        update_coin(username, coin)
+                        if buy :
+                            buy = False
+                        else :
+                            buy = True
                     else :
-                        buy = True                                        
-                        
+                        if no :
+                            no = False
+                        else :
+                            no = True
                 if buy_button2.check_input(pos_mouse):
-                    if buy :
-                        buy = False
+                    if coin >= 150 :
+                        coin -= 150
+                        update_coin(username, coin)
+                        if buy :
+                            buy = False
+                        else :
+                            buy = True
                     else :
-                        buy = True      
+                        if no :
+                            no = False
+                        else :
+                            no = True   
                 if buy_button3.check_input(pos_mouse):
-                    if buy :
-                        buy = False
+                    if coin >= 75 :
+                        coin -= 75
+                        update_coin(username, coin)
+                        if buy :
+                            buy = False
+                        else :
+                            buy = True
                     else :
-                        buy = True
+                        if no :
+                            no = False
+                        else :
+                            no = True
                 if buy_button4.check_input(pos_mouse):
-                    if buy :
-                        buy = False
+                    if coin >= 100 :
+                        coin -= 100
+                        update_coin(username, coin)
+                        if buy :
+                            buy = False
+                        else :
+                            buy = True
                     else :
-                        buy = True                                        
-                        
+                        if no :
+                            no = False
+                        else :
+                            no = True
                 if buy_button5.check_input(pos_mouse):
-                    if buy :
-                        buy = False
+                    if coin >= 150 :
+                        coin -= 150
+                        update_coin(username, coin)
+                        if buy :
+                            buy = False
+                        else :
+                            buy = True
                     else :
-                        buy = True      
+                        if no :
+                            no = False
+                        else :
+                            no = True    
                 if buy_button6.check_input(pos_mouse):
-                    if buy :
-                        buy = False
+                    if coin >= 150 :
+                        coin -= 150
+                        update_coin(username, coin)
+                        if buy :
+                            buy = False
+                        else :
+                            buy = True
                     else :
-                        buy = True
+                        if no :
+                            no = False
+                        else :
+                            no = True
                 if back_button.check_input(pos_mouse):
                     store(username, lvl, coin)
                 if next_button.check_input(pos_mouse):
                     equipment2(username, lvl, coin)
 
         if buy :
-            bought(username, lvl, coin)
+            bought2(username, lvl, coin)
+        elif no :
+            no_money2(username, lvl, coin)
 
         pygame.display.flip()
 
@@ -2650,17 +2856,23 @@ def equipment2(username, lvl, coin) :
     #puopuo also did this
     on = True
     buy = False
+    no = False
     noob_helmet = pygame.image.load("graphic/noob helmet.png")
     noob_armor = pygame.image.load("graphic/noob armor.png")
     helmet3 = pygame.image.load("graphic/helmet3.png")
-    helmet = pygame.image.load("graphic/helmet.png")
-    leg= pygame.image.load("graphic/leg.png")
-    noob_leg= pygame.image.load("graphic/noob leg.png")
                             
     while on:
         pygame.display.set_caption('Chicky Simulator - Store')
         screen.blit(background_image,(0,0))
         pos_mouse = pygame.mouse.get_pos()
+
+        #Coin Display
+        coinlogo = Lock('graphic/manycoin.png', 700, 675, 0.3)
+        coinlogo.draw(screen)
+        coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'white')
+        coin_text_rect = coin_text.get_rect(center = (780,675))
+        screen.blit(coin_text, coin_text_rect)
+        ###############
 
         #EQUIPMENT DIsPLAY
         screen.blit(noob_armor,(75,35))
@@ -2702,20 +2914,51 @@ def equipment2(username, lvl, coin) :
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if buy_button1.check_input(pos_mouse):
-                    if buy :
-                        buy = False
+                    if coin >= 100 :
+                        coin -= 100
+                        update_coin(username, coin)
+                        if buy :
+                            buy = False
+                        else :
+                            buy = True
                     else :
-                        buy = True                                        
+                        if no :
+                            no = False
+                        else :
+                            no = True                                     
                         
                 if buy_button2.check_input(pos_mouse):
-                    if buy :
-                        buy = False
+                    if coin >= 150 :
+                        coin -= 150
+                        update_coin(username, coin)
+                        if buy :
+                            buy = False
+                        else :
+                            buy = True
                     else :
-                        buy = True      
+                        if no :
+                            no = False
+                        else :
+                            no = True
+                if buy_button3.check_input(pos_mouse):
+                    if coin >= 75 :
+                        coin -= 75
+                        update_coin(username, coin)
+                        if buy :
+                            buy = False
+                        else :
+                            buy = True
+                    else :
+                        if no :
+                            no = False
+                        else :
+                            no = True
                 if back_button.check_input(pos_mouse):
                     equipment(username, lvl, coin)
         if buy :
-            bought(username, lvl, coin)
+            bought3(username, lvl, coin)
+        elif no :
+            no_money3(username, lvl, coin)
 
         pygame.display.flip()
 
@@ -2760,10 +3003,10 @@ def arcade_lobby(c,username, lvl, coin):
                     snake_lobby(c,username, lvl, coin)                                   
                         
                 if play_button2.check_input(pos_mouse):
-                    bought(username, lvl, coin)
+                    dunno1_lobby(c,username, lvl, coin) 
 
                 if play_button3.check_input(pos_mouse):
-                    bought(username, lvl, coin)
+                    dunno2_lobby(c,username, lvl, coin) 
 
                 if back_button.check_input(pos_mouse):
                     choose_level(c,username, lvl, coin)           
@@ -2807,6 +3050,71 @@ def snake_lobby(c,username, lvl, coin) :
     pygame.quit()
     sys.exit()
 
+def dunno1_lobby(c,username, lvl, coin) :
+    # puo puo did also this
+    on = True
+    while on :
+        screen.blit(background_image,(0,0))
+        pos_mouse = pygame.mouse.get_pos()
+        pygame.display.set_caption('Chicky Simulator - Unnamed yet')
+        title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('Unnamed', True, 'white')
+        title_text_rect = title_text.get_rect(center = (450,100))
+        screen.blit(title_text, title_text_rect)
+
+        #buttons#
+        back_button = Button('graphic/botton1.png', 50, 35, 0.5, "<<")
+        back_button.draw(screen)
+        play_button = Button('graphic/button2.png', 450, 600, 0.3, "START")
+        play_button.draw(screen)
+
+        #tutorial
+
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                on = False
+            if event.type == pygame.MOUSEBUTTONDOWN :
+                if back_button.check_input(pos_mouse):
+                    arcade_lobby(c,username, lvl, coin)
+        
+        
+        pygame.display.flip()
+
+    pygame.quit()
+    sys.exit()
+
+def dunno2_lobby(c,username, lvl, coin) :
+    # puo puo did also this
+    on = True
+    while on :
+        screen.blit(background_image,(0,0))
+        pos_mouse = pygame.mouse.get_pos()
+        pygame.display.set_caption('Chicky Simulator - Unnamed yet')
+        title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('Unnamed', True, 'white')
+        title_text_rect = title_text.get_rect(center = (450,100))
+        screen.blit(title_text, title_text_rect)
+
+        #buttons#
+        back_button = Button('graphic/botton1.png', 50, 35, 0.5, "<<")
+        back_button.draw(screen)
+        play_button = Button('graphic/button2.png', 450, 600, 0.3, "START")
+        play_button.draw(screen)
+
+        #tutorial
+
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                on = False
+            if event.type == pygame.MOUSEBUTTONDOWN :
+                if back_button.check_input(pos_mouse):
+                    arcade_lobby(c,username, lvl, coin)
+        
+        
+        pygame.display.flip()
+
+    pygame.quit()
+    sys.exit()
 
 log_or_reg()
 
