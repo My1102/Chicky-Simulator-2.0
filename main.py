@@ -48,7 +48,7 @@ username_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((
 password_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((300,450), (300,50)), manager = Manager, object_id = '#password')
 
 # added later
-def caution(c, lvl, username, coin):
+def caution(c, lvl, username, coin, pull):
     while True:
         #program setup / screen display
         pygame.display.set_caption('Chicky Simulator - Caution')
@@ -76,10 +76,10 @@ def caution(c, lvl, username, coin):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if next_button.check_input(pos_mouse):
-                    tutorial2(c, lvl, username, coin)
+                    tutorial2(c, lvl, username, coin, pull)
 
                 if back_button.check_input(pos_mouse):
-                    choose_level(c, lvl, username, coin)
+                    choose_level(c, lvl, username, coin, pull)
 
                 Manager.process_events(event)
 
@@ -87,7 +87,7 @@ def caution(c, lvl, username, coin):
         pygame.display.update()
 
 
-def tutorial1(c, lvl, username, coin):
+def tutorial1(c, lvl, username, coin, pull):
     while True:
         #program setup / screen display
         pygame.display.set_caption('Chicky Simulator - Tutorial')
@@ -115,10 +115,10 @@ def tutorial1(c, lvl, username, coin):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if next_button.check_input(pos_mouse):
-                    caution(c, lvl, username, coin)
+                    caution(c, lvl, username, coin, pull)
 
                 if back_button.check_input(pos_mouse):
-                    choose_level(c, lvl, username, coin)
+                    choose_level(c, lvl, username, coin, pull)
 
                 Manager.process_events(event)
 
@@ -126,7 +126,7 @@ def tutorial1(c, lvl, username, coin):
         pygame.display.update()        
 
 
-def tutorial2(c, lvl, username, coin):
+def tutorial2(c, lvl, username, coin, pull):
     while True:
         #program setup /screen display
         pygame.display.set_caption('Chicky Simulator - Tutorial')
@@ -154,10 +154,10 @@ def tutorial2(c, lvl, username, coin):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start_button.check_input(pos_mouse):
-                    level1(c, lvl, username, coin)
+                    level1(c, lvl, username, coin, pull)
 
                 if back_button.check_input(pos_mouse):
-                    choose_level(c, lvl, username, coin)
+                    choose_level(c, lvl, username, coin, pull)
 
                 Manager.process_events(event)
 
@@ -165,7 +165,7 @@ def tutorial2(c, lvl, username, coin):
         pygame.display.update()   
 
 
-def tutorial4(c, lvl, username, coin):
+def tutorial4(c, lvl, username, coin, pull):
     #screen display / program setup
     screen = pygame.display.set_mode((width,height))
     pygame.display.set_caption('Chicky Simulator - Tutorial')
@@ -195,15 +195,15 @@ def tutorial4(c, lvl, username, coin):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start_button.check_input(pos_mouse):
-                    level3(c, lvl, username, coin)
+                    level3(c, lvl, username, coin, pull)
 
                 if back_button.check_input(pos_mouse):
-                    choose_level(c, lvl, username, coin)
+                    choose_level(c, lvl, username, coin, pull)
 
         pygame.display.update()   
 
 
-def tutorial3(c, lvl, username, coin):
+def tutorial3(c, lvl, username, coin, pull):
     #screen display / program setup
     screen = pygame.display.set_mode((width,height))
     pygame.display.set_caption('Chicky Simulator - Toutorial')
@@ -233,15 +233,15 @@ def tutorial3(c, lvl, username, coin):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start_button.check_input(pos_mouse):
-                    level2(c, lvl, username, coin)
+                    level2(c, lvl, username, coin, pull)
 
                 if back_button.check_input(pos_mouse):
-                    choose_level(c, lvl, username, coin)
+                    choose_level(c, lvl, username, coin, pull)
 
         pygame.display.update()   
 
 
-def level1(c, lvl, username, coin): # This one easier to read
+def level1(c, lvl, username, coin, pull): # This one easier to read
     # by 'Puo Puo'(Puo Lin) & Jia Ying
     import pygame as pg # change pygame to pg 
 
@@ -306,7 +306,7 @@ def level1(c, lvl, username, coin): # This one easier to read
                             # save in list 
                             time_use.append(time)
                             levl = 2 #added later  #for navigation in win - by my
-                            win(c, lvl, username, levl, coin)
+                            win(c, lvl, username, levl, coin, pull)
                             
                 # collision with monsters(This one jy use sprite collide becoz they are moving objects)
                 if pg.sprite.spritecollide(self,yuen_group,False):
@@ -488,7 +488,7 @@ def level1(c, lvl, username, coin): # This one easier to read
         pygame.display.update()
 
 
-def level2(c, lvl, username, coin):
+def level2(c, lvl, username, coin, pull):
     # by 'Puo Puo'(Puo Lin) & Jia Ying
     import pygame as pg #change pygame to pg 
 
@@ -553,7 +553,7 @@ def level2(c, lvl, username, coin):
                             # save time
                             time_use.append(time)
                             levl = 3
-                            win(c, lvl, username, levl, coin)
+                            win(c, lvl, username, levl, coin, pull)
                             
                 #collision with monsters
                 if pg.sprite.spritecollide(self,yuen_group,False):
@@ -728,7 +728,7 @@ def level2(c, lvl, username, coin):
         pygame.display.update()
 
 
-def level3(c, lvl, username, coin):
+def level3(c, lvl, username, coin, pull):
     # by 'Puo Puo'(Puo Lin) & Jia Ying
     import pygame as pg #change pg
 
@@ -792,7 +792,7 @@ def level3(c, lvl, username, coin):
                             # save in list 
                             time_use.append(time)
                             levl = 4
-                            win(c, lvl, username, levl, coin)
+                            win(c, lvl, username, levl, coin, pull)
                             
                 #collision with monsters
                 if pg.sprite.spritecollide(self,yuen_group,False):
@@ -969,7 +969,7 @@ def level3(c, lvl, username, coin):
         pygame.display.update()
 
 
-def level4(c, lvl, username, coin):
+def level4(c, lvl, username, coin, pull):
     # by 'Puo Puo'(Puo Lin) & Jia Ying
     import pygame as pg #change pg
 
@@ -1035,7 +1035,7 @@ def level4(c, lvl, username, coin):
                             # save in list 
                             time_use.append(time)
                             levl = 5
-                            win(c, lvl, username, levl, coin)
+                            win(c, lvl, username, levl, coin, pull)
                             
                 #collision with monsters
                 if pg.sprite.spritecollide(self,yuen_group,False):
@@ -1211,7 +1211,7 @@ def level4(c, lvl, username, coin):
         pygame.display.update()
 
 
-def level5(c, lvl, username, coin):
+def level5(c, lvl, username, coin, pull):
     # by 'Puo Puo'(Puo Lin) & Jia Ying
     import pygame as pg #change pg
 
@@ -1277,7 +1277,7 @@ def level5(c, lvl, username, coin):
                             # save in list and save in text file
                             time_use.append(time)
                             update_time(username, time_use[0])
-                            win5(c, lvl, username, coin)
+                            win5(c, lvl, username, coin, pull)
                             
                             
                 #collision with monsters
@@ -1470,7 +1470,7 @@ def level5(c, lvl, username, coin):
         pygame.display.update()
 
 
-def win5(c, lvl, username, coin):
+def win5(c, lvl, username, coin, pull):
     # winning condition for lvl 5
 
     # screen display / setup
@@ -1502,15 +1502,15 @@ def win5(c, lvl, username, coin):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if level_button.check_input(pos_mouse):
-                    choose_level(c, lvl, username, coin)
+                    choose_level(c, lvl, username, coin, pull)
 
                 if rank_button.check_input(pos_mouse):
-                    ranking(username, lvl, coin)
+                    ranking(username, lvl, coin, pull)
 
         pygame.display.update()
 
 
-def win(c, lvl, username, levl, coin):
+def win(c, lvl, username, levl, coin, pull):
     # winning condition for lvl 1, 2, 3, 4
 
     # screen display / setup
@@ -1547,17 +1547,17 @@ def win(c, lvl, username, levl, coin):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if level_button.check_input(pos_mouse):
-                    choose_level(c, lvl, username, coin)
+                    choose_level(c, lvl, username, coin, pull)
 
                 if next_button.check_input(pos_mouse): #changed later
                     if levl == 2:
-                        tutorial3(c, lvl, username, coin)
+                        tutorial3(c, lvl, username, coin, pull)
                     elif levl == 3:
-                        tutorial4(c, lvl, username, coin)
+                        tutorial4(c, lvl, username, coin, pull)
                     elif levl == 4:
-                        level4(c, lvl, username, coin)
+                        level4(c, lvl, username, coin, pull)
                     elif levl == 5:
-                        level5(c, lvl, username, coin)
+                        level5(c, lvl, username, coin, pull)
 
         pygame.display.update()
 
@@ -1618,7 +1618,7 @@ def update_coin(username, coin):
     return
 
 
-def items(username, lvl, coin, itemget):
+def items(username, lvl, coin, itemget, pull):
 
     while True:
         pygame.display.set_caption('Chicky Simulator - Results')
@@ -1646,7 +1646,7 @@ def items(username, lvl, coin, itemget):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.check_input(pos_mouse):
-                    wish(username, lvl, coin)
+                    wish(username, lvl, coin, pull)
 
             Manager.process_events(event)
 
@@ -1655,7 +1655,7 @@ def items(username, lvl, coin, itemget):
         pygame.display.update()
 
 
-def item(username, lvl, coin, itemget):
+def item(username, lvl, coin, itemget, pull):
 
     while True:
         pygame.display.set_caption('Chicky Simulator - Results')
@@ -1683,7 +1683,7 @@ def item(username, lvl, coin, itemget):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.check_input(pos_mouse):
-                    wish(username, lvl, coin)
+                    wish(username, lvl, coin, pull)
 
             Manager.process_events(event)
 
@@ -1692,7 +1692,7 @@ def item(username, lvl, coin, itemget):
         pygame.display.update()
 
 
-def shooting_stars(username, lvl, coin, times, itemget):
+def shooting_stars(username, lvl, coin, times, itemget, pull):
 
     while True:
         if times == 1:
@@ -1714,10 +1714,10 @@ def shooting_stars(username, lvl, coin, times, itemget):
 
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         vid.stop()
-                        item(username, lvl, coin, itemget)
+                        item(username, lvl, coin, itemget, pull)
             
             vid.close()
-            item(username, lvl, coin, itemget)
+            item(username, lvl, coin, itemget, pull)
 
         else:
             vid = Video('graphic/fivegold.mp4')
@@ -1739,15 +1739,15 @@ def shooting_stars(username, lvl, coin, times, itemget):
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         vid.stop()
                         vid.close()
-                        items(username, lvl, coin, itemget)
+                        items(username, lvl, coin, itemget, pull)
 
             vid.close()
-            items(username, lvl, coin, itemget)
+            items(username, lvl, coin, itemget, pull)
 
         pygame.display.update()
 
 
-def wish(username, lvl, coin):
+def wish(username, lvl, coin, pull):
 
     while True:
         pygame.display.set_caption('Chicky Simulator - Wishing')
@@ -1818,15 +1818,16 @@ def wish(username, lvl, coin):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.check_input(pos_mouse):
-                    lobby(username, lvl, coin)
+                    lobby(username, lvl, coin, pull)
 
                 if one_pull_button.check_input(pos_mouse):
                     if coin >= 100:
                         times = 1
                         coin -= 100
+                        if pull <= 
                         itemget = random.choice(item)
                         update_coin(username, coin)
-                        shooting_stars(username, lvl, coin, times, itemget)
+                        shooting_stars(username, lvl, coin, times, itemget, pull)
                     else:
                         break
 
@@ -1841,7 +1842,7 @@ def wish(username, lvl, coin):
                         item5get = random.choice(item)
                         itemget = str(f'{item1get},{item2get},{item3get},{item4get},{item5get}')
                         update_coin(username, coin)
-                        shooting_stars(username, lvl, coin, times, itemget)
+                        shooting_stars(username, lvl, coin, times, itemget, pull)
                     else:
                         break
 
@@ -1850,7 +1851,7 @@ def wish(username, lvl, coin):
         pygame.display.update()
 
 
-def ranking(username, lvl, coin):
+def ranking(username, lvl, coin, pull):
     # leaderboard functions by my
     while True:
 
@@ -1890,7 +1891,7 @@ def ranking(username, lvl, coin):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.check_input(pos_mouse):
-                    lobby(username, lvl, coin)
+                    lobby(username, lvl, coin, pull)
 
             Manager.process_events(event)
 
@@ -1898,7 +1899,7 @@ def ranking(username, lvl, coin):
         pygame.display.update()
 
 
-def chick(username, lvl, coin):
+def chick(username, lvl, coin, pull):
     # let user pick their character - by my
 
     while True:
@@ -1933,18 +1934,18 @@ def chick(username, lvl, coin):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if chick1_button.check_input(pos_mouse):
                     c = 'graphic/kunchic.png' # link to later use
-                    choose_level(c, lvl, username, coin)
+                    choose_level(c, lvl, username, coin, pull)
 
                 if chick2_button.check_input(pos_mouse):
                     c = 'graphic/geekchic.png'
-                    choose_level(c, lvl, username, coin)
+                    choose_level(c, lvl, username, coin, pull)
 
                 if chick3_button.check_input(pos_mouse):
                     c = 'graphic/pinkchic.png'
-                    choose_level(c, lvl, username, coin)
+                    choose_level(c, lvl, username, coin, pull)
 
                 if back_button.check_input(pos_mouse):
-                    lobby(username, lvl, coin)
+                    lobby(username, lvl, coin, pull)
 
                 Manager.process_events(event)
             
@@ -1952,7 +1953,7 @@ def chick(username, lvl, coin):
         pygame.display.update()
 
 
-def choose_level(c, lvl, username, coin):
+def choose_level(c, lvl, username, coin, pull):
     # level selection - by my
 
     while True:
@@ -2037,29 +2038,29 @@ def choose_level(c, lvl, username, coin):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if lvl1_button.check_input(pos_mouse):
-                    tutorial1(c, lvl, username, coin)
+                    tutorial1(c, lvl, username, coin, pull)
 
                 if lvl2_button.check_input(pos_mouse):
                     if lock2_con == True:
-                        tutorial3(c, lvl, username, coin)
+                        tutorial3(c, lvl, username, coin, pull)
 
                 if lvl3_button.check_input(pos_mouse):
                     if lock3_con == True:
-                        tutorial4(c, lvl, username, coin)
+                        tutorial4(c, lvl, username, coin, pull)
 
                 if lvl4_button.check_input(pos_mouse):
                     if lock4_con == True:
-                        level4(c, lvl, username, coin)
+                        level4(c, lvl, username, coin, pull)
 
                 if lvl5_button.check_input(pos_mouse):
                     if lock5_con == True:
-                        level5(c, lvl, username, coin)
+                        level5(c, lvl, username, coin, pull)
 
                 if back_button.check_input(pos_mouse):
-                    chick(username, lvl, coin)
+                    chick(username, lvl, coin, pull)
                 
                 if next_button.check_input(pos_mouse):
-                    arcade_lobby(c,username, lvl, coin)
+                    arcade_lobby(c,username, lvl, coin, pull)
             
             Manager.process_events(event)
 
@@ -2067,7 +2068,7 @@ def choose_level(c, lvl, username, coin):
         pygame.display.update()
 
 
-def lobby(username, lvl, coin):
+def lobby(username, lvl, coin, pull):
 
 
     while True:
@@ -2114,19 +2115,19 @@ def lobby(username, lvl, coin):
                 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button.check_input(pos_mouse):
-                    chick(username, lvl, coin)  
+                    chick(username, lvl, coin, pull)  
 
                 if rank_button.check_input(pos_mouse):
-                    ranking(username, lvl, coin)
+                    ranking(username, lvl, coin, pull)
                 
                 if wish_button.check_input(pos_mouse):
-                    wish(username, lvl, coin)
+                    wish(username, lvl, coin, pull)
                 
                 if back_button.check_input(pos_mouse):
                     log_or_reg()
                 
                 if store_button.check_input(pos_mouse):
-                    store(username, lvl, coin)
+                    store(username, lvl, coin, pull)
 
                 if quit_button.check_input(pos_mouse):
                     pygame.quit()
@@ -2143,13 +2144,13 @@ def read_userinput(username, password):
     while True:
         file = open('user_details.txt', 'r')
         for i in file:
-            Username, Password, Level, Time, Coin = i.split(",")
+            Username, Password, Level, Time, Coin, Pull, = i.split(",")
             Password = Password.strip()
             Level = Level.strip()
-            Time = Time.strip()
             Coin = Coin.strip()
+            Pull = Pull.strip()
             if (Username == username and Password == password):
-                return Level, Coin # return the user's previous lvl
+                return Level, Coin, Pull
             
             else:
                 screen.blit(background_image,(0,0))
@@ -2191,7 +2192,7 @@ def save_userinput(username, password):
         file = open('user_details.txt', 'r')
         for i in file:
             #list = i.split(",")
-            Username, Password, Level, Time, Coin = i.strip().split(",")
+            Username, Password, Level, Time, Coin, Pull = i.strip().split(",")
 
             # check if the name has been used before
             if username == Username:
@@ -2240,11 +2241,18 @@ def save_userinput(username, password):
 
         else:
             file = open('user_details.txt', 'a')
-            file.write(f'{username}, {password}, 1, 10000, 0' + '\n')
+            file.write(f'{username}, {password}, 1, 10000, 0, 0' + '\n')
+            # username, password, level, time, coin, pull
             file.close()
+
+            file2 = open('user_backpack.txt', 'a')
+            file2.write(f'{username}, normal, no, no')
+            file2.close()
+
             lvl = 1
             coin = 0
-            return lvl, coin
+            pull = 0
+            return lvl, coin, pull
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -2262,7 +2270,7 @@ def save_userinput(username, password):
         pygame.display.update()
 
 
-def welcome_user(username, lvl, coin):
+def welcome_user(username, lvl, coin, pull):
     # screen display after user done with login/register part - my
     while True:
         for event in pygame.event.get():
@@ -2271,7 +2279,7 @@ def welcome_user(username, lvl, coin):
                 sys.exit()
             
             if event.type == pygame.MOUSEBUTTONDOWN:
-                lobby(username, lvl, coin)
+                lobby(username, lvl, coin, pull)
 
             Manager.process_events(event)
 
@@ -2332,8 +2340,8 @@ def login():
 
             if event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED:
                 if '#username' in username_input.get_object_ids() and '#password' in password_input.get_object_ids():
-                    lvl, coin= read_userinput(username_input.text, password_input.text)
-                    welcome_user(username_input.text, int(lvl), int(coin))
+                    lvl, coin, pull = read_userinput(username_input.text, password_input.text)
+                    welcome_user(username_input.text, int(lvl), int(coin), int(pull))
             
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.check_input(pos_mouse):
@@ -2381,8 +2389,8 @@ def register():
 
             if event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED:
                 if '#username' in username_input.get_object_ids() and '#password' in password_input.get_object_ids():
-                    lvl, coin = save_userinput(username_input.text, password_input.text) # link to later use
-                    welcome_user(username_input.text, int(lvl), int(coin))
+                    lvl, coin, pull = save_userinput(username_input.text, password_input.text) # link to later use
+                    welcome_user(username_input.text, int(lvl), int(coin), int(pull))
             
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.check_input(pos_mouse):
@@ -2432,7 +2440,7 @@ def log_or_reg():
         pygame.display.update()
 
 
-def store(username, lvl, coin):
+def store(username, lvl, coin, pull):
     ##puo puo did this
     on = True
     buy = False
@@ -2546,12 +2554,12 @@ def store(username, lvl, coin):
                     else :
                         buy = True
                 if next_button.check_input(pos_mouse):
-                    equipment(username, lvl, coin)
+                    equipment(username, lvl, coin, pull)
                 if back_button.check_input(pos_mouse):
-                    lobby(username, lvl, coin)           
+                    lobby(username, lvl, coin, pull)           
 
         if buy :
-            bought(username, lvl, coin)
+            bought(username, lvl, coin, pull)
 
         pygame.display.flip()
 
@@ -2559,7 +2567,7 @@ def store(username, lvl, coin):
     sys.exit()
 
 
-def bought(username, lvl, coin) :
+def bought(username, lvl, coin, pull) :
     #puopuo did this too
 
     surface =  pygame.Surface((width,height))
@@ -2570,7 +2578,7 @@ def bought(username, lvl, coin) :
     screen.blit(surface,(0,0))
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
-            store(username, lvl, coin)
+            store(username, lvl, coin, pull)
         if event.type == pygame.quit:
             pygame.quit()
             sys.exit()
@@ -2578,7 +2586,7 @@ def bought(username, lvl, coin) :
     pygame.display.flip()
 
 
-def equipment(username, lvl, coin) :
+def equipment(username, lvl, coin, pull) :
     #puopuo did this also
     on = True
     buy = False
@@ -2691,12 +2699,12 @@ def equipment(username, lvl, coin) :
                     else :
                         buy = True
                 if back_button.check_input(pos_mouse):
-                    store(username, lvl, coin)
+                    store(username, lvl, coin, pull)
                 if next_button.check_input(pos_mouse):
-                    equipment2(username, lvl, coin)
+                    equipment2(username, lvl, coin, pull)
 
         if buy :
-            bought(username, lvl, coin)
+            bought(username, lvl, coin, pull)
 
         pygame.display.flip()
 
@@ -2704,7 +2712,7 @@ def equipment(username, lvl, coin) :
     sys.exit()
 
 
-def equipment2(username, lvl, coin) :
+def equipment2(username, lvl, coin, pull) :
     #puopuo also did this
     on = True
     buy = False
@@ -2771,9 +2779,9 @@ def equipment2(username, lvl, coin) :
                     else :
                         buy = True      
                 if back_button.check_input(pos_mouse):
-                    equipment(username, lvl, coin)
+                    equipment(username, lvl, coin, pull)
         if buy :
-            bought(username, lvl, coin)
+            bought(username, lvl, coin, pull)
 
         pygame.display.flip()
 
@@ -2781,7 +2789,7 @@ def equipment2(username, lvl, coin) :
     sys.exit()
 
 
-def arcade_lobby(c,username, lvl, coin):
+def arcade_lobby(c,username, lvl, coin, pull):
     ## also puo puo did this
     on = True
     font = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50)
@@ -2815,16 +2823,16 @@ def arcade_lobby(c,username, lvl, coin):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button1.check_input(pos_mouse):
-                    snake_lobby(c,username, lvl, coin)                                   
+                    snake_lobby(c,username, lvl, coin, pull)                                   
                         
                 if play_button2.check_input(pos_mouse):
-                    bought(username, lvl, coin)
+                    bought(username, lvl, coin, pull)
 
                 if play_button3.check_input(pos_mouse):
-                    bought(username, lvl, coin)
+                    bought(username, lvl, coin, pull)
 
                 if back_button.check_input(pos_mouse):
-                    choose_level(c,username, lvl, coin)           
+                    choose_level(c,username, lvl, coin, pull)           
 
         pygame.display.flip()
 
@@ -2832,7 +2840,7 @@ def arcade_lobby(c,username, lvl, coin):
     sys.exit()
 
 
-def snake_lobby(c,username, lvl, coin) :
+def snake_lobby(c,username, lvl, coin, pull) :
     # puo puo did also this
     on = True
     while on :
@@ -2857,7 +2865,7 @@ def snake_lobby(c,username, lvl, coin) :
                 on = False
             if event.type == pygame.MOUSEBUTTONDOWN :
                 if back_button.check_input(pos_mouse):
-                    arcade_lobby(c,username, lvl, coin)
+                    arcade_lobby(c,username, lvl, coin, pull)
         
         
         pygame.display.flip()
