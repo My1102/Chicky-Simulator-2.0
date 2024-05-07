@@ -1563,12 +1563,9 @@ def win(c, lvl, username, levl, coin, pull):
 
 
 def update_time(username, time):
-    # by 'Puo Puo'(Puo Lin)
-    # steps used updating
     with open('user_details.txt', 'r') as file:
         lines = file.readlines()
 
-    #sort 
     for i, line in enumerate(lines):
         user_details = line.strip().split(", ")
         if user_details[0] == username:
@@ -1585,8 +1582,6 @@ def update_time(username, time):
 
 
 def update_level(username, lvl):
-    # by 'Puo Puo'(Puo Lin) 
-    # store lvl user played 
     with open('user_details.txt', 'r') as file:
         lines = file.readlines()
 
@@ -1618,47 +1613,26 @@ def update_coin(username, coin):
     return
 
 
+def update_pull(username, pull):
+    with open('user_details.txt', 'r') as file:
+        lines = file.readlines()
+
+    for i, line in enumerate(lines):
+        user_details = line.strip().split(", ")
+        if user_details[0] == username:
+            user_details[5] = str(pull)
+            lines[i] = ', '.join(user_details) + '\n'
+            break
+
+    with open('user_details.txt', 'w') as file:
+        file.writelines(lines)
+    return
+
+
 def items(username, lvl, coin, itemget, pull):
 
     while True:
-        pygame.display.set_caption('Chicky Simulator - Results')
-        screen.blit(ranking_image,(0,0))
-
-        wish_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Items Get', True, 'white')
-        wish_text_rect = wish_text.get_rect(center = (450,100))
-        screen.blit(wish_text, wish_text_rect)
-
-        wishing_surface = pygame.Surface((700,350))
-        wishing_surface.fill('white')
-        wishing_surface.set_alpha(150)
-        wishing_surface_rect = wishing_surface.get_rect(center=(width/2,350))
-        screen.blit(wishing_surface, wishing_surface_rect)
-
-        back_button = Button('graphic/button2.png', 450, 580, 0.3, "BACK")
-        back_button.draw(screen)
-
-        pos_mouse = pygame.mouse.get_pos()
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if back_button.check_input(pos_mouse):
-                    wish(username, lvl, coin, pull)
-
-            Manager.process_events(event)
-
-        Manager.update(UI_REFRESH_RATE)
-
-        pygame.display.update()
-
-
-def item(username, lvl, coin, itemget, pull):
-
-    while True:
-        pygame.display.set_caption('Chicky Simulator - Results')
+        pygame.display.set_caption('Chicky Simulator - Items Get')
         screen.blit(ranking_image,(0,0))
 
         wish_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Items Get', True, 'white')
@@ -1714,10 +1688,10 @@ def shooting_stars(username, lvl, coin, times, itemget, pull):
 
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         vid.stop()
-                        item(username, lvl, coin, itemget, pull)
+                        items(username, lvl, coin, itemget, pull)
             
             vid.close()
-            item(username, lvl, coin, itemget, pull)
+            items(username, lvl, coin, itemget, pull)
 
         else:
             vid = Video('graphic/fivegold.mp4')
@@ -1750,10 +1724,10 @@ def shooting_stars(username, lvl, coin, times, itemget, pull):
 def wish(username, lvl, coin, pull):
 
     while True:
-        pygame.display.set_caption('Chicky Simulator - Wishing')
+        pygame.display.set_caption('Chicky Simulator - Wishes')
         screen.blit(ranking_image,(0,0))
 
-        wish_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Wishing', True, 'white')
+        wish_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Wishes', True, 'white')
         wish_text_rect = wish_text.get_rect(center = (450,100))
         screen.blit(wish_text, wish_text_rect)
 
@@ -1770,28 +1744,33 @@ def wish(username, lvl, coin, pull):
         coin_text_rect = coin_text.get_rect(center = (780,100))
         screen.blit(coin_text, coin_text_rect)
 
+        rpull = 50 - pull
+        pull_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render(f'{rpull} Wishes Left', True, 'black')
+        pull_text_rect = pull_text.get_rect(center = (240,510))
+        screen.blit(pull_text, pull_text_rect)
+
         one_pull_button = Button('graphic/button2.png', 540, 580, 0.22, "1 Wish")
         one_pull_button.draw(screen)
 
-        scoin = Lock('graphic/coin2.png', 500, 640, 0.15)
+        scoin = Lock('graphic/coin2.png', 510, 510, 0.12)
         scoin.draw(screen)
 
-        scoin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('100', True, 'white')
-        scoin_text_rect = scoin_text.get_rect(center = (580,650))
+        scoin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('100', True, 'black')
+        scoin_text_rect = scoin_text.get_rect(center = (560,510))
         screen.blit(scoin_text, scoin_text_rect)
 
         five_pull_button = Button('graphic/button2.png', 720, 580, 0.22, "5 Wish")
         five_pull_button.draw(screen)
 
-        bcoin = Lock('graphic/coin2.png', 680, 640, 0.15)
+        bcoin = Lock('graphic/coin2.png', 680, 510, 0.12)
         bcoin.draw(screen)
 
-        bcoin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('500', True, 'white')
-        bcoin_text_rect = bcoin_text.get_rect(center = (760,650))
+        bcoin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('500', True, 'black')
+        bcoin_text_rect = bcoin_text.get_rect(center = (740,510))
         screen.blit(bcoin_text, bcoin_text_rect)
 
-        backpack_button = Button('graphic/backpack3.png', 150, 580, 0.3, " ")
-        backpack_button.draw(screen)
+        chicky_button = Button('graphic/chicky.png', 150, 580, 0.11, " ")
+        chicky_button.draw(screen)
 
         back_button = Button('graphic/botton1.png', 100, 100, 0.6, "<<")
         back_button.draw(screen)
@@ -1810,6 +1789,8 @@ def wish(username, lvl, coin, pull):
                 'coin50','coin50','coin50',
                 'coin75','coin75',
                 'coin90','kitty','tanker','worrier','speedy','magnet')
+        
+        chicky = ('kitty','tanker','worrier','speedy','magnet')
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -1824,8 +1805,17 @@ def wish(username, lvl, coin, pull):
                     if coin >= 100:
                         times = 1
                         coin -= 100
+                        pull += 1
+
                         if pull < 50:
                             itemget = random.choice(item)
+                            if itemget in chicky:
+                                pull = 0
+                        else:
+                            pull = 0
+                            itemget = random.choice(chicky)
+                        
+                        update_pull(username, pull)
                         update_coin(username, coin)
                         shooting_stars(username, lvl, coin, times, itemget, pull)
                     else:
@@ -1835,14 +1825,23 @@ def wish(username, lvl, coin, pull):
                     if coin >= 500:
                         times = 5
                         coin -= 500
-                        item1get = random.choice(item)
-                        item2get = random.choice(item)
-                        item3get = random.choice(item)
-                        item4get = random.choice(item)
-                        item5get = random.choice(item)
-                        itemget = str(f'{item1get},{item2get},{item3get},{item4get},{item5get}')
+                        n = 5
+
+                        while n > 0:
+                            pull += 1
+                            n -= 1
+                            if pull < 50:
+                                itemget = random.choice(item)
+                                if itemget in chicky:
+                                    pull = 0
+                            else:
+                                pull = 0
+                                itemget = random.choice(chicky)
+                            itemsget = str(itemget)
+
+                        update_pull(username, pull)
                         update_coin(username, coin)
-                        shooting_stars(username, lvl, coin, times, itemget, pull)
+                        shooting_stars(username, lvl, coin, times, itemsget, pull)
                     else:
                         break
 
@@ -1880,7 +1879,7 @@ def ranking(username, lvl, coin, pull):
         with open('user_details.txt', 'r') as file:
             data = [tuple(line.strip().split(',')) for line in file]
             sorted_data = sorted(data, key=lambda x:int(x[3])) 
-            for rank, (Username, Password, Level, Time, Coin) in enumerate(sorted_data[0:9], start=1):
+            for rank, (Username, Password, Level, Time, Coin, Pull) in enumerate(sorted_data[0:9], start=1):
                 first = Ranking(130+(rank*50), str(rank), Username, Time)
                 first.show(screen)
 
@@ -2644,6 +2643,7 @@ def bought1(username, lvl, coin, pull) :
 
     pygame.display.flip()
 
+
 def bought2(username, lvl, coin, pull) :
     #puopuo did this too
 
@@ -2663,6 +2663,7 @@ def bought2(username, lvl, coin, pull) :
             sys.exit()
 
     pygame.display.flip()
+
 
 def bought3(username, lvl, coin, pull) :
     #puopuo did this too
@@ -2704,6 +2705,7 @@ def no_money(username, lvl, coin, pull) :
 
     pygame.display.flip()
 
+
 def no_money2(username, lvl, coin, pull) :
     #puopuo did this too
 
@@ -2723,6 +2725,7 @@ def no_money2(username, lvl, coin, pull) :
             sys.exit()
 
     pygame.display.flip()
+
 
 def no_money3(username, lvl, coin, pull) :
     #puopuo did this too
@@ -3126,6 +3129,7 @@ def snake_lobby(c,username, lvl, coin, pull) :
     pygame.quit()
     sys.exit()
 
+
 def dunno1_lobby(c,username, lvl, coin, pull) :
     # puo puo did also this
     on = True
@@ -3158,6 +3162,7 @@ def dunno1_lobby(c,username, lvl, coin, pull) :
 
     pygame.quit()
     sys.exit()
+
 
 def dunno2_lobby(c,username, lvl, coin, pull) :
     # puo puo did also this
@@ -3192,5 +3197,5 @@ def dunno2_lobby(c,username, lvl, coin, pull) :
     pygame.quit()
     sys.exit()
 
-log_or_reg()
 
+log_or_reg()
