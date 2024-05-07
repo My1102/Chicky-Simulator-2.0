@@ -18,6 +18,7 @@
 import pygame
 import sys
 import pygame_gui
+import random
 import os
 from pyvidplayer2 import Video
 from button import Button # library by my
@@ -1616,13 +1617,13 @@ def update_coin(username, coin):
     return
 
 
-def results(username, lvl, coin):
+def items(username, lvl, coin, itemget):
 
     while True:
         pygame.display.set_caption('Chicky Simulator - Results')
         screen.blit(ranking_image,(0,0))
 
-        wish_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Rubbish', True, 'white')
+        wish_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Items Get', True, 'white')
         wish_text_rect = wish_text.get_rect(center = (450,100))
         screen.blit(wish_text, wish_text_rect)
 
@@ -1653,7 +1654,44 @@ def results(username, lvl, coin):
         pygame.display.update()
 
 
-def shooting_stars(username, lvl, coin, times):
+def item(username, lvl, coin, itemget):
+
+    while True:
+        pygame.display.set_caption('Chicky Simulator - Results')
+        screen.blit(ranking_image,(0,0))
+
+        wish_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Items Get', True, 'white')
+        wish_text_rect = wish_text.get_rect(center = (450,100))
+        screen.blit(wish_text, wish_text_rect)
+
+        wishing_surface = pygame.Surface((700,350))
+        wishing_surface.fill('white')
+        wishing_surface.set_alpha(150)
+        wishing_surface_rect = wishing_surface.get_rect(center=(width/2,350))
+        screen.blit(wishing_surface, wishing_surface_rect)
+
+        back_button = Button('graphic/button2.png', 450, 580, 0.3, "BACK")
+        back_button.draw(screen)
+
+        pos_mouse = pygame.mouse.get_pos()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if back_button.check_input(pos_mouse):
+                    wish(username, lvl, coin)
+
+            Manager.process_events(event)
+
+        Manager.update(UI_REFRESH_RATE)
+
+        pygame.display.update()
+
+
+def shooting_stars(username, lvl, coin, times, itemget):
 
     while True:
         if times == 1:
@@ -1675,10 +1713,10 @@ def shooting_stars(username, lvl, coin, times):
 
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         vid.stop()
-                        results(username, lvl, coin)
+                        item(username, lvl, coin, itemget)
             
             vid.close()
-            results(username, lvl, coin)
+            item(username, lvl, coin, itemget)
 
         else:
             vid = Video('graphic/fivegold.mp4')
@@ -1700,10 +1738,10 @@ def shooting_stars(username, lvl, coin, times):
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         vid.stop()
                         vid.close()
-                        results(username, lvl, coin)
+                        items(username, lvl, coin, itemget)
 
             vid.close()
-            results(username, lvl, coin)
+            items(username, lvl, coin, itemget)
 
         pygame.display.update()
 
@@ -1759,6 +1797,19 @@ def wish(username, lvl, coin):
 
         pos_mouse = pygame.mouse.get_pos()
 
+        item = ('coin5','coin5',
+                'coin10','coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+                'coin75','coin75',
+                'coin90','kitty','tanker','worrier','speedy','magnet')
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -1772,8 +1823,9 @@ def wish(username, lvl, coin):
                     if coin >= 100:
                         times = 1
                         coin -= 100
+                        itemget = random.choice(item)
                         update_coin(username, coin)
-                        shooting_stars(username, lvl, coin, times)
+                        shooting_stars(username, lvl, coin, times, itemget)
                     else:
                         break
 
@@ -1781,8 +1833,14 @@ def wish(username, lvl, coin):
                     if coin >= 500:
                         times = 5
                         coin -= 500
+                        item1get = random.choice(item)
+                        item2get = random.choice(item)
+                        item3get = random.choice(item)
+                        item4get = random.choice(item)
+                        item5get = random.choice(item)
+                        itemget = str(f'{item1get},{item2get},{item3get},{item4get},{item5get}')
                         update_coin(username, coin)
-                        shooting_stars(username, lvl, coin, times)
+                        shooting_stars(username, lvl, coin, times, itemget)
                     else:
                         break
 
