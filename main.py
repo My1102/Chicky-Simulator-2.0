@@ -198,10 +198,7 @@ def tutorial4(c, lvl, username, coin):
 
                 if back_button.check_input(pos_mouse):
                     choose_level(c, lvl, username, coin)
-<<<<<<< HEAD
 
-=======
->>>>>>> d8037de57e57765f1ee2e50419059b078eefd4d0
         pygame.display.update()   
 
 
@@ -1508,10 +1505,7 @@ def win5(c, lvl, username, coin):
 
                 if rank_button.check_input(pos_mouse):
                     ranking(username, lvl, coin)
-<<<<<<< HEAD
-=======
 
->>>>>>> d8037de57e57765f1ee2e50419059b078eefd4d0
         pygame.display.update()
 
 
@@ -1563,10 +1557,7 @@ def win(c, lvl, username, levl, coin):
                         level4(c, lvl, username, coin)
                     elif levl == 5:
                         level5(c, lvl, username, coin)
-<<<<<<< HEAD
-=======
 
->>>>>>> d8037de57e57765f1ee2e50419059b078eefd4d0
         pygame.display.update()
 
 
@@ -1627,10 +1618,7 @@ def update_coin(username, coin):
 
 
 def results(username, lvl, coin):
-<<<<<<< HEAD
-=======
 
->>>>>>> d8037de57e57765f1ee2e50419059b078eefd4d0
     while True:
         pygame.display.set_caption('Chicky Simulator - Results')
         screen.blit(ranking_image,(0,0))
@@ -1801,10 +1789,6 @@ def wish(username, lvl, coin):
 
             Manager.process_events(event)
 
-<<<<<<< HEAD
-=======
-
->>>>>>> d8037de57e57765f1ee2e50419059b078eefd4d0
         pygame.display.update()
 
 
@@ -2026,10 +2010,7 @@ def choose_level(c, lvl, username, coin):
 
 
 def lobby(username, lvl, coin):
-<<<<<<< HEAD
-=======
-#when user start - my
->>>>>>> d8037de57e57765f1ee2e50419059b078eefd4d0
+
 
     while True:
 
@@ -2521,11 +2502,8 @@ def store(username, lvl, coin):
 
 
 def bought(username, lvl, coin) :
-<<<<<<< HEAD
     #puopuo did this too
-=======
 
->>>>>>> d8037de57e57765f1ee2e50419059b078eefd4d0
     surface =  pygame.Surface((width,height))
     pygame.display.set_caption('Chicky Simulator - Store')
     surface.blit(background_image,(0,0))
@@ -2688,9 +2666,6 @@ def equipment2(username, lvl, coin) :
         screen.blit(noob_armor,(75,35))
         screen.blit(helmet3,(390,35))
         screen.blit(noob_helmet,(680,35))
-        screen.blit(noob_leg,(75,370))
-        screen.blit(helmet,(390,370))
-        screen.blit(leg,(680,370))
         #################
 
         #PRICE
@@ -2706,18 +2681,6 @@ def equipment2(username, lvl, coin) :
         price_text = font.render(f"{75}", True, (255,255,255))
         text_rect = price_text.get_rect(center =(750,215))
         screen.blit(price_text, text_rect)
-        ####dunno yet#####
-        price_text = font.render(f"{100}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(150,525))
-        screen.blit(price_text, text_rect)
-        ######dunno yet#####        
-        price_text = font.render(f"{150}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(450,525))
-        screen.blit(price_text, text_rect)
-        #######dunno yet#########        
-        price_text = font.render(f"{150}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(750,525))
-        screen.blit(price_text, text_rect)
 
 
         # BUY BUTTONS
@@ -2727,12 +2690,6 @@ def equipment2(username, lvl, coin) :
         buy_button2.draw(screen)
         buy_button3 = Button('graphic/botton1.png', 750, 300, 1, "BUY")
         buy_button3.draw(screen)
-        buy_button4 = Button('graphic/botton1.png', 150, 600, 1, "BUY")
-        buy_button4.draw(screen)
-        buy_button5 = Button('graphic/botton1.png', 450, 600, 1, "BUY")
-        buy_button5.draw(screen)
-        buy_button6 = Button('graphic/botton1.png', 750, 600, 1, "BUY")
-        buy_button6.draw(screen)
         #########
 
         #Back page button#
@@ -2755,27 +2712,6 @@ def equipment2(username, lvl, coin) :
                         buy = False
                     else :
                         buy = True      
-                if buy_button3.check_input(pos_mouse):
-                    if buy :
-                        buy = False
-                    else :
-                        buy = True
-                if buy_button4.check_input(pos_mouse):
-                    if buy :
-                        buy = False
-                    else :
-                        buy = True                                        
-                        
-                if buy_button5.check_input(pos_mouse):
-                    if buy :
-                        buy = False
-                    else :
-                        buy = True      
-                if buy_button6.check_input(pos_mouse):
-                    if buy :
-                        buy = False
-                    else :
-                        buy = True
                 if back_button.check_input(pos_mouse):
                     equipment(username, lvl, coin)
         if buy :
@@ -2786,7 +2722,7 @@ def equipment2(username, lvl, coin) :
     pygame.quit()
     sys.exit()
 
-<<<<<<< HEAD
+
 def arcade_lobby(c,username, lvl, coin):
     ## also puo puo did this
     on = True
@@ -2845,6 +2781,9 @@ def snake_lobby(c,username, lvl, coin) :
         screen.blit(background_image,(0,0))
         pos_mouse = pygame.mouse.get_pos()
         pygame.display.set_caption('Chicky Simulator - Unnamed yet')
+        title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('Unnamed', True, 'white')
+        title_text_rect = title_text.get_rect(center = (450,100))
+        screen.blit(title_text, title_text_rect)
 
         #buttons#
         back_button = Button('graphic/botton1.png', 50, 35, 0.5, "<<")
@@ -2868,8 +2807,6 @@ def snake_lobby(c,username, lvl, coin) :
     pygame.quit()
     sys.exit()
 
-=======
->>>>>>> d8037de57e57765f1ee2e50419059b078eefd4d0
 
 log_or_reg()
 
