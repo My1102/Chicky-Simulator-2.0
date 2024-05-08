@@ -2253,7 +2253,8 @@ def shooting_stars(username, lvl, coin, times, itemget, pull):
 
         else:
             item_list = itemget.split(',')
-            if item_list in chicky:
+            # for item in item_list:
+            if ((item_list[0] in chicky) or (item_list[1] in chicky) or (item_list[2] in chicky) or (item_list[3] in chicky) or (item_list[4] in chicky)):
                 vid = Video('graphic/fivegold.mp4')
                 screen = pygame.display.set_mode((width,height))
                 pygame.display.set_caption('Chicky Simulator - Wishing')
