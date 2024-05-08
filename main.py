@@ -242,7 +242,8 @@ def tutorial3(c, lvl, username, coin, pull):
 
         pygame.display.update()   
 
-def leveltest(c,lvl,username, coin, pull):
+
+def leveltest(c, lvl, username, coin, pull):
     width, height = 900, 700
     screen = pygame.display.set_mode((width,height))
     pygame.display.set_caption('Chicky Simulator')
@@ -539,6 +540,7 @@ def leveltest(c,lvl,username, coin, pull):
             if event.type == pygame.QUIT:
                 run = False
         pygame.display.update()
+
 
 def level1(c, lvl, username, coin, pull): # This one easier to read
     # by 'Puo Puo'(Puo Lin) & Jia Ying
@@ -1928,7 +1930,32 @@ def update_pull(username, pull):
     return
 
 
-def items(username, lvl, coin, itemget, pull):
+def update_chicky(username, chicky):
+    with open('user_backpack.txt', 'r') as file:
+        lines = file.readlines()
+
+    for i, line in enumerate(lines):
+        user_backpack = line.strip().split(", ")
+        if user_backpack[0] == username:
+            chicky_list = user_backpack[1].split('/')
+            if chicky_list[1] == '0':
+                del chicky_list[1]
+                chicky_list.append(f'{chicky}')
+            elif chicky in chicky_list:
+                break
+            else:
+                chicky_list.append(f'{chicky}')
+            chicky_str = '/'.join(chicky_list)
+            user_backpack[1] = str(chicky_str)
+            lines[i] = ', '.join(user_backpack) + '\n'
+            break
+
+    with open('user_backpack.txt', 'w') as file:
+        file.writelines(lines)
+    return
+
+
+def items(username, lvl, coin, times, itemget, pull):
 
     while True:
         pygame.display.set_caption('Chicky Simulator - Items Get')
@@ -1949,6 +1976,212 @@ def items(username, lvl, coin, itemget, pull):
 
         pos_mouse = pygame.mouse.get_pos()
 
+        if times == 1:
+            if itemget == 'kitty':
+                chicky = str('kitty')
+                update_chicky(username, chicky)
+                kitty = Lock('graphic/miaoji.png', width/2, 350, 0.18)
+                kitty.draw(screen)
+
+            elif itemget == 'tanker':
+                chicky = str('tanker')
+                update_chicky(username, chicky)
+                tanker = Lock('graphic/tank chic.png', width/2, 350, 0.18)
+                tanker.draw(screen)
+
+            elif itemget == 'magnet':
+                chicky = str('magnet')
+                update_chicky(username, chicky)
+                magnet = Lock('graphic/magnetchic.png', width/2, 350, 0.18)
+                magnet.draw(screen)
+
+            elif itemget == 'speedy':
+                chicky = str('speedy')
+                update_chicky(username, chicky)
+                speedy = Lock('graphic/speedychic.png', width/2, 350, 0.18)
+                speedy.draw(screen)
+
+            elif itemget == 'worrier':
+                chicky = str('worrier')
+                update_chicky(username, chicky)
+                worrier = Lock('graphic/ninjachic.png', width/2, 350, 0.18)
+                worrier.draw(screen)
+
+            else:
+                coins = Lock('graphic/itemcoin.png', width/2, 350, 1.5)
+                coins.draw(screen)
+
+        else:
+            item1,item2,item3,item4,item5 = itemget.split(',')
+            if item1 == 'kitty':
+                chicky = str('kitty')
+                update_chicky(username, chicky)
+                kitty = Lock('graphic/miaoji.png', 200, 350, 0.18)
+                kitty.draw(screen)
+
+            elif item1 == 'tanker':
+                chicky = str('tanker')
+                update_chicky(username, chicky)
+                tanker = Lock('graphic/tank chic.png', 200, 350, 0.18)
+                tanker.draw(screen)
+
+            elif item1 == 'magnet':
+                chicky = str('magnet')
+                update_chicky(username, chicky)
+                magnet = Lock('graphic/magnetchic.png', 200, 350, 0.18)
+                magnet.draw(screen)
+
+            elif item1 == 'speedy':
+                chicky = str('speedy')
+                update_chicky(username, chicky)
+                speedy = Lock('graphic/speedychic.png', 200, 350, 0.18)
+                speedy.draw(screen)
+
+            elif item1 == 'worrier':
+                chicky = str('worrier')
+                update_chicky(username, chicky)
+                worrier = Lock('graphic/ninjachic.png', 200, 350, 0.18)
+                worrier.draw(screen)
+
+            else:
+                coins = Lock('graphic/itemcoin.png', 200, 350, 1.5)
+                coins.draw(screen)
+
+            if item2 == 'kitty':
+                chicky = str('kitty')
+                update_chicky(username, chicky)
+                kitty = Lock('graphic/miaoji.png', 325, 350, 0.18)
+                kitty.draw(screen)
+
+            elif item2 == 'tanker':
+                chicky = str('tanker')
+                update_chicky(username, chicky)
+                tanker = Lock('graphic/tank chic.png', 325, 350, 0.18)
+                tanker.draw(screen)
+
+            elif item2 == 'magnet':
+                chicky = str('magnet')
+                update_chicky(username, chicky)
+                magnet = Lock('graphic/magnetchic.png', 325, 350, 0.18)
+                magnet.draw(screen)
+
+            elif item2 == 'speedy':
+                chicky = str('speedy')
+                update_chicky(username, chicky)
+                speedy = Lock('graphic/speedychic.png', 325, 350, 0.18)
+                speedy.draw(screen)
+
+            elif item2 == 'worrier':
+                chicky = str('worrier')
+                update_chicky(username, chicky)
+                worrier = Lock('graphic/ninjachic.png', 325, 350, 0.18)
+                worrier.draw(screen)
+
+            else:
+                coins = Lock('graphic/itemcoin.png', 325, 350, 1.5)
+                coins.draw(screen)
+
+            if item3 == 'kitty':
+                chicky = str('kitty')
+                update_chicky(username, chicky)
+                kitty = Lock('graphic/miaoji.png', width/2, 350, 0.18)
+                kitty.draw(screen)
+
+            elif item3 == 'tanker':
+                chicky = str('tanker')
+                update_chicky(username, chicky)
+                tanker = Lock('graphic/tank chic.png', width/2, 350, 0.18)
+                tanker.draw(screen)
+
+            elif item3 == 'magnet':
+                chicky = str('magnet')
+                update_chicky(username, chicky)
+                magnet = Lock('graphic/magnetchic.png', width/2, 350, 0.18)
+                magnet.draw(screen)
+
+            elif item3 == 'speedy':
+                chicky = str('speedy')
+                update_chicky(username, chicky)
+                speedy = Lock('graphic/speedychic.png', width/2, 350, 0.18)
+                speedy.draw(screen)
+
+            elif item3 == 'worrier':
+                chicky = str('worrier')
+                update_chicky(username, chicky)
+                worrier = Lock('graphic/ninjachic.png', width/2, 350, 0.18)
+                worrier.draw(screen)
+
+            else:
+                coins = Lock('graphic/itemcoin.png', width/2, 350, 1.5)
+                coins.draw(screen)
+
+            if item4 == 'kitty':
+                chicky = str('kitty')
+                update_chicky(username, chicky)
+                kitty = Lock('graphic/miaoji.png', 575, 350, 0.18)
+                kitty.draw(screen)
+
+            elif item4 == 'tanker':
+                chicky = str('tanker')
+                update_chicky(username, chicky)
+                tanker = Lock('graphic/tank chic.png', 575, 350, 0.18)
+                tanker.draw(screen)
+
+            elif item4 == 'magnet':
+                chicky = str('magnet')
+                update_chicky(username, chicky)
+                magnet = Lock('graphic/magnetchic.png', 575, 350, 0.18)
+                magnet.draw(screen)
+
+            elif item4 == 'speedy':
+                chicky = str('speedy')
+                update_chicky(username, chicky)
+                speedy = Lock('graphic/speedychic.png', 575, 350, 0.18)
+                speedy.draw(screen)
+
+            elif item4 == 'worrier':
+                chicky = str('worrier')
+                update_chicky(username, chicky)
+                worrier = Lock('graphic/ninjachic.png', 575, 350, 0.18)
+                worrier.draw(screen)
+
+            else:
+                coins = Lock('graphic/itemcoin.png', 575, 350, 1.5)
+                coins.draw(screen)
+            
+            if item5 == 'kitty':
+                chicky = str('kitty')
+                update_chicky(username, chicky)
+                kitty = Lock('graphic/miaoji.png', 700, 350, 0.18)
+                kitty.draw(screen)
+
+            elif item5 == 'tanker':
+                chicky = str('tanker')
+                update_chicky(username, chicky)
+                tanker = Lock('graphic/tank chic.png', 700, 350, 0.18)
+                tanker.draw(screen)
+
+            elif item5 == 'magnet':
+                chicky = str('magnet')
+                update_chicky(username, chicky)
+                magnet = Lock('graphic/magnetchic.png', 700, 350, 0.18)
+                magnet.draw(screen)
+
+            elif item5 == 'speedy':
+                chicky = str('speedy')
+                update_chicky(username, chicky)
+                speedy = Lock('graphic/speedychic.png', 700, 350, 0.18)
+                speedy.draw(screen)
+
+            elif item5 == 'worrier':
+                chicky = str('worrier')
+                update_chicky(username, chicky)
+                worrier = Lock('graphic/ninjachic.png', 700, 350, 0.18)
+                worrier.draw(screen)
+            else:
+                coins = Lock('graphic/itemcoin.png', 700, 350, 1.5)
+                coins.draw(screen)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -1968,54 +2201,105 @@ def items(username, lvl, coin, itemget, pull):
 def shooting_stars(username, lvl, coin, times, itemget, pull):
 
     while True:
+        chicky = ('kitty','tanker','worrier','speedy','magnet')
         if times == 1:
-            vid = Video('graphic/onegold.mp4')
-            screen = pygame.display.set_mode((width,height))
-            pygame.display.set_caption('Chicky Simulator - Wishing')
+            if itemget in chicky:
+                vid = Video('graphic/onegold.mp4')
+                screen = pygame.display.set_mode((width,height))
+                pygame.display.set_caption('Chicky Simulator - Wishing')
 
-            while vid.active:
-                vid.set_speed(1.0)
-                if vid.draw(screen, (-360, 0), force_draw=False):
-                    pygame.display.update()
+                while vid.active:
+                    vid.set_speed(1.0)
+                    if vid.draw(screen, (-360, 0), force_draw=False):
+                        pygame.display.update()
 
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        vid.stop()
-                        vid.close()
-                        pygame.quit()
-                        sys.exit()
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            vid.stop()
+                            vid.close()
+                            pygame.quit()
+                            sys.exit()
 
-                    if event.type == pygame.MOUSEBUTTONDOWN:
-                        vid.stop()
-                        items(username, lvl, coin, itemget, pull)
-            
-            vid.close()
-            items(username, lvl, coin, itemget, pull)
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                            vid.stop()
+                            items(username, lvl, coin, times, itemget, pull)
+                
+                vid.close()
+                items(username, lvl, coin, times, itemget, pull)
+
+            else:
+                vid = Video('graphic/onepurple.mp4')
+                screen = pygame.display.set_mode((width,height))
+                pygame.display.set_caption('Chicky Simulator - Wishing')
+
+                while vid.active:
+                    vid.set_speed(1.0)
+                    if vid.draw(screen, (-360, 0), force_draw=False):
+                        pygame.display.update()
+
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            vid.stop()
+                            vid.close()
+                            pygame.quit()
+                            sys.exit()
+
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                            vid.stop()
+                            items(username, lvl, coin, times, itemget, pull)
+                
+                vid.close()
+                items(username, lvl, coin, times, itemget, pull)
 
         else:
-            vid = Video('graphic/fivegold.mp4')
-            screen = pygame.display.set_mode((width,height))
-            pygame.display.set_caption('Chicky Simulator - Wishing')
+            item_list = itemget.split(',')
+            if item_list in chicky:
+                vid = Video('graphic/fivegold.mp4')
+                screen = pygame.display.set_mode((width,height))
+                pygame.display.set_caption('Chicky Simulator - Wishing')
 
-            while vid.active:
-                vid.set_speed(1.0)
-                if vid.draw(screen, (-310, 0), force_draw=False):
-                    pygame.display.update()
+                while vid.active:
+                    vid.set_speed(1.0)
+                    if vid.draw(screen, (-360, 0), force_draw=False):
+                        pygame.display.update()
 
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        vid.stop()
-                        vid.close()
-                        pygame.quit()
-                        sys.exit()
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            vid.stop()
+                            vid.close()
+                            pygame.quit()
+                            sys.exit()
 
-                    if event.type == pygame.MOUSEBUTTONDOWN:
-                        vid.stop()
-                        vid.close()
-                        items(username, lvl, coin, itemget, pull)
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                            vid.stop()
+                            items(username, lvl, coin, times, itemget, pull)
+                
+                vid.close()
+                items(username, lvl, coin, times, itemget, pull)
 
-            vid.close()
-            items(username, lvl, coin, itemget, pull)
+            else:
+                vid = Video('graphic/fivepurple.mp4')
+                screen = pygame.display.set_mode((width,height))
+                pygame.display.set_caption('Chicky Simulator - Wishing')
+
+                while vid.active:
+                    vid.set_speed(1.0)
+                    if vid.draw(screen, (-360, 0), force_draw=False):
+                        pygame.display.update()
+
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            vid.stop()
+                            vid.close()
+                            pygame.quit()
+                            sys.exit()
+
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                            vid.stop()
+                            items(username, lvl, coin, times, itemget, pull)
+                
+                vid.close()
+                items(username, lvl, coin, times, itemget, pull)
 
         pygame.display.update()
 
@@ -2035,6 +2319,9 @@ def wish(username, lvl, coin, pull):
         wishing_surface.set_alpha(150)
         wishing_surface_rect = wishing_surface.get_rect(center=(width/2,350))
         screen.blit(wishing_surface, wishing_surface_rect)
+
+        all_chicky = Lock('graphic/allchicky.png', width/2, 340, 0.9)
+        all_chicky.draw(screen)
 
         coinlogo = Lock('graphic/manycoin.png', 700, 100, 0.3)
         coinlogo.draw(screen)
@@ -2125,7 +2412,7 @@ def wish(username, lvl, coin, pull):
                         times = 5
                         coin -= 500
                         n = 5
-
+                        itemlist = [0]
                         while n > 0:
                             pull += 1
                             n -= 1
@@ -2133,10 +2420,15 @@ def wish(username, lvl, coin, pull):
                                 itemget = random.choice(item)
                                 if itemget in chicky:
                                     pull = 0
+
                             else:
                                 pull = 0
                                 itemget = random.choice(chicky)
-                            itemsget = str(itemget)
+
+                            itemlist.append(itemget)
+
+                        del itemlist[0]
+                        itemsget = str(f'{itemlist[0]},{itemlist[1]},{itemlist[2]},{itemlist[3]},{itemlist[4]}')
 
                         update_pull(username, pull)
                         update_coin(username, coin)
