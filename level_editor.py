@@ -42,7 +42,7 @@ load_img = pygame.transform.scale(load_img,(50,50))
 
 #define game variables
 clicked = False
-level = 1
+lvl = 1
 
 #define colours
 white = (255, 255, 255)
@@ -147,13 +147,13 @@ while run:
 	#load and save level
 	if save_button.draw():
 		#save level data
-		pickle_out = open(f'level{level}_data', 'wb')
+		pickle_out = open(f'level{lvl}_data', 'wb')
 		pickle.dump(world_data, pickle_out)
 		pickle_out.close()
 	if load_button.draw():
 		#load in level data
-		if path.exists(f'level{level}_data'):
-			pickle_in = open(f'level{level}_data', 'rb')
+		if path.exists(f'level{lvl}_data'):
+			pickle_in = open(f'level{lvl}_data', 'rb')
 			world_data = pickle.load(pickle_in)
 
 
@@ -163,7 +163,7 @@ while run:
 
 
 	#text showing current level
-	draw_text(f'Level: {level}', font, white, tile_size, screen_height - 60)
+	draw_text(f'Level: {lvl}', font, white, tile_size, screen_height - 60)
 	draw_text('Press UP or DOWN to change level', font, white, tile_size, screen_height - 40)
 
 	#event handler
@@ -193,9 +193,9 @@ while run:
 		#up and down key presses to change level number
 		if event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_UP:
-				level += 1
-			elif event.key == pygame.K_DOWN and level > 1:
-				level -= 1
+				lvl += 1
+			elif event.key == pygame.K_DOWN and lvl > 1:
+				lvl -= 1
 
 	#update game display window
 	pygame.display.update()
