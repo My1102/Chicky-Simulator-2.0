@@ -4379,7 +4379,7 @@ def shield3_info(username, lvl, coin, pull) :
 
         surface = pygame.Surface((175,195))
         surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Shield\n3-Star\nDEF+10',True,'white'),(5,5))
+        surface.blit(font.render('Shield\n3-Star\nDEF+5',True,'white'),(5,5))
         screen.blit(surface,(80,375))
 
         for event in pygame.event.get():
@@ -4397,7 +4397,7 @@ def shield4_info(username, lvl, coin, pull) :
 
         surface = pygame.Surface((175,195))
         surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Shield\n4-Star\nDEF+20',True,'white'),(5,5))
+        surface.blit(font.render('Shield\n4-Star\nDEF+7',True,'white'),(5,5))
         screen.blit(surface,(380,375))
 
         for event in pygame.event.get():
@@ -4415,7 +4415,7 @@ def shield5_info(username, lvl, coin, pull) :
 
         surface = pygame.Surface((175,195))
         surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Shield\n5-Star\nDEF+30',True,'white'),(5,5))
+        surface.blit(font.render('Shield\n5-Star\nDEF+10',True,'white'),(5,5))
         screen.blit(surface,(680,375))
 
         for event in pygame.event.get():
@@ -4433,7 +4433,7 @@ def helmet3_info(username, lvl, coin, pull) :
 
         surface = pygame.Surface((175,195))
         surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Helmet\n3-Star\nHP+5\nDEF+5',True,'white'),(5,5))
+        surface.blit(font.render('Helmet\n3-Star\nDEF+5',True,'white'),(5,5))
         screen.blit(surface,(80,130))
 
         for event in pygame.event.get():
@@ -4451,7 +4451,7 @@ def helmet4_info(username, lvl, coin, pull) :
 
         surface = pygame.Surface((175,195))
         surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Helmet\n4-Star\nHP+10\nDEF+7',True,'white'),(5,5))
+        surface.blit(font.render('Helmet\n4-Star\nDEF+7',True,'white'),(5,5))
         screen.blit(surface,(380,130))
 
         for event in pygame.event.get():
@@ -4469,7 +4469,7 @@ def helmet5_info(username, lvl, coin, pull) :
 
         surface = pygame.Surface((175,195))
         surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Helmet\n5-Star\nHP+15\nDEF+10',True,'white'),(5,5))
+        surface.blit(font.render('Helmet\n5-Star\nDEF+10',True,'white'),(5,5))
         screen.blit(surface,(680,130))
 
         for event in pygame.event.get():
@@ -4487,7 +4487,7 @@ def armor3_info(username, lvl, coin, pull) :
 
         surface = pygame.Surface((175,195))
         surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Armor\n3-Star\nHP+10\nDEF+5',True,'white'),(5,5))
+        surface.blit(font.render('Armor\n3-Star\nDEF+5',True,'white'),(5,5))
         screen.blit(surface,(80,130))
 
         for event in pygame.event.get():
@@ -4505,7 +4505,7 @@ def armor4_info(username, lvl, coin, pull) :
 
         surface = pygame.Surface((175,195))
         surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Armor\n4-Star\nHP+20\nDEF+10',True,'white'),(5,5))
+        surface.blit(font.render('Armor\n4-Star\nDEF+7',True,'white'),(5,5))
         screen.blit(surface,(380,130))
 
         for event in pygame.event.get():
@@ -4523,7 +4523,7 @@ def armor5_info(username, lvl, coin, pull) :
 
         surface = pygame.Surface((175,195))
         surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Armor\n5-Star\nHP+30\nDEF+15',True,'white'),(5,5))
+        surface.blit(font.render('Armor\n5-Star\nDEF+10',True,'white'),(5,5))
         screen.blit(surface,(680,130))
 
         for event in pygame.event.get():
