@@ -3030,6 +3030,55 @@ def log_or_reg():
             Manager.update(UI_REFRESH_RATE)
         pygame.display.update()
 
+def update_weapon(username, weapon):
+    with open('user_backpack.txt', 'r') as file:
+        lines = file.readlines()
+
+    for i, line in enumerate(lines):
+        user_backpack = line.strip().split(", ")
+        if user_backpack[0] == username:
+            weapon_list = user_backpack[2].split('/')
+            if weapon_list[0] == 'no':
+                del weapon_list[0]
+                weapon_list.append(f'{weapon}')
+            elif weapon in weapon_list:
+                break
+            else:
+                weapon_list.append(f'{weapon}')
+            weapon_str = '/'.join(weapon_list)
+            user_backpack[2] = str(weapon_str)
+            lines[i] = ', '.join(user_backpack) + '\n'
+            break
+
+    with open('user_backpack.txt', 'w') as file:
+        file.writelines(lines)
+    return
+
+
+def update_equipment(username, equipments):
+    with open('user_backpack.txt', 'r') as file:
+        lines = file.readlines()
+
+    for i, line in enumerate(lines):
+        user_backpack = line.strip().split(", ")
+        if user_backpack[0] == username:
+            equipments_list = user_backpack[3].split('/')
+            if equipments_list[0] == 'no':
+                del equipments_list[0]
+                equipments_list.append(f'{equipments}')
+            elif equipments in equipments_list:
+                break
+            else:
+                equipments_list.append(f'{equipments}')
+            equipments_str = '/'.join(equipments_list)
+            user_backpack[3] = str(equipments_str)
+            lines[i] = ', '.join(user_backpack) + '\n'
+            break
+
+    with open('user_backpack.txt', 'w') as file:
+        file.writelines(lines)
+    return
+
 
 def store(username, lvl, coin, pull):
     ##puo puo did this
@@ -3043,6 +3092,7 @@ def store(username, lvl, coin, pull):
     hammer= pygame.image.load("graphic/hammer.png")
     axe= pygame.image.load("graphic/axe.png")
     font = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50)
+
                             
     while on:
         pygame.display.set_caption('Chicky Simulator - Store')
@@ -3050,71 +3100,88 @@ def store(username, lvl, coin, pull):
         pos_mouse = pygame.mouse.get_pos()
 
         #Coin Display
-        coinlogo = Lock('graphic/manycoin.png', 700, 675, 0.3)
+        coinlogo = Lock('graphic/manycoin.png', 660, 70, 0.3)
         coinlogo.draw(screen)
         coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'white')
-        coin_text_rect = coin_text.get_rect(center = (780,675))
+        coin_text_rect = coin_text.get_rect(center = (750,70))
         screen.blit(coin_text, coin_text_rect)
         ###############
 
+        #####Text Display        
+        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Store', True, 'white')
+        store_text_rect = store_text.get_rect(center = (450,70))
+        screen.blit(store_text, store_text_rect)
+        #################
+
+        #white surface
+        store_surface = pygame.Surface((850,500))
+        store_surface.fill('white')
+        store_surface.set_alpha(150)
+        store_surface_rect = store_surface.get_rect(center=(width/2,380))
+        screen.blit(store_surface, store_surface_rect)
+
         #EQUIPMENT DIsPLAY
-        screen.blit(sword,(75,35))
-        screen.blit(shield,(390,35))
-        screen.blit(bow,(680,35))
-        screen.blit(x_bow,(75,370))
-        screen.blit(hammer,(390,370))
-        screen.blit(axe,(680,370))
+        screen.blit(sword,(85,130))
+        screen.blit(shield,(380,130))
+        screen.blit(bow,(680,130))
+        screen.blit(x_bow,(85,375))
+        screen.blit(hammer,(380,375))
+        screen.blit(axe,(680,375))
         #################
 
         #PRICE
         #####sword####
         price_text = font.render(f"{100}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(150,215))
+        text_rect = price_text.get_rect(center =(150,305))
         screen.blit(price_text, text_rect)
         ######Shield######
         price_text = font.render(f"{150}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(450,215))
+        text_rect = price_text.get_rect(center =(450,305))
         screen.blit(price_text, text_rect)
         ######bow######
         price_text = font.render(f"{75}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(750,215))
+        text_rect = price_text.get_rect(center =(750,305))
         screen.blit(price_text, text_rect)
         ####x-bow#####
         price_text = font.render(f"{100}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(150,525))
+        text_rect = price_text.get_rect(center =(150,555))
         screen.blit(price_text, text_rect)
         ######hammer#####        
         price_text = font.render(f"{150}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(450,525))
+        text_rect = price_text.get_rect(center =(450,555))
         screen.blit(price_text, text_rect)
         #######axe#########        
         price_text = font.render(f"{150}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(750,525))
+        text_rect = price_text.get_rect(center =(750,555))
         screen.blit(price_text, text_rect)
 
 
         #BUTTONS
-        buy_button1 = Button('graphic/botton1.png', 150, 300, 1, "BUY")
+        buy_button1 = Button('graphic/button2.png', 150, 350, 0.15, "BUY")
         buy_button1.draw(screen)
-        buy_button2 = Button('graphic/botton1.png', 450, 300, 1, "BUY")
+        buy_button2 = Button('graphic/button2.png', 450, 350, 0.15, "BUY")
         buy_button2.draw(screen)
-        buy_button3 = Button('graphic/botton1.png', 750, 300, 1, "BUY")
+        buy_button3 = Button('graphic/button2.png', 750, 350, 0.15, "BUY")
         buy_button3.draw(screen)
-        buy_button4 = Button('graphic/botton1.png', 150, 600, 1, "BUY")
+        buy_button4 = Button('graphic/button2.png', 150, 600, 0.15, "BUY")
         buy_button4.draw(screen)
-        buy_button5 = Button('graphic/botton1.png', 450, 600, 1, "BUY")
+        buy_button5 = Button('graphic/button2.png', 450, 600, 0.15, "BUY")
         buy_button5.draw(screen)
-        buy_button6 = Button('graphic/botton1.png', 750, 600, 1, "BUY")
+        buy_button6 = Button('graphic/button2.png', 750, 600, 0.15, "BUY")
         buy_button6.draw(screen)
         #########
 
         #Next page button#
-        next_button = Button('graphic/button2.png', 840, 35, 0.13, "NEXT")
+        next_button = Button('graphic/botton1.png', 850, 70, 0.6, ">>")
         next_button.draw(screen)
 
         #Back page button#
-        back_button = Button('graphic/button2.png', 50, 35, 0.13, "Back")
+        back_button = Button('graphic/botton1.png', 70, 70, 0.6, "<<")
         back_button.draw(screen)
+
+        #To store data
+        weapon = ('sword','shield','bow','x-bow','hammer','axe')
+        
             
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -3122,84 +3189,185 @@ def store(username, lvl, coin, pull):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if buy_button1.check_input(pos_mouse):
-                    if coin >= 100 :
-                        coin -= 100
-                        update_coin(username, coin)
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True
-                        
-                if buy_button2.check_input(pos_mouse):
-                    if coin >= 150 :
-                        coin -= 150
-                        update_coin(username, coin)
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True      
-                if buy_button3.check_input(pos_mouse):
-                    if coin >= 75 :
-                        coin -= 75
-                        update_coin(username, coin)
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                            if no :
-                                no = False
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            weapon_list = user_backpack[2].split('/')
+                            if 'sword' in weapon_list :
+                                alr_have(username,lvl, coin, pull)
                             else :
-                                no = True
+                                if coin >= 100:
+                                    coin -= 100
+                                    update_coin(username, coin)
+                                    update_weapon(username,weapon[0])
+                                    bought1(username, lvl, coin, pull)
+                                        
+                                else :
+                                    no_money(username, lvl, coin, pull)
+
+
+                            weapon_str = '/'.join(weapon_list)
+                            user_backpack[2] = str(weapon_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+
+                    return
+                    
+                if buy_button2.check_input(pos_mouse):
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            weapon_list = user_backpack[2].split('/')
+                            if 'shield' in weapon_list :
+                                alr_have(username,lvl, coin, pull)
+                            else :
+                                if coin >= 150 :
+                                    coin -= 150
+                                    update_coin(username, coin)
+                                    update_weapon(username,weapon[1])
+
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True   
+
+
+                            weapon_str = '/'.join(weapon_list)
+                            user_backpack[2] = str(weapon_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+
+                if buy_button3.check_input(pos_mouse):
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            weapon_list = user_backpack[2].split('/')
+                            if 'bow' in weapon_list :
+                                alr_have(username,lvl, coin, pull)
+                            else :
+                                if coin >= 75 :
+                                    coin -= 75
+                                    update_coin(username, coin)
+                                    update_weapon(username,weapon[2])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                        if no :
+                                            no = False
+                                        else :
+                                            no = True
+
+                            weapon_str = '/'.join(weapon_list)
+                            user_backpack[2] = str(weapon_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                    
                 if buy_button4.check_input(pos_mouse):
-                    if coin >= 100 :
-                        coin -= 100
-                        update_coin(username, coin)
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True                                        
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            weapon_list = user_backpack[2].split('/')
+                            if 'x-bow' in weapon_list :
+                                alr_have(username,lvl, coin, pull)
+                            else :
+                                if coin >= 100 :
+                                    coin -= 100
+                                    update_coin(username, coin)
+                                    update_weapon(username,weapon[3])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True                                        
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True
+
+                            weapon_str = '/'.join(weapon_list)
+                            user_backpack[2] = str(weapon_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                    
                 if buy_button5.check_input(pos_mouse):
-                    if coin >= 150 :
-                        coin -= 150
-                        update_coin(username, coin)
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            weapon_list = user_backpack[2].split('/')
+                            if 'hammer' in weapon_list :
+                                alr_have(username,lvl, coin, pull)
+                            else :
+                                if coin >= 150 :
+                                    coin -= 150
+                                    update_coin(username, coin)
+                                    update_weapon(username,weapon[4])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True
+
+                            weapon_str = '/'.join(weapon_list)
+                            user_backpack[2] = str(weapon_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                    
                 if buy_button6.check_input(pos_mouse):
-                    if coin >= 150 :
-                        coin -= 150
-                        update_coin(username, coin)
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            weapon_list = user_backpack[2].split('/')
+                            if 'axe' in weapon_list :
+                                alr_have(username,lvl, coin, pull)
+                            else :
+                                if coin >= 150 :
+                                    coin -= 150
+                                    update_coin(username, coin)
+                                    update_weapon(username,weapon[5])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True
+
+                            weapon_str = '/'.join(weapon_list)
+                            user_backpack[2] = str(weapon_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+
                 if next_button.check_input(pos_mouse):
                     equipment(username, lvl, coin, pull)
                 if back_button.check_input(pos_mouse):
@@ -3215,129 +3383,181 @@ def store(username, lvl, coin, pull):
     sys.exit()
 
 
+def alr_have(username,lvl, coin, pull):
+    pygame.display.set_caption('Chicky Simulator - Store')
+    screen.blit(background_image,(0,0))
+    screen.blit(font.render('You already have one.',True,'white'),(230,300))
+    screen.blit(font.render('Click again to go back.',True,'white'),(230,350))
+    while True :
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                store(username, lvl, coin, pull)
+
+            if event.type == pygame.quit:
+                pygame.quit()
+                sys.exit()
+
+            Manager.process_events(event)
+            
+        Manager.update(UI_REFRESH_RATE)
+        pygame.display.update()
+
+def alr_have2(username,lvl, coin, pull):
+    pygame.display.set_caption('Chicky Simulator - Store')
+    screen.blit(background_image,(0,0))
+    screen.blit(font.render('You already have one.',True,'white'),(230,300))
+    screen.blit(font.render('Click again to go back.',True,'white'),(230,350))
+    while True :
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                equipment(username, lvl, coin, pull)
+
+            if event.type == pygame.quit:
+                pygame.quit()
+                sys.exit()
+
+            Manager.process_events(event)
+            
+        Manager.update(UI_REFRESH_RATE)
+        pygame.display.update()
+
+def alr_have3(username,lvl, coin, pull):
+    pygame.display.set_caption('Chicky Simulator - Store')
+    screen.blit(background_image,(0,0))
+    screen.blit(font.render('You already have one.',True,'white'),(230,300))
+    screen.blit(font.render('Click again to go back.',True,'white'),(230,350))
+    while True :
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                equipment2(username, lvl, coin, pull)
+
+            if event.type == pygame.quit:
+                pygame.quit()
+                sys.exit()
+
+            Manager.process_events(event)
+            
+        Manager.update(UI_REFRESH_RATE)
+        pygame.display.update()
+
+
 def bought1(username, lvl, coin, pull) :
     #puopuo did this too
 
-    surface =  pygame.Surface((width,height))
     pygame.display.set_caption('Chicky Simulator - Store')
-    surface.blit(background_image,(0,0))
-    surface.blit(font.render('You bought an item.',True,'white'),(280,300))
-    surface.blit(font.render('Click again to go back.',True,'white'),(230,350))
-    screen.blit(surface,(0,0))
+    screen.blit(background_image,(0,0))
+    screen.blit(font.render('You bought an item.',True,'white'),(280,300))
+    screen.blit(font.render('Click again to go back.',True,'white'),(230,350))
+    on = True
+    while on :
+        for event in pygame.event.get():
+            if event.type == pygame.quit:
+                on = False
+                pygame.quit()
+                sys.exit()      
+                      
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                store(username, lvl, coin, pull)
 
-    for event in pygame.event.get():
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            store(username, lvl, coin, pull)
-
-        if event.type == pygame.quit:
-            pygame.quit()
-            sys.exit()
-
-    pygame.display.flip()
+            Manager.process_events(event)
+        
+        Manager.update(UI_REFRESH_RATE)
+        pygame.display.flip()
 
 
 def bought2(username, lvl, coin, pull) :
     #puopuo did this too
 
-    surface =  pygame.Surface((width,height))
     pygame.display.set_caption('Chicky Simulator - Store')
-    surface.blit(background_image,(0,0))
-    surface.blit(font.render('You bought an item.',True,'white'),(280,300))
-    surface.blit(font.render('Click again to go back.',True,'white'),(230,350))
-    screen.blit(surface,(0,0))
-
-    for event in pygame.event.get():
-        if event.type == pygame.MOUSEBUTTONDOWN:
+    screen.blit(background_image,(0,0))
+    screen.blit(font.render('You bought an item.',True,'white'),(280,300))
+    screen.blit(font.render('Click again to go back.',True,'white'),(230,350))
+    while True :
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
                 equipment(username, lvl, coin, pull)
 
-        if event.type == pygame.quit:
-            pygame.quit()
-            sys.exit()
+            if event.type == pygame.quit:
+                pygame.quit()
+                sys.exit()
 
-    pygame.display.flip()
+        pygame.display.flip()
 
 
 def bought3(username, lvl, coin, pull) :
     #puopuo did this too
 
-    surface =  pygame.Surface((width,height))
     pygame.display.set_caption('Chicky Simulator - Store')
-    surface.blit(background_image,(0,0))
-    surface.blit(font.render('You bought an item.',True,'white'),(280,300))
-    surface.blit(font.render('Click again to go back.',True,'white'),(230,350))
-    screen.blit(surface,(0,0))
+    screen.blit(background_image,(0,0))
+    screen.blit(font.render('You bought an item.',True,'white'),(280,300))
+    screen.blit(font.render('Click again to go back.',True,'white'),(230,350))
 
-    for event in pygame.event.get():
-        if event.type == pygame.MOUSEBUTTONDOWN:
+    while True :
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
                 equipment2(username, lvl, coin, pull)
 
-        if event.type == pygame.quit:
-            pygame.quit()
-            sys.exit()
+            if event.type == pygame.quit:
+                pygame.quit()
+                sys.exit()
 
-    pygame.display.flip()
+        pygame.display.flip()
 
 
 def no_money(username, lvl, coin, pull) :
     #puopuo did this too
 
-    surface =  pygame.Surface((width,height))
     pygame.display.set_caption('Chicky Simulator - Store')
-    surface.blit(background_image,(0,0))
-    surface.blit(font.render('You do not have enough coin.',True,'white'),(180,300))
-    surface.blit(font.render('Click again to go back.',True,'white'),(230,350))
-    screen.blit(surface,(0,0))
-    for event in pygame.event.get():
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            store(username, lvl, coin, pull)
+    screen.blit(background_image,(0,0))
+    screen.blit(font.render('You do not have enough coin.',True,'white'),(180,300))
+    screen.blit(font.render('Click again to go back.',True,'white'),(230,350))
+    while True :
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                store(username, lvl, coin, pull)
 
-        if event.type == pygame.quit:
-            pygame.quit()
-            sys.exit()
+            if event.type == pygame.quit:
+                pygame.quit()
+                sys.exit()
 
-    pygame.display.flip()
+        pygame.display.flip()
 
 
 def no_money2(username, lvl, coin, pull) :
     #puopuo did this too
 
-    surface =  pygame.Surface((width,height))
     pygame.display.set_caption('Chicky Simulator - Store')
-    surface.blit(background_image,(0,0))
-    surface.blit(font.render('You do not have enough coin.',True,'white'),(180,300))
-    surface.blit(font.render('Click again to go back.',True,'white'),(230,350))
-    screen.blit(surface,(0,0))
+    screen.blit(background_image,(0,0))
+    screen.blit(font.render('You do not have enough coin.',True,'white'),(180,300))
+    screen.blit(font.render('Click again to go back.',True,'white'),(230,350))
+    while True :
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                equipment(username, lvl, coin, pull)
 
-    for event in pygame.event.get():
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            equipment(username, lvl, coin, pull)
+            if event.type == pygame.quit:
+                pygame.quit()
+                sys.exit()
 
-        if event.type == pygame.quit:
-            pygame.quit()
-            sys.exit()
-
-    pygame.display.flip()
+        pygame.display.flip()
 
 
 def no_money3(username, lvl, coin, pull) :
     #puopuo did this too
 
-    surface =  pygame.Surface((width,height))
-    pygame.display.set_caption('Chicky Simulator - Store')
-    surface.blit(background_image,(0,0))
-    surface.blit(font.render('You do not have enough coin.',True,'white'),(180,300))
-    surface.blit(font.render('Click again to go back.',True,'white'),(230,350))
-    screen.blit(surface,(0,0))
+    screen.blit(background_image,(0,0))
+    screen.blit(font.render('You do not have enough coin.',True,'white'),(180,300))
+    screen.blit(font.render('Click again to go back.',True,'white'),(230,350))
+    while True :
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                equipment2(username, lvl, coin, pull)
 
-    for event in pygame.event.get():
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            equipment2(username, lvl, coin, pull)
+            if event.type == pygame.quit:
+                pygame.quit()
+                sys.exit()
 
-        if event.type == pygame.quit:
-            pygame.quit()
-            sys.exit()
-
-    pygame.display.flip()
+        pygame.display.flip()
 
 
 def equipment(username, lvl, coin, pull) :
@@ -3358,71 +3578,87 @@ def equipment(username, lvl, coin, pull) :
         pos_mouse = pygame.mouse.get_pos()
 
         #Coin Display
-        coinlogo = Lock('graphic/manycoin.png', 700, 675, 0.3)
+        coinlogo = Lock('graphic/manycoin.png', 660, 70, 0.3)
         coinlogo.draw(screen)
         coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'white')
-        coin_text_rect = coin_text.get_rect(center = (780,675))
+        coin_text_rect = coin_text.get_rect(center = (750,70))
         screen.blit(coin_text, coin_text_rect)
         ###############
 
+        #####Text Display        
+        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Store', True, 'white')
+        store_text_rect = store_text.get_rect(center = (450,70))
+        screen.blit(store_text, store_text_rect)
+        #################
+
+        #white surface
+        store_surface = pygame.Surface((850,500))
+        store_surface.fill('white')
+        store_surface.set_alpha(150)
+        store_surface_rect = store_surface.get_rect(center=(width/2,380))
+        screen.blit(store_surface, store_surface_rect)
+
         #EQUIPMENT DIsPLAY
-        screen.blit(hand,(75,35))
-        screen.blit(armor,(390,35))
-        screen.blit(noob_hand,(680,35))
-        screen.blit(noob_leg,(75,370))
-        screen.blit(helmet,(390,370))
-        screen.blit(leg,(680,370))
+        screen.blit(hand,(85,130))
+        screen.blit(armor,(380,130))
+        screen.blit(noob_hand,(680,130))
+        screen.blit(noob_leg,(85,375))
+        screen.blit(helmet,(380,375))
+        screen.blit(leg,(680,375))
         #################
 
         #PRICE
         #####hand####
         price_text = font.render(f"{100}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(150,215))
+        text_rect = price_text.get_rect(center =(150,305))
         screen.blit(price_text, text_rect)
         ######armor######
         price_text = font.render(f"{150}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(450,215))
+        text_rect = price_text.get_rect(center =(450,305))
         screen.blit(price_text, text_rect)
         ######noob hand######
         price_text = font.render(f"{75}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(750,215))
+        text_rect = price_text.get_rect(center =(750,305))
         screen.blit(price_text, text_rect)
         ####noob leg#####
         price_text = font.render(f"{100}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(150,525))
+        text_rect = price_text.get_rect(center =(150,555))
         screen.blit(price_text, text_rect)
         ######helmet#####        
         price_text = font.render(f"{150}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(450,525))
+        text_rect = price_text.get_rect(center =(450,555))
         screen.blit(price_text, text_rect)
         #######leg#########        
         price_text = font.render(f"{150}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(750,525))
+        text_rect = price_text.get_rect(center =(750,555))
         screen.blit(price_text, text_rect)
 
 
         # BUY BUTTONS
-        buy_button1 = Button('graphic/botton1.png', 150, 300, 1, "BUY")
+        buy_button1 = Button('graphic/button2.png', 150, 350, 0.15, "BUY")
         buy_button1.draw(screen)
-        buy_button2 = Button('graphic/botton1.png', 450, 300, 1, "BUY")
+        buy_button2 = Button('graphic/button2.png', 450, 350, 0.15, "BUY")
         buy_button2.draw(screen)
-        buy_button3 = Button('graphic/botton1.png', 750, 300, 1, "BUY")
+        buy_button3 = Button('graphic/button2.png', 750, 350, 0.15, "BUY")
         buy_button3.draw(screen)
-        buy_button4 = Button('graphic/botton1.png', 150, 600, 1, "BUY")
+        buy_button4 = Button('graphic/button2.png', 150, 600, 0.15, "BUY")
         buy_button4.draw(screen)
-        buy_button5 = Button('graphic/botton1.png', 450, 600, 1, "BUY")
+        buy_button5 = Button('graphic/button2.png', 450, 600, 0.15, "BUY")
         buy_button5.draw(screen)
-        buy_button6 = Button('graphic/botton1.png', 750, 600, 1, "BUY")
+        buy_button6 = Button('graphic/button2.png', 750, 600, 0.15, "BUY")
         buy_button6.draw(screen)
         #########
 
         #Back page button#
-        back_button = Button('graphic/button2.png', 50, 35, 0.13, "Back")
+        back_button = Button('graphic/botton1.png', 70, 70, 0.6, "<<")
         back_button.draw(screen)
 
         #Next page button#
-        next_button = Button('graphic/button2.png', 840, 35, 0.13, "NEXT")
+        next_button = Button('graphic/botton1.png', 850, 70, 0.6, ">>")
         next_button.draw(screen)
+
+        #SAving Data
+        equipments = ('hand','noob_hand','armor','helmet','leg','noob_leg')
             
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -3430,83 +3666,185 @@ def equipment(username, lvl, coin, pull) :
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if buy_button1.check_input(pos_mouse):
-                    if coin >= 100 :
-                        coin -= 100
-                        update_coin(username, coin)
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'hand' in equipments_list :
+                                alr_have2(username,lvl, coin, pull)
+                            else :
+                                if coin >= 150 :
+                                    coin -= 150
+                                    update_coin(username, coin)
+                                    update_equipment(username, equipments[0])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True   
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                    
                 if buy_button2.check_input(pos_mouse):
-                    if coin >= 150 :
-                        coin -= 150
-                        update_coin(username, coin)
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True   
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'noob_hand' in equipments_list :
+                                alr_have2(username,lvl, coin, pull)
+                            else :
+                                if coin >= 150 :
+                                    coin -= 150
+                                    update_coin(username, coin)
+                                    update_equipment(username, equipments[1])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True  
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+ 
                 if buy_button3.check_input(pos_mouse):
-                    if coin >= 75 :
-                        coin -= 75
-                        update_coin(username, coin)
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'armor' in equipments_list :
+                                alr_have2(username,lvl, coin, pull)
+                            else :
+                                if coin >= 75 :
+                                    coin -= 75
+                                    update_coin(username, coin)
+                                    update_equipment(username, equipments[2])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True 
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+
                 if buy_button4.check_input(pos_mouse):
-                    if coin >= 100 :
-                        coin -= 100
-                        update_coin(username, coin)
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'helmet' in equipments_list :
+                                alr_have2(username,lvl, coin, pull)
+                            else :
+                                if coin >= 100 :
+                                    coin -= 100
+                                    update_coin(username, coin)
+                                    update_equipment(username, equipments[3])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True  
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                    
                 if buy_button5.check_input(pos_mouse):
-                    if coin >= 150 :
-                        coin -= 150
-                        update_coin(username, coin)
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True    
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'leg' in equipments_list :
+                                alr_have2(username,lvl, coin, pull)
+                            else :
+                                if coin >= 150 :
+                                    coin -= 150
+                                    update_coin(username, coin)
+                                    update_equipment(username, equipments[4])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True  
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                        
                 if buy_button6.check_input(pos_mouse):
-                    if coin >= 150 :
-                        coin -= 150
-                        update_coin(username, coin)
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'noob_leg' in equipments_list :
+                                alr_have2(username,lvl, coin, pull)
+                            else :
+                                if coin >= 150 :
+                                    coin -= 150
+                                    update_coin(username, coin)
+                                    update_equipment(username, equipments[5])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                    
                 if back_button.check_input(pos_mouse):
                     store(username, lvl, coin, pull)
                 if next_button.check_input(pos_mouse):
@@ -3538,46 +3876,62 @@ def equipment2(username, lvl, coin, pull) :
         pos_mouse = pygame.mouse.get_pos()
 
         #Coin Display
-        coinlogo = Lock('graphic/manycoin.png', 700, 675, 0.3)
+        coinlogo = Lock('graphic/manycoin.png', 660, 70, 0.3)
         coinlogo.draw(screen)
         coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'white')
-        coin_text_rect = coin_text.get_rect(center = (780,675))
+        coin_text_rect = coin_text.get_rect(center = (750,70))
         screen.blit(coin_text, coin_text_rect)
         ###############
 
+        #####Text Display        
+        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Store', True, 'white')
+        store_text_rect = store_text.get_rect(center = (450,70))
+        screen.blit(store_text, store_text_rect)
+        #################
+
+        #white surface
+        store_surface = pygame.Surface((850,500))
+        store_surface.fill('white')
+        store_surface.set_alpha(150)
+        wishing_surface_rect = store_surface.get_rect(center=(width/2,380))
+        screen.blit(store_surface, wishing_surface_rect)
+
         #EQUIPMENT DIsPLAY
-        screen.blit(noob_armor,(75,35))
-        screen.blit(helmet3,(390,35))
-        screen.blit(noob_helmet,(680,35))
+        screen.blit(noob_armor,(85,130))
+        screen.blit(helmet3,(385,130))
+        screen.blit(noob_helmet,(680,130))
         #################
 
         #PRICE
         #####noob helmet####
         price_text = font.render(f"{100}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(150,215))
+        text_rect = price_text.get_rect(center =(150,305))
         screen.blit(price_text, text_rect)
         ######noob armor######
         price_text = font.render(f"{150}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(450,215))
+        text_rect = price_text.get_rect(center =(450,305))
         screen.blit(price_text, text_rect)
         ######helmet 3######
         price_text = font.render(f"{75}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(750,215))
+        text_rect = price_text.get_rect(center =(750,305))
         screen.blit(price_text, text_rect)
 
 
         # BUY BUTTONS
-        buy_button1 = Button('graphic/botton1.png', 150, 300, 1, "BUY")
+        buy_button1 = Button('graphic/button2.png', 150, 350,0.15, "BUY")
         buy_button1.draw(screen)
-        buy_button2 = Button('graphic/botton1.png', 450, 300, 1, "BUY")
+        buy_button2 = Button('graphic/button2.png', 450, 350,0.15, "BUY")
         buy_button2.draw(screen)
-        buy_button3 = Button('graphic/botton1.png', 750, 300, 1, "BUY")
+        buy_button3 = Button('graphic/button2.png', 750, 350, 0.15, "BUY")
         buy_button3.draw(screen)
         #########
 
         #Back page button#
-        back_button = Button('graphic/button2.png', 50, 35, 0.13, "Back")
+        back_button = Button('graphic/botton1.png', 70, 70, 0.6, "<<")
         back_button.draw(screen)
+
+        #Data saving
+        equipments =('noob_helmet','helmet3','noob_armor')
             
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -3585,45 +3939,96 @@ def equipment2(username, lvl, coin, pull) :
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if buy_button1.check_input(pos_mouse):
-                    if coin >= 100 :
-                        coin -= 100
-                        update_coin(username, coin)
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True                                     
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'noob_helmet' in equipments_list :
+                                alr_have3(username,lvl, coin, pull)
+                            else :
+                                if coin >= 100 :
+                                    coin -= 100
+                                    update_coin(username, coin)
+                                    update_equipment(username, equipments[0])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                                                         
                         
                 if buy_button2.check_input(pos_mouse):
-                    if coin >= 150 :
-                        coin -= 150
-                        update_coin(username, coin)
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'helmet3' in equipments_list :
+                                alr_have3(username,lvl, coin, pull)
+                            else :
+                                if coin >= 150 :
+                                    coin -= 150
+                                    update_coin(username, coin)
+                                    update_equipment(username, equipments[1])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                    
                 if buy_button3.check_input(pos_mouse):
-                    if coin >= 75 :
-                        coin -= 75
-                        update_coin(username, coin)
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'noob_armor' in equipments_list :
+                                alr_have3(username,lvl, coin, pull)
+                            else :
+                                if coin >= 75 :
+                                    coin -= 75
+                                    update_coin(username, coin)
+                                    update_equipment(username, equipments[2])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                    
                 if back_button.check_input(pos_mouse):
                     equipment(username, lvl, coin, pull)
         if buy :
