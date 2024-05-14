@@ -3079,26 +3079,6 @@ def update_equipment(username, equipments):
         file.writelines(lines)
     return
 
-def check_weapon(username,weapon) :
-    with open('user_backpack.txt', 'r') as file:
-        lines = file.readlines()
-
-    for i, line in enumerate(lines):
-        user_backpack = line.strip().split(", ")
-        if user_backpack[0] == username:
-            weapon_list = user_backpack[2].split('/')
-            if weapon in weapon_list:
-                yo = False
-            weapon_str = '/'.join(weapon_list)
-            user_backpack[2] = str(weapon_str)
-            lines[i] = ', '.join(user_backpack) + '\n'
-            break
-
-    # with open('user_backpack.txt', 'w') as file:
-    #     file.writelines(lines)
-    return
-
-
 
 def store(username, lvl, coin, pull):
     ##puo puo did this
@@ -3209,86 +3189,185 @@ def store(username, lvl, coin, pull):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if buy_button1.check_input(pos_mouse):
-                    if coin >= 100:
-                        coin -= 100
-                        update_coin(username, coin)
-                        update_weapon(username,weapon[0])
-                        bought1(username, lvl, coin, pull)
-                            
-                    else :
-                        no_money(username, lvl, coin, pull)
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            weapon_list = user_backpack[2].split('/')
+                            if 'sword' in weapon_list :
+                                alr_have(username,lvl, coin, pull)
+                            else :
+                                if coin >= 100:
+                                    coin -= 100
+                                    update_coin(username, coin)
+                                    update_weapon(username,weapon[0])
+                                    bought1(username, lvl, coin, pull)
+                                        
+                                else :
+                                    no_money(username, lvl, coin, pull)
+
+
+                            weapon_str = '/'.join(weapon_list)
+                            user_backpack[2] = str(weapon_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+
+                    return
                     
                 if buy_button2.check_input(pos_mouse):
-                    if coin >= 150 :
-                        coin -= 150
-                        update_coin(username, coin)
-                        update_weapon(username,weapon[1])
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
 
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True      
-                if buy_button3.check_input(pos_mouse):
-                    if coin >= 75 :
-                        coin -= 75
-                        update_coin(username, coin)
-                        update_weapon(username,weapon[2])
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                            if no :
-                                no = False
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            weapon_list = user_backpack[2].split('/')
+                            if 'shield' in weapon_list :
+                                alr_have(username,lvl, coin, pull)
                             else :
-                                no = True
+                                if coin >= 150 :
+                                    coin -= 150
+                                    update_coin(username, coin)
+                                    update_weapon(username,weapon[1])
+
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True   
+
+
+                            weapon_str = '/'.join(weapon_list)
+                            user_backpack[2] = str(weapon_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+
+                if buy_button3.check_input(pos_mouse):
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            weapon_list = user_backpack[2].split('/')
+                            if 'bow' in weapon_list :
+                                alr_have(username,lvl, coin, pull)
+                            else :
+                                if coin >= 75 :
+                                    coin -= 75
+                                    update_coin(username, coin)
+                                    update_weapon(username,weapon[2])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                        if no :
+                                            no = False
+                                        else :
+                                            no = True
+
+                            weapon_str = '/'.join(weapon_list)
+                            user_backpack[2] = str(weapon_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                    
                 if buy_button4.check_input(pos_mouse):
-                    if coin >= 100 :
-                        coin -= 100
-                        update_coin(username, coin)
-                        update_weapon(username,weapon[3])
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True                                        
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            weapon_list = user_backpack[2].split('/')
+                            if 'x-bow' in weapon_list :
+                                alr_have(username,lvl, coin, pull)
+                            else :
+                                if coin >= 100 :
+                                    coin -= 100
+                                    update_coin(username, coin)
+                                    update_weapon(username,weapon[3])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True                                        
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True
+
+                            weapon_str = '/'.join(weapon_list)
+                            user_backpack[2] = str(weapon_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                    
                 if buy_button5.check_input(pos_mouse):
-                    if coin >= 150 :
-                        coin -= 150
-                        update_coin(username, coin)
-                        update_weapon(username,weapon[4])
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            weapon_list = user_backpack[2].split('/')
+                            if 'hammer' in weapon_list :
+                                alr_have(username,lvl, coin, pull)
+                            else :
+                                if coin >= 150 :
+                                    coin -= 150
+                                    update_coin(username, coin)
+                                    update_weapon(username,weapon[4])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True
+
+                            weapon_str = '/'.join(weapon_list)
+                            user_backpack[2] = str(weapon_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                    
                 if buy_button6.check_input(pos_mouse):
-                    if coin >= 150 :
-                        coin -= 150
-                        update_coin(username, coin)
-                        update_weapon(username,weapon[5])
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            weapon_list = user_backpack[2].split('/')
+                            if 'axe' in weapon_list :
+                                alr_have(username,lvl, coin, pull)
+                            else :
+                                if coin >= 150 :
+                                    coin -= 150
+                                    update_coin(username, coin)
+                                    update_weapon(username,weapon[5])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True
+
+                            weapon_str = '/'.join(weapon_list)
+                            user_backpack[2] = str(weapon_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+
                 if next_button.check_input(pos_mouse):
                     equipment(username, lvl, coin, pull)
                 if back_button.check_input(pos_mouse):
@@ -3322,6 +3401,45 @@ def alr_have(username,lvl, coin, pull):
             
         Manager.update(UI_REFRESH_RATE)
         pygame.display.update()
+
+def alr_have2(username,lvl, coin, pull):
+    pygame.display.set_caption('Chicky Simulator - Store')
+    screen.blit(background_image,(0,0))
+    screen.blit(font.render('You already have one.',True,'white'),(230,300))
+    screen.blit(font.render('Click again to go back.',True,'white'),(230,350))
+    while True :
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                equipment(username, lvl, coin, pull)
+
+            if event.type == pygame.quit:
+                pygame.quit()
+                sys.exit()
+
+            Manager.process_events(event)
+            
+        Manager.update(UI_REFRESH_RATE)
+        pygame.display.update()
+
+def alr_have3(username,lvl, coin, pull):
+    pygame.display.set_caption('Chicky Simulator - Store')
+    screen.blit(background_image,(0,0))
+    screen.blit(font.render('You already have one.',True,'white'),(230,300))
+    screen.blit(font.render('Click again to go back.',True,'white'),(230,350))
+    while True :
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                equipment2(username, lvl, coin, pull)
+
+            if event.type == pygame.quit:
+                pygame.quit()
+                sys.exit()
+
+            Manager.process_events(event)
+            
+        Manager.update(UI_REFRESH_RATE)
+        pygame.display.update()
+
 
 def bought1(username, lvl, coin, pull) :
     #puopuo did this too
@@ -3548,89 +3666,185 @@ def equipment(username, lvl, coin, pull) :
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if buy_button1.check_input(pos_mouse):
-                    if coin >= 100 :
-                        coin -= 100
-                        update_coin(username, coin)
-                        update_equipment(username, equipments[0])
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'hand' in equipments_list :
+                                alr_have2(username,lvl, coin, pull)
+                            else :
+                                if coin >= 150 :
+                                    coin -= 150
+                                    update_coin(username, coin)
+                                    update_equipment(username, equipments[0])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True   
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                    
                 if buy_button2.check_input(pos_mouse):
-                    if coin >= 150 :
-                        coin -= 150
-                        update_coin(username, coin)
-                        update_equipment(username, equipments[1])
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True   
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'noob_hand' in equipments_list :
+                                alr_have2(username,lvl, coin, pull)
+                            else :
+                                if coin >= 150 :
+                                    coin -= 150
+                                    update_coin(username, coin)
+                                    update_equipment(username, equipments[1])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True  
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+ 
                 if buy_button3.check_input(pos_mouse):
-                    if coin >= 75 :
-                        coin -= 75
-                        update_coin(username, coin)
-                        update_equipment(username, equipments[2])
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'armor' in equipments_list :
+                                alr_have2(username,lvl, coin, pull)
+                            else :
+                                if coin >= 75 :
+                                    coin -= 75
+                                    update_coin(username, coin)
+                                    update_equipment(username, equipments[2])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True 
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+
                 if buy_button4.check_input(pos_mouse):
-                    if coin >= 100 :
-                        coin -= 100
-                        update_coin(username, coin)
-                        update_equipment(username, equipments[3])
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'helmet' in equipments_list :
+                                alr_have2(username,lvl, coin, pull)
+                            else :
+                                if coin >= 100 :
+                                    coin -= 100
+                                    update_coin(username, coin)
+                                    update_equipment(username, equipments[3])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True  
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                    
                 if buy_button5.check_input(pos_mouse):
-                    if coin >= 150 :
-                        coin -= 150
-                        update_coin(username, coin)
-                        update_equipment(username, equipments[4])
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True    
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'leg' in equipments_list :
+                                alr_have2(username,lvl, coin, pull)
+                            else :
+                                if coin >= 150 :
+                                    coin -= 150
+                                    update_coin(username, coin)
+                                    update_equipment(username, equipments[4])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True  
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                        
                 if buy_button6.check_input(pos_mouse):
-                    if coin >= 150 :
-                        coin -= 150
-                        update_coin(username, coin)
-                        update_equipment(username, equipments[5])
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'noob_leg' in equipments_list :
+                                alr_have2(username,lvl, coin, pull)
+                            else :
+                                if coin >= 150 :
+                                    coin -= 150
+                                    update_coin(username, coin)
+                                    update_equipment(username, equipments[5])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                    
                 if back_button.check_input(pos_mouse):
                     store(username, lvl, coin, pull)
                 if next_button.check_input(pos_mouse):
@@ -3725,48 +3939,96 @@ def equipment2(username, lvl, coin, pull) :
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if buy_button1.check_input(pos_mouse):
-                    if coin >= 100 :
-                        coin -= 100
-                        update_coin(username, coin)
-                        update_equipment(username, equipments[0])
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True                                     
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'noob_helmet' in equipments_list :
+                                alr_have3(username,lvl, coin, pull)
+                            else :
+                                if coin >= 100 :
+                                    coin -= 100
+                                    update_coin(username, coin)
+                                    update_equipment(username, equipments[0])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                                                         
                         
                 if buy_button2.check_input(pos_mouse):
-                    if coin >= 150 :
-                        coin -= 150
-                        update_coin(username, coin)
-                        update_equipment(username, equipments[1])
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'helmet3' in equipments_list :
+                                alr_have3(username,lvl, coin, pull)
+                            else :
+                                if coin >= 150 :
+                                    coin -= 150
+                                    update_coin(username, coin)
+                                    update_equipment(username, equipments[1])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                    
                 if buy_button3.check_input(pos_mouse):
-                    if coin >= 75 :
-                        coin -= 75
-                        update_coin(username, coin)
-                        update_equipment(username, equipments[2])
-                        if buy :
-                            buy = False
-                        else :
-                            buy = True
-                    else :
-                        if no :
-                            no = False
-                        else :
-                            no = True
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'noob_armor' in equipments_list :
+                                alr_have3(username,lvl, coin, pull)
+                            else :
+                                if coin >= 75 :
+                                    coin -= 75
+                                    update_coin(username, coin)
+                                    update_equipment(username, equipments[2])
+                                    if buy :
+                                        buy = False
+                                    else :
+                                        buy = True
+                                else :
+                                    if no :
+                                        no = False
+                                    else :
+                                        no = True
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                    
                 if back_button.check_input(pos_mouse):
                     equipment(username, lvl, coin, pull)
         if buy :

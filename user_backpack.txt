@@ -1,4 +1,4 @@
-my, normal/0, bo/shield/bow/sword/axe/hammer/x-bow, armor/noob_hand/noob_armor/helmet3/hand/noob_leg
+my, normal/0, no, no
 jy, normal/0, no, no
 pl, normal/0, no, no
 renliang, normal/0, no, no
