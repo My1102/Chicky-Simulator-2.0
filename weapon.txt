@@ -1,0 +1,6 @@
+3_axe,10,0,0
+4_hammer,20,0,0
+5_sword,30,0,0
+3_shield,Wood,0,0,10
+4_shield,Iron,0,0,20
+5_shield,Diamond,0,0,30
