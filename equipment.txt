@@ -1,0 +1,12 @@
+3_helmet,Leather,0,5,4
+4_helmet,Iron,0,10,7
+5_helmet,Diamond,0,15,10
+3_shoes,Leather,3,0,5
+4_shoes,Iron,5,0,10
+5_shoes,Diamond,10,0,15
+3_armor,Leather,0,10,0
+4_armor,Iron,0,20,0
+5_armor,Diamond,0,30,0
+3_hand,Leather,3,0,5
+4_hand,Iron,5,0,10
+5_hand,Diamond,10,0,15

@@ -1,4 +1,4 @@
-my, normal/0, no, no
+my, normal/0, axe/hammer/sword/shield3/shield4/shield5, no
 jy, normal/0, no, no
 pl, normal/0, no, no
 renliang, normal/0, no, no
