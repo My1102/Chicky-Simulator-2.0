@@ -2364,7 +2364,37 @@ def wish(username, lvl, coin, pull):
 
         pos_mouse = pygame.mouse.get_pos()
 
-        item = ('coin5','coin5',
+        # 1.25%
+        item = ('coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
                 'coin10','coin10','coin10',
                 'coin15','coin15','coin15','coin15',
                 'coin20','coin20','coin20','coin20','coin20',
@@ -2374,8 +2404,92 @@ def wish(username, lvl, coin, pull):
                 'coin40','coin40','coin40','coin40','coin40',
                 'coin45','coin45','coin45','coin45',
                 'coin50','coin50','coin50',
-                'coin75','coin75',
+
+                'coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin10','coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin10','coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin10','coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
                 'coin90','kitty','tanker','worrier','speedy','magnet')
+        
+        pity = ('coin10','coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin10','coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin75','coin75','coin75',
+                'coin90','coin90',
+                'kitty','tanker','worrier','speedy','magnet')
         
         chicky = ('kitty','tanker','worrier','speedy','magnet')
 
@@ -2394,8 +2508,12 @@ def wish(username, lvl, coin, pull):
                         coin -= 100
                         pull += 1
 
-                        if pull < 50:
+                        if pull < 40:
                             itemget = random.choice(item)
+                            if itemget in chicky:
+                                pull = 0
+                        elif ((pull >= 40) and (pull < 50)):
+                            itemget = random.choice(pity)
                             if itemget in chicky:
                                 pull = 0
                         else:
@@ -2417,11 +2535,14 @@ def wish(username, lvl, coin, pull):
                         while n > 0:
                             pull += 1
                             n -= 1
-                            if pull < 50:
+                            if pull < 40:
                                 itemget = random.choice(item)
                                 if itemget in chicky:
                                     pull = 0
-
+                            elif ((pull >= 40) and (pull < 50)):
+                                itemget = random.choice(pity)
+                                if itemget in chicky:
+                                    pull = 0
                             else:
                                 pull = 0
                                 itemget = random.choice(chicky)
@@ -2837,7 +2958,7 @@ def save_userinput(username, password):
             file.close()
 
             file2 = open('user_backpack.txt', 'a')
-            file2.write(f'{username}, normal, no, no')
+            file2.write(f'{username}, normal/0, no, no')
             file2.close()
 
             lvl = 1

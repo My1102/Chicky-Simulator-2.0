@@ -1,4 +1,4 @@
-my, normal/0, no, no
+my, normal/tanker/kitty/magnet/worrier/speedy, no, no
 jy, normal/0, no, no
 pl, normal/0, no, no
 renliang, normal/0, no, no

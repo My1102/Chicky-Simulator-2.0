@@ -1,9 +1,3 @@
-# I want to built a randomise function.
-# If user enter 1 wish, it will randomise one times from the item list, then pull += 1 .
-# If user enter 5 wish, it will randomise 5 times from the item list, then pull += 5.
-# If user get the chicky, pull = 0
-# When pull == 50, it will randomise one times from the chicky list
-
 import random
 
 username = str(input('username: '))
