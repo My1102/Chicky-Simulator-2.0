@@ -24,6 +24,7 @@ from pyvidplayer2 import Video
 from button import Button # library by my
 from rank import Ranking # library by my
 from lock import Lock # library by my
+from backpack import Item, Slot, Info
 from os import path
 import pickle
 
@@ -1955,21 +1956,189 @@ def update_chicky(username, chicky):
     return
 
 
+def update_weapon(username, weapon):
+    with open('user_backpack.txt', 'r') as file:
+        lines = file.readlines()
+
+    for i, line in enumerate(lines):
+        user_backpack = line.strip().split(", ")
+        if user_backpack[0] == username:
+            weapon_list = user_backpack[2].split('/')
+            if weapon_list[0] == 'no':
+                del weapon_list[0]
+                weapon_list.append(f'{weapon}')
+            elif weapon in weapon_list:
+                break
+            else:
+                weapon_list.append(f'{weapon}')
+            weapon_str = '/'.join(weapon_list)
+            user_backpack[2] = str(weapon_str)
+            lines[i] = ', '.join(user_backpack) + '\n'
+            break
+
+    with open('user_backpack.txt', 'w') as file:
+        file.writelines(lines)
+    return
+
+
+def update_equipment(username, equipments):
+    with open('user_backpack.txt', 'r') as file:
+        lines = file.readlines()
+
+    for i, line in enumerate(lines):
+        user_backpack = line.strip().split(", ")
+        if user_backpack[0] == username:
+            equipments_list = user_backpack[3].split('/')
+            if equipments_list[0] == 'no':
+                del equipments_list[0]
+                equipments_list.append(f'{equipments}')
+            elif equipments in equipments_list:
+                break
+            else:
+                equipments_list.append(f'{equipments}')
+            equipments_str = '/'.join(equipments_list)
+            user_backpack[3] = str(equipments_str)
+            lines[i] = ', '.join(user_backpack) + '\n'
+            break
+
+    with open('user_backpack.txt', 'w') as file:
+        file.writelines(lines)
+    return
+
+
+def backpack(username, lvl, coin, pull):
+
+    FPS = 60
+    selected_item = None
+    backpack_rows = 5
+    backpack_cols = 3
+    slot_size = 100
+    backpack_slots = []
+
+    for row in range(backpack_rows):
+        for col in range(backpack_cols):
+            x = 495 + col * (slot_size + 25)
+            y = 140 + row * (slot_size + 10)
+            backpack_slots.append(Slot(x, y, slot_size, slot_size))
+
+    equip_slots = {
+        "sword": Slot(105, 430, slot_size, slot_size),
+        "shield": Slot(255, 430, slot_size, slot_size),
+        "helmet": Slot(30, 550, slot_size, slot_size),
+        "armor": Slot(180, 550, slot_size, slot_size),
+        "shoes": Slot(330, 550, slot_size, slot_size)
+    }
+
+    items = [
+        Item('Sword', 'graphic/sword.png', 'Sword\nAttack +30', 0.65),
+        Item('Shield', 'graphic/shield.png', 'Wood Shield\nDefend +5', 0.65),
+        Item('Helmet', 'graphic/helmet.png', 'Leather Helmet\nDefend +5', 0.65),
+        Item('Armor', 'graphic/armor.png', 'Leather Armor\nDefend +5', 0.65),
+        Item('Shoes', 'graphic/noob leg.png', 'Leather Shoes\nSpeed +2', 0.65)
+    ]
+
+    for i, item in enumerate(items):
+        backpack_slots[i].item = item
+
+    while True:
+
+        pygame.display.set_caption('Chicky Simulator - Backpack')
+        screen.blit(ranking_image,(0,0))
+
+        backpack_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Backpack', True, 'white')
+        backpack_text_rect = backpack_text.get_rect(center = (450,80))
+        screen.blit(backpack_text, backpack_text_rect)
+
+        coinlogo = Lock('graphic/manycoin.png', 700, 80, 0.3)
+        coinlogo.draw(screen)
+
+        coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'white')
+        coin_text_rect = coin_text.get_rect(center = (780,80))
+        screen.blit(coin_text, coin_text_rect)
+
+        backpack_surface = pygame.Surface((420,550))
+        backpack_surface.fill('white')
+        backpack_surface.set_alpha(150)
+        backpack_surface_rect = backpack_surface.get_rect(center=(670,410))
+        screen.blit(backpack_surface, backpack_surface_rect)
+
+        equip_surface = pygame.Surface((420,550))
+        equip_surface.fill('white')
+        equip_surface.set_alpha(150)
+        equip_surface_rect = equip_surface.get_rect(center=(230,410))
+        screen.blit(equip_surface, equip_surface_rect)
+
+        back_button = Button('graphic/botton1.png', 100, 80, 0.6, "<<")
+        back_button.draw(screen)
+
+        pos_mouse = pygame.mouse.get_pos()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                for slot in backpack_slots + list(equip_slots.values()):
+                    if slot.rect.collidepoint(pos_mouse) and slot.item:
+                        selected_item = slot.item
+                        info = Info(50, 140, selected_item.info)
+                        info.draw(screen)
+                        slot.item = None
+                        break
+
+                if back_button.check_input(pos_mouse):
+                    lobby(username, lvl, coin, pull)
+
+            elif event.type == pygame.MOUSEBUTTONUP:
+                if selected_item:
+                    for slot in backpack_slots + list(equip_slots.values()):
+                        if slot.rect.collidepoint(pos_mouse) and slot.item is None:
+                            slot.item = selected_item
+                            selected_item = None
+                            break
+                    if selected_item:
+                        for slot in backpack_slots:
+                            if slot.item is None:
+                                slot.item = selected_item
+                                selected_item = None
+                                break
+
+            # elif selected_item.check_input(pos_mouse):
+                # info = Info(50, 140, selected_item.info)
+                # info.draw(screen)
+
+        for slot in backpack_slots:
+            slot.draw(screen)
+
+        for slot in equip_slots.values():
+            slot.draw(screen)
+
+        if selected_item:
+            info = Info(50, 150, selected_item.info)
+            info.draw(screen)
+
+        pygame.display.flip()
+        clock.tick(FPS)
+
+        pygame.display.update()
+
+
 def items(username, lvl, coin, times, itemget, pull):
 
     while True:
         pygame.display.set_caption('Chicky Simulator - Items Get')
         screen.blit(ranking_image,(0,0))
 
-        wish_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Items Get', True, 'white')
-        wish_text_rect = wish_text.get_rect(center = (450,100))
-        screen.blit(wish_text, wish_text_rect)
+        item_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Items Get', True, 'white')
+        item_text_rect = item_text.get_rect(center = (450,100))
+        screen.blit(item_text, item_text_rect)
 
-        wishing_surface = pygame.Surface((700,350))
-        wishing_surface.fill('white')
-        wishing_surface.set_alpha(150)
-        wishing_surface_rect = wishing_surface.get_rect(center=(width/2,350))
-        screen.blit(wishing_surface, wishing_surface_rect)
+        item_surface = pygame.Surface((700,350))
+        item_surface.fill('white')
+        item_surface.set_alpha(150)
+        item_surface_rect = item_surface.get_rect(center=(width/2,350))
+        screen.blit(item_surface, item_surface_rect)
 
         back_button = Button('graphic/button2.png', 450, 580, 0.3, "BACK")
         back_button.draw(screen)
@@ -2364,7 +2533,37 @@ def wish(username, lvl, coin, pull):
 
         pos_mouse = pygame.mouse.get_pos()
 
-        item = ('coin5','coin5',
+        # 1.25%
+        item = ('coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
                 'coin10','coin10','coin10',
                 'coin15','coin15','coin15','coin15',
                 'coin20','coin20','coin20','coin20','coin20',
@@ -2374,8 +2573,92 @@ def wish(username, lvl, coin, pull):
                 'coin40','coin40','coin40','coin40','coin40',
                 'coin45','coin45','coin45','coin45',
                 'coin50','coin50','coin50',
-                'coin75','coin75',
+
+                'coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin10','coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin10','coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin10','coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
                 'coin90','kitty','tanker','worrier','speedy','magnet')
+        
+        pity = ('coin10','coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin10','coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin75','coin75','coin75',
+                'coin90','coin90',
+                'kitty','tanker','worrier','speedy','magnet')
         
         chicky = ('kitty','tanker','worrier','speedy','magnet')
 
@@ -2394,8 +2677,12 @@ def wish(username, lvl, coin, pull):
                         coin -= 100
                         pull += 1
 
-                        if pull < 50:
+                        if pull < 40:
                             itemget = random.choice(item)
+                            if itemget in chicky:
+                                pull = 0
+                        elif ((pull >= 40) and (pull < 50)):
+                            itemget = random.choice(pity)
                             if itemget in chicky:
                                 pull = 0
                         else:
@@ -2417,11 +2704,14 @@ def wish(username, lvl, coin, pull):
                         while n > 0:
                             pull += 1
                             n -= 1
-                            if pull < 50:
+                            if pull < 40:
                                 itemget = random.choice(item)
                                 if itemget in chicky:
                                     pull = 0
-
+                            elif ((pull >= 40) and (pull < 50)):
+                                itemget = random.choice(pity)
+                                if itemget in chicky:
+                                    pull = 0
                             else:
                                 pull = 0
                                 itemget = random.choice(chicky)
@@ -2717,14 +3007,17 @@ def lobby(username, lvl, coin, pull):
                 if wish_button.check_input(pos_mouse):
                     wish(username, lvl, coin, pull)
                 
-                if back_button.check_input(pos_mouse):
-                    log_or_reg()
-                
                 if store_button.check_input(pos_mouse):
                     store(username, lvl, coin, pull)
                     
                 if collection_button.check_input(pos_mouse):
                     collection(username, lvl, coin, pull)
+
+                if backpack_button.check_input(pos_mouse):
+                    backpack(username, lvl, coin, pull)
+
+                if back_button.check_input(pos_mouse):
+                    log_or_reg()
 
                 if quit_button.check_input(pos_mouse):
                     pygame.quit()
@@ -2843,7 +3136,7 @@ def save_userinput(username, password):
             file.close()
 
             file2 = open('user_backpack.txt', 'a')
-            file2.write(f'{username}, normal, no, no')
+            file2.write(f'{username}, normal/0, no, no')
             file2.close()
 
             lvl = 1
@@ -3035,55 +3328,6 @@ def log_or_reg():
 
             Manager.update(UI_REFRESH_RATE)
         pygame.display.update()
-
-def update_weapon(username, weapon):
-    with open('user_backpack.txt', 'r') as file:
-        lines = file.readlines()
-
-    for i, line in enumerate(lines):
-        user_backpack = line.strip().split(", ")
-        if user_backpack[0] == username:
-            weapon_list = user_backpack[2].split('/')
-            if weapon_list[0] == 'no':
-                del weapon_list[0]
-                weapon_list.append(f'{weapon}')
-            elif weapon in weapon_list:
-                break
-            else:
-                weapon_list.append(f'{weapon}')
-            weapon_str = '/'.join(weapon_list)
-            user_backpack[2] = str(weapon_str)
-            lines[i] = ', '.join(user_backpack) + '\n'
-            break
-
-    with open('user_backpack.txt', 'w') as file:
-        file.writelines(lines)
-    return
-
-
-def update_equipment(username, equipments):
-    with open('user_backpack.txt', 'r') as file:
-        lines = file.readlines()
-
-    for i, line in enumerate(lines):
-        user_backpack = line.strip().split(", ")
-        if user_backpack[0] == username:
-            equipments_list = user_backpack[3].split('/')
-            if equipments_list[0] == 'no':
-                del equipments_list[0]
-                equipments_list.append(f'{equipments}')
-            elif equipments in equipments_list:
-                break
-            else:
-                equipments_list.append(f'{equipments}')
-            equipments_str = '/'.join(equipments_list)
-            user_backpack[3] = str(equipments_str)
-            lines[i] = ', '.join(user_backpack) + '\n'
-            break
-
-    with open('user_backpack.txt', 'w') as file:
-        file.writelines(lines)
-    return
 
 
 def store(username, lvl, coin, pull):
@@ -3433,6 +3677,7 @@ def alr_have(username,lvl, coin, pull):
         Manager.update(UI_REFRESH_RATE)
         pygame.display.update()
 
+
 def alr_have2(username,lvl, coin, pull):
     pygame.display.set_caption('Chicky Simulator - Store')
     screen.blit(background_image,(0,0))
@@ -3451,6 +3696,7 @@ def alr_have2(username,lvl, coin, pull):
             
         Manager.update(UI_REFRESH_RATE)
         pygame.display.update()
+
 
 def alr_have3(username,lvl, coin, pull):
     pygame.display.set_caption('Chicky Simulator - Store')
@@ -4265,6 +4511,64 @@ def dunno2_lobby(c,username, lvl, coin, pull) :
     pygame.quit()
     sys.exit()
 
+
+def collection(c,username, lvl, coin, pull) :
+    ##puo puo did this
+    on = True
+    buy = False
+    no = False
+    sword = pygame.image.load("graphic/sword.png")
+    shield = pygame.image.load("graphic/shield.png")
+    bow = pygame.image.load("graphic/bow.png")
+    x_bow = pygame.image.load("graphic/x-bow.png")
+    hammer= pygame.image.load("graphic/hammer.png")
+    axe= pygame.image.load("graphic/axe.png")
+    font = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50)
+
+    while on:
+        pygame.display.set_caption('Chicky Simulator - Collection')
+        screen.blit(background_image,(0,0))
+        pos_mouse = pygame.mouse.get_pos()
+
+        #####Text Display
+        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Collection', True, 'white')
+        store_text_rect = store_text.get_rect(center = (450,70))
+        screen.blit(store_text, store_text_rect)
+        #################
+
+        #white surface
+        store_surface = pygame.Surface((850,500))
+        store_surface.fill('white')
+        store_surface.set_alpha(150)
+        store_surface_rect = store_surface.get_rect(center=(width/2,380))
+        screen.blit(store_surface, store_surface_rect)
+        #########
+
+        #EQUIPMENT DisPLAY
+        screen.blit(sword,(85,130))
+        screen.blit(shield,(380,130))
+        screen.blit(bow,(680,130))
+        screen.blit(x_bow,(85,375))
+        screen.blit(hammer,(380,375))
+        screen.blit(axe,(680,375))
+        #################
+
+        #Next page button#
+        next_button = Button('graphic/botton1.png', 850, 70, 0.6, ">>")
+        next_button.draw(screen)
+
+        #Back page button#
+        back_button = Button('graphic/botton1.png', 70, 70, 0.6, "<<")
+        back_button.draw(screen)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                on = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if sword.check_input(pos_mouse):
+                    sword(c,username, lvl, coin, pull)
+
+
 def axe_info(username, lvl, coin, pull) :
 
     while True :
@@ -4282,6 +4586,7 @@ def axe_info(username, lvl, coin, pull) :
                 sys.exit()
 
         pygame.display.flip()
+
 
 def hammer_info(username, lvl, coin, pull) :
 
@@ -4301,6 +4606,7 @@ def hammer_info(username, lvl, coin, pull) :
 
         pygame.display.flip()
 
+
 def sword_info(username, lvl, coin, pull) :
 
     while True :
@@ -4318,6 +4624,7 @@ def sword_info(username, lvl, coin, pull) :
                 sys.exit()
 
         pygame.display.flip()
+
 
 def shoe3_info(username, lvl, coin, pull) :
 
@@ -4337,6 +4644,7 @@ def shoe3_info(username, lvl, coin, pull) :
 
         pygame.display.flip()
 
+
 def shoe4_info(username, lvl, coin, pull) :
 
     while True :
@@ -4354,6 +4662,7 @@ def shoe4_info(username, lvl, coin, pull) :
                 sys.exit()
 
         pygame.display.flip()
+
 
 def shoe5_info(username, lvl, coin, pull) :
 
@@ -4373,6 +4682,7 @@ def shoe5_info(username, lvl, coin, pull) :
 
         pygame.display.flip()
 
+
 def shield3_info(username, lvl, coin, pull) :
 
     while True :
@@ -4390,6 +4700,7 @@ def shield3_info(username, lvl, coin, pull) :
                 sys.exit()
 
         pygame.display.flip()
+
 
 def shield4_info(username, lvl, coin, pull) :
 
@@ -4409,6 +4720,7 @@ def shield4_info(username, lvl, coin, pull) :
 
         pygame.display.flip()
 
+
 def shield5_info(username, lvl, coin, pull) :
 
     while True :
@@ -4426,6 +4738,7 @@ def shield5_info(username, lvl, coin, pull) :
                 sys.exit()
 
         pygame.display.flip()
+
 
 def helmet3_info(username, lvl, coin, pull) :
 
@@ -4445,6 +4758,7 @@ def helmet3_info(username, lvl, coin, pull) :
 
         pygame.display.flip()
 
+
 def helmet4_info(username, lvl, coin, pull) :
 
     while True :
@@ -4462,6 +4776,7 @@ def helmet4_info(username, lvl, coin, pull) :
                 sys.exit()
 
         pygame.display.flip()
+
 
 def helmet5_info(username, lvl, coin, pull) :
 
@@ -4481,6 +4796,7 @@ def helmet5_info(username, lvl, coin, pull) :
 
         pygame.display.flip()
 
+
 def armor3_info(username, lvl, coin, pull) :
 
     while True :
@@ -4498,6 +4814,7 @@ def armor3_info(username, lvl, coin, pull) :
                 sys.exit()
 
         pygame.display.flip()
+
 
 def armor4_info(username, lvl, coin, pull) :
 
@@ -4517,6 +4834,7 @@ def armor4_info(username, lvl, coin, pull) :
 
         pygame.display.flip()
 
+
 def armor5_info(username, lvl, coin, pull) :
 
     while True :
@@ -4534,6 +4852,7 @@ def armor5_info(username, lvl, coin, pull) :
                 sys.exit()
 
         pygame.display.flip()
+
 
 def collection(username, lvl, coin, pull):
     on = True
@@ -4693,6 +5012,7 @@ def collection(username, lvl, coin, pull):
 
     pygame.quit()
     sys.exit()
+
 
 def collection2(username, lvl, coin, pull):
     on = True
@@ -4854,6 +5174,7 @@ def collection2(username, lvl, coin, pull):
     pygame.quit()
     sys.exit()
 
+
 def collection3(username, lvl, coin, pull):
     on = True
     shoe3 = Button("graphic/leg.png",150,205,1,'')
@@ -5012,6 +5333,7 @@ def collection3(username, lvl, coin, pull):
 
     pygame.quit()
     sys.exit()
+
 
 def collection4(username, lvl, coin, pull):
     on = True
@@ -5172,6 +5494,7 @@ def collection4(username, lvl, coin, pull):
     pygame.quit()
     sys.exit()
 
+
 def collection5(username, lvl, coin, pull):
     on = True
     axe= Button("graphic/axe.png",150,205,1,'')
@@ -5325,5 +5648,6 @@ def collection5(username, lvl, coin, pull):
 
     pygame.quit()
     sys.exit()
+
 
 log_or_reg()
