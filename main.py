@@ -28,6 +28,7 @@ from backpack import Item, Slot, Info
 from os import path
 import pickle
 
+
 pygame.init()
 
 FFMPEG_PATH = 'ffmpeg-7.0-essentials_build/ffmpeg-7.0-essentials_build/bin'
@@ -255,12 +256,18 @@ def leveltest(c, lvl, username, coin, pull):
     font = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100)
     clock = pygame.time.Clock()
     Manager = pygame_gui.UIManager((width,height))
-    UI_REFRESH_RATE = clock.tick(60)/1000
+    UI_REFRESH_RATE = clock.tick(60)
+    # info = pygame.image.load('graphic/brown.png')
+    # pygame.transform.scale(info,(200,700))
+
+    red = (255,0,0)
+    green = (0, 255, 0)
 
     tile_size = 35
     gameover = 0
     lvl = 1
     maxlevel = 30
+   
     
     username_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((300,320), (300,50)), manager = Manager, object_id = '#username')
     password_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((300,450), (300,50)), manager = Manager, object_id = '#password')
@@ -285,35 +292,106 @@ def leveltest(c, lvl, username, coin, pull):
         return world
 
     class chicky():
-        def __init__(self,x,y):
-                    chic = pygame.image.load(c)
-                    self.image = pygame.transform.scale(chic,(30,30))
-                    self.rect = self.image.get_rect(center=(17,17))
-                    self.rect.x = x
-                    self.rect.y = y
+        def __init__(self,x,y,max_hp,damage,cd):
+            # chic = pygame.image.load(c)
+            # self.image = pygame.transform.scale(chic,(30,30))
+            self.images_right = []
+            self.images_left = []
+            self.index = 0
+            self.counter = 0
+            for num in range(1, 6):
+                img_right = pygame.image.load(f'graphic/chickytest/{num}.png')
+                img_right = pygame.transform.scale(img_right, (30, 30))
+                img_left = pygame.transform.flip(img_right, True, False)
+                self.images_right.append(img_right)
+                self.images_left.append(img_left)
+                print(f"Loaded image {num}.png")
+
+                
+            self.image = self.images_right[self.index]
+            self.rect = self.image.get_rect()
+            self.rect.x = x
+            self.rect.y = y
+            self.max_hp = max_hp
+            self.hp = max_hp
+            self.damage = damage
+            self.cd = cd
+            self.last_attack_time = 0
+            self.direction = 0
+
+        def attack(self):
+            current_time = pygame.time.get_ticks()
+            if current_time - self.last_attack_time > self.cd:
+                # Perform attack
+                for yuen in pygame.sprite.spritecollide(self, yuen_group, False):
+                    yuen.hp -= self.damage
+                    print(yuen.hp)
+                for jy in pygame.sprite.spritecollide(self, jy_group, False):
+                    jy.hp -= self.damage
+                for puolin in pygame.sprite.spritecollide(self, puolin_group, False):
+                    puolin.hp -= self.damage
+                # Set last attack time
+                self.last_attack_time = current_time
+
 
         def update(self,gameover):
             dx = 0 
             dy = 0 
+            walk_cooldown = 0
+            
 
             if gameover == 0:
                 key = pygame.key.get_pressed()
                 if key[pygame.K_w]:
                     dy -= 3
-                    if self.rect.y<0 :
-                        self.rect.y=0
+                    #self.counter += 1
+                    # if self.rect.y<0 :
+                    #     self.rect.y=0
                 if key[pygame.K_a]:
                     dx -= 3
-                    if self.rect.x<0 :
-                        self.rect.x=0
+                    self.counter += 1
+                    self.direction = -1
+                    # if self.rect.x<0 :
+                    #     self.rect.x=0
+                        
                 if key[pygame.K_s]:
                     dy += 3
-                    if self.rect.y>height :
-                        self.rect.y=height
+                    # self.counter += 1
+                    # if self.rect.y>height :
+                    #     self.rect.y=height
+
                 if key[pygame.K_d]:
                     dx += 3
-                    if self.rect.x>width :
-                        self.rect.x=width
+                    self.counter += 1
+                    # print(self.images_right)
+                    self.direction = 1 
+                    # if self.rect.x>width :
+                    #     self.rect.x=width
+
+                if key[pygame.K_SPACE]:
+                    Chicky.attack()
+
+                if key[pygame.K_LEFT] == False and key[pygame.K_RIGHT] == False:
+                    self.counter = 0
+                    self.index = 0
+                    if self.direction == 1:
+                        self.image = self.images_right[self.index]
+                    if self.direction == -1:
+                        self.image = self.images_left[self.index]
+
+                
+                if self.counter > walk_cooldown:
+                    self.counter = 0
+                    self.index +- 1
+                    if self.index >= len(self.images_right):
+                        self.index = 0
+                    if self.direction == 1:
+                        self.image = self.images_right[self.index]
+                    if self.direction == -1:
+                        self.image = self.images_left[self.index]
+
+               
+
                 
                 # collision with blocks
                 for item in world.block_list:
@@ -332,13 +410,40 @@ def leveltest(c, lvl, username, coin, pull):
                             gameover = 1
                             # win(c,lvl,username,coin)
                             
-                # collision with monsters(This one jy use sprite collide becoz they are moving objects)
-                if pygame.sprite.spritecollide(self,yuen_group,False):
-                    gameover = -1
-                if pygame.sprite.spritecollide(self,jy_group,False):
-                    gameover = -1
-                if pygame.sprite.spritecollide(self,puolin_group,False):
-                    gameover = -1
+                # collision with monsters
+                # for yuen in pygame.sprite.spritecollide(Chicky, yuen_group, False):
+                
+                #     Chicky.hp -= yuen.damage
+                    
+                # for jy in pygame.sprite.spritecollide(Chicky, jy_group, False):
+                    
+                #     Chicky.hp -= jy.damage
+                # for puolin in pygame.sprite.spritecollide(Chicky, puolin_group, False):
+                    
+                #     Chicky.hp -= puolin.damage
+                # if pygame.sprite.spritecollide(self, yuen_group, False):
+        
+                #     self.hp -= yuen.damage
+                # elif pygame.sprite.spritecollide(self, jy_group, False):
+                    
+                #     self.hp -= jy.damage
+                # elif pygame.sprite.spritecollide(self, puolin_group, False):
+                    
+                #     self.hp -= puolin.damage
+                # if self.hp <= 0:
+                #     gameover = -1    
+
+                # return gameover 
+
+                # if pygame.sprite.spritecollide(self,yuen_group,False):
+                #     # gameover = -1
+                #     key = pygame.key.get_pressed()
+                #     if key[pygame.K_SPACE]:
+                #         yuen_group.update.hp -= self.damage
+                # if pygame.sprite.spritecollide(self,jy_group,False):
+                #     gameover = -1
+                # if pygame.sprite.spritecollide(self,puolin_group,False):
+                #     gameover = -1
 
             elif gameover == -1 :
                 self.rect.x = 35
@@ -350,7 +455,21 @@ def leveltest(c, lvl, username, coin, pull):
             screen.blit(self.image,self.rect)
 
             return gameover
+        
+    class HealthBar():
+        def __init__(self,x,y,hp,max_hp):
+            self.x = x
+            self.y =y 
+            self.hp = hp
+            self.max_hp = max_hp
 
+        def draw(self,hp):
+            self.hp = hp
+            ratio = self.hp/self.max_hp
+            pygame.draw.rect(screen,red,(self.x,self.y,60,200))
+            pygame.draw.rect(screen,green,(self.x,self.y,60,200*ratio))
+            
+    
     class World():
         def __init__(self,data):
             self.block_list = [ ] 
@@ -380,15 +499,15 @@ def leveltest(c, lvl, username, coin, pull):
                         self.coin_list.append(item)
                         
                     if tile == 3 :
-                        yuen = Monster1(col_count * tile_size,row_count * tile_size)
+                        yuen = Monster1(col_count * tile_size,row_count * tile_size,100,100,15,5)
                         yuen_group.add(yuen)
                         
                     if tile == 4 :
-                        jy = Monster3(col_count * tile_size,row_count * tile_size)
+                        jy = Monster3(col_count * tile_size,row_count * tile_size,75,75,30)
                         jy_group.add(jy)
 
                     if tile == 5 :
-                        puolin = Monster2(col_count * tile_size,row_count * tile_size)
+                        puolin = Monster2(col_count * tile_size,row_count * tile_size,150,150,5)
                         puolin_group.add(puolin)
 
                     # if tile == 6:
@@ -403,7 +522,7 @@ def leveltest(c, lvl, username, coin, pull):
                 screen.blit(item[0],item[1])
 
     class Monster1(pygame.sprite.Sprite):
-        def __init__(self,x,y):
+        def __init__(self,x,y,hp,max_hp,damage,cd):
             pygame.sprite.Sprite.__init__(self)
             self.image = pygame.image.load('graphic/monster1.png')
             self.image = pygame.transform.scale(self.image, (tile_size, tile_size))
@@ -412,26 +531,56 @@ def leveltest(c, lvl, username, coin, pull):
             self.rect.y = y
             self.move_direction = 1
             self.move_counter = 0
+            self.hp = hp
+            self.max_hp = max_hp
+            self.damage = damage
+            self.cd = cd
+            self.last_attack_time = 0
             
-        def update(self):
+        def update(self,hp,max_hp,damage):
+            current_time = pygame.time.get_ticks()
             self.rect.x += self.move_direction
             self.move_counter += 1
             if self.move_counter > 100 :
                 self.move_direction *= -1
                 self.move_counter *= -1
+            self.hp = hp
+            self.max_hp = max_hp
+            self.damage = damage
+            if current_time - self.last_attack_time > self.cd:
+                for yuen in pygame.sprite.spritecollide(Chicky, yuen_group, False):
+                    Chicky.hp -= self.damage
+                    
+            ratio = self.hp/self.max_hp
+            pygame.draw.rect(screen,red,(self.rect.x ,self.rect.y -5 ,35,5))
+            pygame.draw.rect(screen,green,(self.rect.x*ratio ,self.rect.y -5 ,35,5))
+            
+            # if pygame.sprite.collide_rect(self,Chicky):
+            #     Chicky.hp -= yuen_group.damage
+                
 
     class Monster2(pygame.sprite.Sprite):
-        def __init__(self,x,y):
+        def __init__(self,x,y,hp,max_hp,damage):
             pygame.sprite.Sprite.__init__(self)
             self.image = pygame.image.load('graphic/monster2.png')
             self.image = pygame.transform.scale(self.image, (tile_size, tile_size))
             self.rect = self.image.get_rect()
             self.rect.x = x
             self.rect.y = y
-                    
+            self.hp = hp
+            self.max_hp = max_hp
+            self.damage = damage
+
+        def update(self,hp,max_hp,damage):
+            self.hp = hp
+            self.max_hp = max_hp
+            self.damage = damage
+            ratio = self.hp/self.max_hp
+            pygame.draw.rect(screen,red,(self.rect.x ,self.rect.y -5 ,35,5))
+            pygame.draw.rect(screen,green,(self.rect.x ,self.rect.y -5 ,35*ratio,5))
 
     class Monster3(pygame.sprite.Sprite):
-        def __init__(self,x,y):
+        def __init__(self,x,y,hp,max_hp,damage):
             pygame.sprite.Sprite.__init__(self)
             self.image = pygame.image.load('graphic/monster3.png')
             self.image = pygame.transform.scale(self.image, (tile_size, tile_size))
@@ -440,13 +589,23 @@ def leveltest(c, lvl, username, coin, pull):
             self.rect.y = y
             self.move_direction = 1
             self.move_counter = 0
+            self.hp = hp
+            self.max_hp = max_hp
+            self.damage = damage
             
-        def update(self):
+        def update(self,hp,max_hp,damage):
             self.rect.y += self.move_direction
             self.move_counter += 1
             if self.move_counter > 250 :
                 self.move_direction *= -1
                 self.move_counter *= -1
+            self.hp = hp
+            self.max_hp = max_hp
+            self.damage = damage
+            ratio = self.hp / self.max_hp
+            pygame.draw.rect(screen,red,(self.rect.x ,self.rect.y -5 ,35,5))
+            pygame.draw.rect(screen,green,(self.rect.x ,self.rect.y -5 ,35*ratio,5))
+
 
     class Exit(pygame.sprite.Sprite):
         def __init__(self, x, y):
@@ -457,12 +616,15 @@ def leveltest(c, lvl, username, coin, pull):
             self.rect.x = x
             self.rect.y = y
             
-    Chicky = chicky(35,35)
+    Chicky = chicky(35,35,100,10,5)
 
     yuen_group = pygame.sprite.Group()
     puolin_group = pygame.sprite.Group()
     jy_group = pygame.sprite.Group()  
     exit_group = pygame.sprite.Group() 
+
+    chicky_health_bar = HealthBar(750,200,Chicky.hp,Chicky.max_hp)
+    
 
     if path.exists(f'level{lvl}_data'):
         pickle_in = open(f'level{lvl}_data', 'rb')
@@ -480,15 +642,9 @@ def leveltest(c, lvl, username, coin, pull):
         
         clock.tick(fps)
         screen.blit(background_image,(0,0))
-
-        # if main_menu == True:
-        #     if exit_button.draw():
-        #         run = False
-        #     if start_button.draw():
-        #         main_menu = False
-
-        # else:
+        
         world.draw()
+        gameover = Chicky.update(gameover)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -504,19 +660,24 @@ def leveltest(c, lvl, username, coin, pull):
         timer_text = font.render(f"{time}", True, (255,255,255))
         text_rect = timer_text.get_rect(center = (width//2,50))
         screen.blit(timer_text, text_rect)
+        chicky_health_bar.draw(Chicky.hp)
+        
 
         if gameover == 0:
-            jy_group.update()
-            yuen_group.update()
-            puolin_group.update()
+            for jy in jy_group:
+                jy.update(75,75,15)
+            for yuen in yuen_group:
+                yuen.update(100, 100, 10)
+            for puolin in puolin_group:
+                puolin.update(150, 150, 5)
+            
+
 
         jy_group.draw(screen)
         yuen_group.draw(screen)
         puolin_group.draw(screen)
-        # coin_group.draw(screen)
-        # exit_group.draw(screen)
-
-        gameover = Chicky.update(gameover)
+            # coin_group.draw(screen)
+            # exit_group.draw(screen)
 
         if gameover == -1:
             # if restart_button.draw(screen):
@@ -533,7 +694,7 @@ def leveltest(c, lvl, username, coin, pull):
                 #reset level
                 world_data = []
                 world = reset_level(lvl)
-                Chicky = chicky(35,35)
+                Chicky = chicky(35,35,100,10,5)
                 gameover = 0
                 update_level(username, lvl)
 
@@ -939,6 +1100,7 @@ def level2(c, lvl, username, coin, pull):
                 if self.move_counter > 100 :
                     self.move_direction *= -1
                     self.move_counter *= -1
+
 
         class Monster2(pg.sprite.Sprite):
             def __init__(self,x,y):
