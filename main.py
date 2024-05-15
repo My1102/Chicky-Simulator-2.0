@@ -24,6 +24,7 @@ from pyvidplayer2 import Video
 from button import Button # library by my
 from rank import Ranking # library by my
 from lock import Lock # library by my
+from backpack import Item, Slot, Info
 from os import path
 import pickle
 
@@ -2007,7 +2008,40 @@ def update_equipment(username, equipments):
 
 def backpack(username, lvl, coin, pull):
 
+    FPS = 60
+    selected_item = None
+    backpack_rows = 5
+    backpack_cols = 3
+    slot_size = 100
+    backpack_slots = []
+
+    for row in range(backpack_rows):
+        for col in range(backpack_cols):
+            x = 495 + col * (slot_size + 25)
+            y = 140 + row * (slot_size + 10)
+            backpack_slots.append(Slot(x, y, slot_size, slot_size))
+
+    equip_slots = {
+        "sword": Slot(105, 430, slot_size, slot_size),
+        "shield": Slot(255, 430, slot_size, slot_size),
+        "helmet": Slot(30, 550, slot_size, slot_size),
+        "armor": Slot(180, 550, slot_size, slot_size),
+        "shoes": Slot(330, 550, slot_size, slot_size)
+    }
+
+    items = [
+        Item('Sword', 'graphic/sword.png', 'Sword\nAttack +30', 0.65),
+        Item('Shield', 'graphic/shield.png', 'Wood Shield\nDefend +5', 0.65),
+        Item('Helmet', 'graphic/helmet.png', 'Leather Helmet\nDefend +5', 0.65),
+        Item('Armor', 'graphic/armor.png', 'Leather Armor\nDefend +5', 0.65),
+        Item('Shoes', 'graphic/noob leg.png', 'Leather Shoes\nSpeed +2', 0.65)
+    ]
+
+    for i, item in enumerate(items):
+        backpack_slots[i].item = item
+
     while True:
+
         pygame.display.set_caption('Chicky Simulator - Backpack')
         screen.blit(ranking_image,(0,0))
 
@@ -2044,9 +2078,48 @@ def backpack(username, lvl, coin, pull):
                 pygame.quit()
                 sys.exit()
             
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                for slot in backpack_slots + list(equip_slots.values()):
+                    if slot.rect.collidepoint(pos_mouse) and slot.item:
+                        selected_item = slot.item
+                        info = Info(50, 140, selected_item.info)
+                        info.draw(screen)
+                        slot.item = None
+                        break
+
                 if back_button.check_input(pos_mouse):
                     lobby(username, lvl, coin, pull)
+
+            elif event.type == pygame.MOUSEBUTTONUP:
+                if selected_item:
+                    for slot in backpack_slots + list(equip_slots.values()):
+                        if slot.rect.collidepoint(pos_mouse) and slot.item is None:
+                            slot.item = selected_item
+                            selected_item = None
+                            break
+                    if selected_item:
+                        for slot in backpack_slots:
+                            if slot.item is None:
+                                slot.item = selected_item
+                                selected_item = None
+                                break
+
+            # elif selected_item.check_input(pos_mouse):
+                # info = Info(50, 140, selected_item.info)
+                # info.draw(screen)
+
+        for slot in backpack_slots:
+            slot.draw(screen)
+
+        for slot in equip_slots.values():
+            slot.draw(screen)
+
+        if selected_item:
+            info = Info(50, 150, selected_item.info)
+            info.draw(screen)
+
+        pygame.display.flip()
+        clock.tick(FPS)
 
         pygame.display.update()
 
@@ -4552,6 +4625,7 @@ def sword_info(username, lvl, coin, pull) :
 
         pygame.display.flip()
 
+
 def shoe3_info(username, lvl, coin, pull) :
 
     while True :
@@ -4569,6 +4643,7 @@ def shoe3_info(username, lvl, coin, pull) :
                 sys.exit()
 
         pygame.display.flip()
+
 
 def shoe4_info(username, lvl, coin, pull) :
 
@@ -4588,6 +4663,7 @@ def shoe4_info(username, lvl, coin, pull) :
 
         pygame.display.flip()
 
+
 def shoe5_info(username, lvl, coin, pull) :
 
     while True :
@@ -4605,6 +4681,7 @@ def shoe5_info(username, lvl, coin, pull) :
                 sys.exit()
 
         pygame.display.flip()
+
 
 def shield3_info(username, lvl, coin, pull) :
 
@@ -4624,6 +4701,7 @@ def shield3_info(username, lvl, coin, pull) :
 
         pygame.display.flip()
 
+
 def shield4_info(username, lvl, coin, pull) :
 
     while True :
@@ -4641,6 +4719,7 @@ def shield4_info(username, lvl, coin, pull) :
                 sys.exit()
 
         pygame.display.flip()
+
 
 def shield5_info(username, lvl, coin, pull) :
 
@@ -4660,6 +4739,7 @@ def shield5_info(username, lvl, coin, pull) :
 
         pygame.display.flip()
 
+
 def helmet3_info(username, lvl, coin, pull) :
 
     while True :
@@ -4677,6 +4757,7 @@ def helmet3_info(username, lvl, coin, pull) :
                 sys.exit()
 
         pygame.display.flip()
+
 
 def helmet4_info(username, lvl, coin, pull) :
 
@@ -4696,6 +4777,7 @@ def helmet4_info(username, lvl, coin, pull) :
 
         pygame.display.flip()
 
+
 def helmet5_info(username, lvl, coin, pull) :
 
     while True :
@@ -4713,6 +4795,7 @@ def helmet5_info(username, lvl, coin, pull) :
                 sys.exit()
 
         pygame.display.flip()
+
 
 def armor3_info(username, lvl, coin, pull) :
 
@@ -4732,6 +4815,7 @@ def armor3_info(username, lvl, coin, pull) :
 
         pygame.display.flip()
 
+
 def armor4_info(username, lvl, coin, pull) :
 
     while True :
@@ -4750,6 +4834,7 @@ def armor4_info(username, lvl, coin, pull) :
 
         pygame.display.flip()
 
+
 def armor5_info(username, lvl, coin, pull) :
 
     while True :
@@ -4767,6 +4852,7 @@ def armor5_info(username, lvl, coin, pull) :
                 sys.exit()
 
         pygame.display.flip()
+
 
 def collection(username, lvl, coin, pull):
     on = True
@@ -4926,6 +5012,7 @@ def collection(username, lvl, coin, pull):
 
     pygame.quit()
     sys.exit()
+
 
 def collection2(username, lvl, coin, pull):
     on = True
@@ -5087,6 +5174,7 @@ def collection2(username, lvl, coin, pull):
     pygame.quit()
     sys.exit()
 
+
 def collection3(username, lvl, coin, pull):
     on = True
     shoe3 = Button("graphic/leg.png",150,205,1,'')
@@ -5245,6 +5333,7 @@ def collection3(username, lvl, coin, pull):
 
     pygame.quit()
     sys.exit()
+
 
 def collection4(username, lvl, coin, pull):
     on = True
@@ -5405,6 +5494,7 @@ def collection4(username, lvl, coin, pull):
     pygame.quit()
     sys.exit()
 
+
 def collection5(username, lvl, coin, pull):
     on = True
     axe= Button("graphic/axe.png",150,205,1,'')
@@ -5558,5 +5648,6 @@ def collection5(username, lvl, coin, pull):
 
     pygame.quit()
     sys.exit()
+
 
 log_or_reg()
