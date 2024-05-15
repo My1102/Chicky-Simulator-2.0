@@ -1,88 +1,119 @@
-# I want to built a randomise function.
-# If user enter 1 wish, it will randomise one times from the item list, then pull += 1 .
-# If user enter 5 wish, it will randomise 5 times from the item list, then pull += 5.
-# If user get the chicky, pull = 0
-# When pull == 50, it will randomise one times from the chicky list
+import pygame
+import sys
 
-import random
+# Initialize Pygame
+pygame.init()
 
-username = str(input('username: '))
-chicky = str(input('what chicky: '))
+# Set up the display
+screen = pygame.display.set_mode((800, 600))
+pygame.display.set_caption("Inventory System")
 
-def update_chicky(username, chicky):
-    with open('user_backpack.txt', 'r') as file:
-        lines = file.readlines()
+class Item:
+    def __init__(self, name, description, image, item_type):
+        self.name = name
+        self.description = description
+        self.image = pygame.image.load(image)
+        self.type = item_type  # e.g., "sword", "shield", "helmet", "armor", "shoes"
+        self.rect = self.image.get_rect()
 
-    for i, line in enumerate(lines):
-        user_backpack = line.strip().split(", ")
-        if user_backpack[0] == username:
-            chicky_list = user_backpack[1].split('/')
-            if chicky_list[1] == '0':
-                del chicky_list[1]
-                chicky_list.append(f'{chicky}')
-            elif chicky in chicky_list:
-                break
-            else:
-                chicky_list.append(f'{chicky}')
-            chicky_str = '/'.join(chicky_list)
-            user_backpack[1] = str(chicky_str)
-            lines[i] = ', '.join(user_backpack) + '\n'
-            break
+class Inventory:
+    def __init__(self):
+        self.items = []
 
-    with open('user_backpack.txt', 'w') as file:
-        file.writelines(lines)
-    return
+    def add_item(self, item):
+        self.items.append(item)
 
-wish = int(input('1 or 5 wish: '))
-pull = int(input('Pull: '))
-item = ('coin5','coin5',
-        'coin10','coin10','coin10',
-        'coin15','coin15','coin15','coin15',
-        'coin20','coin20','coin20','coin20','coin20',
-        'coin25','coin25','coin25','coin25','coin25',
-        'coin30','coin30','coin30','coin30','coin30','coin30',
-        'coin35','coin35','coin35','coin35','coin35',
-        'coin40','coin40','coin40','coin40','coin40',
-        'coin45','coin45','coin45','coin45',
-        'coin50','coin50','coin50',
-        'coin75','coin75',
-        'coin90','kitty','tanker','worrier','speedy','magnet')
+    def remove_item(self, item):
+        self.items.remove(item)
 
-chickyhoho = ('kitty','tanker','worrier','speedy','magnet')
+def draw_inventory(screen, inventory, selected_item=None):
+    x, y = 50, 50
+    for item in inventory.items:
+        screen.blit(item.image, (x, y))
+        if item == selected_item:
+            pygame.draw.rect(screen, (255, 255, 0), (x, y, 64, 64), 3)  # Highlight selected item
+        x += 70  # Move to the next slot
 
-if wish == 1:
-    pull += 1
-    if pull < 50:
-        itemget = random.choice(item)
-        if itemget in chickyhoho:
-            pull = 0
-        print(itemget, pull)
+def draw_item_info(screen, item):
+    font = pygame.font.Font(None, 36)
+    text = font.render(item.name, True, (255, 255, 255))
+    screen.blit(text, (50, 500))
+    description = font.render(item.description, True, (255, 255, 255))
+    screen.blit(description, (50, 540))
 
-    else:
-        pull = 0
-        itemget = random.choice(chickyhoho)
-        print(itemget, pull)
+class EquipSlot:
+    def __init__(self, x, y, item_type):
+        self.rect = pygame.Rect(x, y, 64, 64)
+        self.item = None
+        self.type = item_type
 
-else:
-    n = 5
-    itemlist = [0]
-    while n > 0:
-        pull += 1
-        n -= 1
-        if pull < 50:
-            itemget = random.choice(item)
-            if itemget in chickyhoho:
-                pull = 0
+# Define equip slots
+equip_slots = {
+    "sword": EquipSlot(700, 50, "sword"),
+    "shield": EquipSlot(700, 130, "shield"),
+    "helmet": EquipSlot(700, 210, "helmet"),
+    "armor": EquipSlot(700, 290, "armor"),
+    "shoes": EquipSlot(700, 370, "shoes")
+}
 
-        else:
-            pull = 0
-            itemget = random.choice(chickyhoho)
+selected_item = None
+dragging_item = None
+offset_x = 0
+offset_y = 0
 
-        itemlist.append(itemget)
+def handle_mouse_event(event, inventory):
+    global selected_item, dragging_item, offset_x, offset_y
+    if event.type == pygame.MOUSEBUTTONDOWN:
+        x, y = 50, 50
+        for item in inventory.items:
+            item.rect.topleft = (x, y)
+            if item.rect.collidepoint(event.pos):
+                selected_item = item
+                dragging_item = item
+                offset_x = item.rect.x - event.pos[0]
+                offset_y = item.rect.y - event.pos[1]
+            x += 70
+    elif event.type == pygame.MOUSEBUTTONUP:
+        if dragging_item:
+            for slot in equip_slots.values():
+                if slot.rect.collidepoint(event.pos) and slot.type == dragging_item.type:
+                    slot.item = dragging_item
+                    inventory.remove_item(dragging_item)
+            dragging_item = None
+    elif event.type == pygame.MOUSEMOTION:
+        if dragging_item:
+            dragging_item.rect.x = event.pos[0] + offset_x
+            dragging_item.rect.y = event.pos
 
-    del itemlist[0]
-    itemsget = str(f'{itemlist[0]},{itemlist[1]},{itemlist[2]},{itemlist[3]},{itemlist[4]}')
-    item1,item2,item3,item4,item5 = itemsget.split(',')
-    print(item1, item2, item3, item4, item5)
+# Load images
+sword_image = "graphic/sword.png"
+shield_image = "graphic/shield.png"
+item_type1 = 'sword'
+item_type2 = 'shield'
 
-update_chicky(username, chicky)
+# Create items
+sword = Item("Sword", "A sharp blade.", sword_image, item_type1)
+shield = Item("Shield", "A sturdy shield.", shield_image, item_type1)
+
+# Create an inventory and add items
+inventory = Inventory()
+inventory.add_item(sword)
+inventory.add_item(shield)
+
+# Main loop
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            handle_mouse_event(event, inventory)
+
+    screen.fill((30, 30, 30))  # Fill the screen with a dark color
+    draw_inventory(screen, inventory, selected_item)
+    if selected_item:
+        draw_item_info(screen, selected_item)
+    pygame.display.flip()
+
+pygame.quit()
+sys.exit()

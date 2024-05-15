@@ -24,6 +24,7 @@ from pyvidplayer2 import Video
 from button import Button # library by my
 from rank import Ranking # library by my
 from lock import Lock # library by my
+from backpack import Item, Slot, Info
 from os import path
 import pickle
 
@@ -2117,21 +2118,189 @@ def update_chicky(username, chicky):
     return
 
 
+def update_weapon(username, weapon):
+    with open('user_backpack.txt', 'r') as file:
+        lines = file.readlines()
+
+    for i, line in enumerate(lines):
+        user_backpack = line.strip().split(", ")
+        if user_backpack[0] == username:
+            weapon_list = user_backpack[2].split('/')
+            if weapon_list[0] == 'no':
+                del weapon_list[0]
+                weapon_list.append(f'{weapon}')
+            elif weapon in weapon_list:
+                break
+            else:
+                weapon_list.append(f'{weapon}')
+            weapon_str = '/'.join(weapon_list)
+            user_backpack[2] = str(weapon_str)
+            lines[i] = ', '.join(user_backpack) + '\n'
+            break
+
+    with open('user_backpack.txt', 'w') as file:
+        file.writelines(lines)
+    return
+
+
+def update_equipment(username, equipments):
+    with open('user_backpack.txt', 'r') as file:
+        lines = file.readlines()
+
+    for i, line in enumerate(lines):
+        user_backpack = line.strip().split(", ")
+        if user_backpack[0] == username:
+            equipments_list = user_backpack[3].split('/')
+            if equipments_list[0] == 'no':
+                del equipments_list[0]
+                equipments_list.append(f'{equipments}')
+            elif equipments in equipments_list:
+                break
+            else:
+                equipments_list.append(f'{equipments}')
+            equipments_str = '/'.join(equipments_list)
+            user_backpack[3] = str(equipments_str)
+            lines[i] = ', '.join(user_backpack) + '\n'
+            break
+
+    with open('user_backpack.txt', 'w') as file:
+        file.writelines(lines)
+    return
+
+
+def backpack(username, lvl, coin, pull):
+
+    FPS = 60
+    selected_item = None
+    backpack_rows = 5
+    backpack_cols = 3
+    slot_size = 100
+    backpack_slots = []
+
+    for row in range(backpack_rows):
+        for col in range(backpack_cols):
+            x = 495 + col * (slot_size + 25)
+            y = 140 + row * (slot_size + 10)
+            backpack_slots.append(Slot(x, y, slot_size, slot_size))
+
+    equip_slots = {
+        "sword": Slot(105, 430, slot_size, slot_size),
+        "shield": Slot(255, 430, slot_size, slot_size),
+        "helmet": Slot(30, 550, slot_size, slot_size),
+        "armor": Slot(180, 550, slot_size, slot_size),
+        "shoes": Slot(330, 550, slot_size, slot_size)
+    }
+
+    items = [
+        Item('Sword', 'graphic/sword.png', 'Sword\nAttack +30', 0.65),
+        Item('Shield', 'graphic/shield.png', 'Wood Shield\nDefend +5', 0.65),
+        Item('Helmet', 'graphic/helmet.png', 'Leather Helmet\nDefend +5', 0.65),
+        Item('Armor', 'graphic/armor.png', 'Leather Armor\nDefend +5', 0.65),
+        Item('Shoes', 'graphic/noob leg.png', 'Leather Shoes\nSpeed +2', 0.65)
+    ]
+
+    for i, item in enumerate(items):
+        backpack_slots[i].item = item
+
+    while True:
+
+        pygame.display.set_caption('Chicky Simulator - Backpack')
+        screen.blit(ranking_image,(0,0))
+
+        backpack_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Backpack', True, 'white')
+        backpack_text_rect = backpack_text.get_rect(center = (450,80))
+        screen.blit(backpack_text, backpack_text_rect)
+
+        coinlogo = Lock('graphic/manycoin.png', 700, 80, 0.3)
+        coinlogo.draw(screen)
+
+        coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'white')
+        coin_text_rect = coin_text.get_rect(center = (780,80))
+        screen.blit(coin_text, coin_text_rect)
+
+        backpack_surface = pygame.Surface((420,550))
+        backpack_surface.fill('white')
+        backpack_surface.set_alpha(150)
+        backpack_surface_rect = backpack_surface.get_rect(center=(670,410))
+        screen.blit(backpack_surface, backpack_surface_rect)
+
+        equip_surface = pygame.Surface((420,550))
+        equip_surface.fill('white')
+        equip_surface.set_alpha(150)
+        equip_surface_rect = equip_surface.get_rect(center=(230,410))
+        screen.blit(equip_surface, equip_surface_rect)
+
+        back_button = Button('graphic/botton1.png', 100, 80, 0.6, "<<")
+        back_button.draw(screen)
+
+        pos_mouse = pygame.mouse.get_pos()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                for slot in backpack_slots + list(equip_slots.values()):
+                    if slot.rect.collidepoint(pos_mouse) and slot.item:
+                        selected_item = slot.item
+                        info = Info(50, 140, selected_item.info)
+                        info.draw(screen)
+                        slot.item = None
+                        break
+
+                if back_button.check_input(pos_mouse):
+                    lobby(username, lvl, coin, pull)
+
+            elif event.type == pygame.MOUSEBUTTONUP:
+                if selected_item:
+                    for slot in backpack_slots + list(equip_slots.values()):
+                        if slot.rect.collidepoint(pos_mouse) and slot.item is None:
+                            slot.item = selected_item
+                            selected_item = None
+                            break
+                    if selected_item:
+                        for slot in backpack_slots:
+                            if slot.item is None:
+                                slot.item = selected_item
+                                selected_item = None
+                                break
+
+            # elif selected_item.check_input(pos_mouse):
+                # info = Info(50, 140, selected_item.info)
+                # info.draw(screen)
+
+        for slot in backpack_slots:
+            slot.draw(screen)
+
+        for slot in equip_slots.values():
+            slot.draw(screen)
+
+        if selected_item:
+            info = Info(50, 150, selected_item.info)
+            info.draw(screen)
+
+        pygame.display.flip()
+        clock.tick(FPS)
+
+        pygame.display.update()
+
+
 def items(username, lvl, coin, times, itemget, pull):
 
     while True:
         pygame.display.set_caption('Chicky Simulator - Items Get')
         screen.blit(ranking_image,(0,0))
 
-        wish_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Items Get', True, 'white')
-        wish_text_rect = wish_text.get_rect(center = (450,100))
-        screen.blit(wish_text, wish_text_rect)
+        item_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Items Get', True, 'white')
+        item_text_rect = item_text.get_rect(center = (450,100))
+        screen.blit(item_text, item_text_rect)
 
-        wishing_surface = pygame.Surface((700,350))
-        wishing_surface.fill('white')
-        wishing_surface.set_alpha(150)
-        wishing_surface_rect = wishing_surface.get_rect(center=(width/2,350))
-        screen.blit(wishing_surface, wishing_surface_rect)
+        item_surface = pygame.Surface((700,350))
+        item_surface.fill('white')
+        item_surface.set_alpha(150)
+        item_surface_rect = item_surface.get_rect(center=(width/2,350))
+        screen.blit(item_surface, item_surface_rect)
 
         back_button = Button('graphic/button2.png', 450, 580, 0.3, "BACK")
         back_button.draw(screen)
@@ -2526,7 +2695,37 @@ def wish(username, lvl, coin, pull):
 
         pos_mouse = pygame.mouse.get_pos()
 
-        item = ('coin5','coin5',
+        # 1.25%
+        item = ('coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
                 'coin10','coin10','coin10',
                 'coin15','coin15','coin15','coin15',
                 'coin20','coin20','coin20','coin20','coin20',
@@ -2536,8 +2735,92 @@ def wish(username, lvl, coin, pull):
                 'coin40','coin40','coin40','coin40','coin40',
                 'coin45','coin45','coin45','coin45',
                 'coin50','coin50','coin50',
-                'coin75','coin75',
+
+                'coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin10','coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin10','coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin10','coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
                 'coin90','kitty','tanker','worrier','speedy','magnet')
+        
+        pity = ('coin10','coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin10','coin10','coin10',
+                'coin15','coin15','coin15','coin15',
+                'coin20','coin20','coin20','coin20','coin20',
+                'coin25','coin25','coin25','coin25','coin25',
+                'coin30','coin30','coin30','coin30','coin30','coin30',
+                'coin35','coin35','coin35','coin35','coin35',
+                'coin40','coin40','coin40','coin40','coin40',
+                'coin45','coin45','coin45','coin45',
+                'coin50','coin50','coin50',
+
+                'coin75','coin75','coin75',
+                'coin90','coin90',
+                'kitty','tanker','worrier','speedy','magnet')
         
         chicky = ('kitty','tanker','worrier','speedy','magnet')
 
@@ -2556,8 +2839,12 @@ def wish(username, lvl, coin, pull):
                         coin -= 100
                         pull += 1
 
-                        if pull < 50:
+                        if pull < 40:
                             itemget = random.choice(item)
+                            if itemget in chicky:
+                                pull = 0
+                        elif ((pull >= 40) and (pull < 50)):
+                            itemget = random.choice(pity)
                             if itemget in chicky:
                                 pull = 0
                         else:
@@ -2579,11 +2866,14 @@ def wish(username, lvl, coin, pull):
                         while n > 0:
                             pull += 1
                             n -= 1
-                            if pull < 50:
+                            if pull < 40:
                                 itemget = random.choice(item)
                                 if itemget in chicky:
                                     pull = 0
-
+                            elif ((pull >= 40) and (pull < 50)):
+                                itemget = random.choice(pity)
+                                if itemget in chicky:
+                                    pull = 0
                             else:
                                 pull = 0
                                 itemget = random.choice(chicky)
@@ -2858,6 +3148,9 @@ def lobby(username, lvl, coin, pull):
         back_button = Button('graphic/botton1.png', 70, 70, 0.6, "<<")
         back_button.draw(screen)
 
+        collection_button = Button('graphic/botton1.png', 800, 350, 0.6, "?")
+        collection_button.draw(screen)
+
         pos_mouse = pygame.mouse.get_pos()
 
         # get user events (their selections)
@@ -2876,11 +3169,17 @@ def lobby(username, lvl, coin, pull):
                 if wish_button.check_input(pos_mouse):
                     wish(username, lvl, coin, pull)
                 
-                if back_button.check_input(pos_mouse):
-                    log_or_reg()
-                
                 if store_button.check_input(pos_mouse):
                     store(username, lvl, coin, pull)
+                    
+                if collection_button.check_input(pos_mouse):
+                    collection(username, lvl, coin, pull)
+
+                if backpack_button.check_input(pos_mouse):
+                    backpack(username, lvl, coin, pull)
+
+                if back_button.check_input(pos_mouse):
+                    log_or_reg()
 
                 if quit_button.check_input(pos_mouse):
                     pygame.quit()
@@ -2999,7 +3298,7 @@ def save_userinput(username, password):
             file.close()
 
             file2 = open('user_backpack.txt', 'a')
-            file2.write(f'{username}, normal, no, no')
+            file2.write(f'{username}, normal/0, no, no')
             file2.close()
 
             lvl = 1
@@ -3191,55 +3490,6 @@ def log_or_reg():
 
             Manager.update(UI_REFRESH_RATE)
         pygame.display.update()
-
-def update_weapon(username, weapon):
-    with open('user_backpack.txt', 'r') as file:
-        lines = file.readlines()
-
-    for i, line in enumerate(lines):
-        user_backpack = line.strip().split(", ")
-        if user_backpack[0] == username:
-            weapon_list = user_backpack[2].split('/')
-            if weapon_list[0] == 'no':
-                del weapon_list[0]
-                weapon_list.append(f'{weapon}')
-            elif weapon in weapon_list:
-                break
-            else:
-                weapon_list.append(f'{weapon}')
-            weapon_str = '/'.join(weapon_list)
-            user_backpack[2] = str(weapon_str)
-            lines[i] = ', '.join(user_backpack) + '\n'
-            break
-
-    with open('user_backpack.txt', 'w') as file:
-        file.writelines(lines)
-    return
-
-
-def update_equipment(username, equipments):
-    with open('user_backpack.txt', 'r') as file:
-        lines = file.readlines()
-
-    for i, line in enumerate(lines):
-        user_backpack = line.strip().split(", ")
-        if user_backpack[0] == username:
-            equipments_list = user_backpack[3].split('/')
-            if equipments_list[0] == 'no':
-                del equipments_list[0]
-                equipments_list.append(f'{equipments}')
-            elif equipments in equipments_list:
-                break
-            else:
-                equipments_list.append(f'{equipments}')
-            equipments_str = '/'.join(equipments_list)
-            user_backpack[3] = str(equipments_str)
-            lines[i] = ', '.join(user_backpack) + '\n'
-            break
-
-    with open('user_backpack.txt', 'w') as file:
-        file.writelines(lines)
-    return
 
 
 def store(username, lvl, coin, pull):
@@ -3589,6 +3839,7 @@ def alr_have(username,lvl, coin, pull):
         Manager.update(UI_REFRESH_RATE)
         pygame.display.update()
 
+
 def alr_have2(username,lvl, coin, pull):
     pygame.display.set_caption('Chicky Simulator - Store')
     screen.blit(background_image,(0,0))
@@ -3607,6 +3858,7 @@ def alr_have2(username,lvl, coin, pull):
             
         Manager.update(UI_REFRESH_RATE)
         pygame.display.update()
+
 
 def alr_have3(username,lvl, coin, pull):
     pygame.display.set_caption('Chicky Simulator - Store')
@@ -3752,9 +4004,9 @@ def equipment(username, lvl, coin, pull) :
     on = True
     buy = False
     no = False
-    hand3= Button("graphic/hand.png",150,205,1,'')
-    hand4 = Button("graphic/noob hand.png",450,205,1,'')
-    hand5 = Button("graphic/hand.png",750,205,1,'')
+    armor3 = Button("graphic/noob armor.png",150,205,1,'')
+    armor4= Button("graphic/noob armor.png",450,205,1,'')
+    armor5= Button("graphic/noob armor.png",750,205,1,'')
     shoe3 = Button("graphic/leg.png",150,460,1,'')
     shoe4= Button("graphic/leg.png",450,460,1,'')
     shoe5= Button("graphic/noob leg.png",750,460,1,'')
@@ -3786,24 +4038,24 @@ def equipment(username, lvl, coin, pull) :
         screen.blit(store_surface, store_surface_rect)
 
         #EQUIPMENT DIsPLAY
-        hand3.draw(screen)
-        hand4.draw(screen)
-        hand5.draw(screen)
+        armor3.draw(screen)
+        armor4.draw(screen)
+        armor5.draw(screen)
         shoe3.draw(screen)
         shoe4.draw(screen)
         shoe5.draw(screen)
         #################
 
         #PRICE
-        #####hand####
+        ####armor3#####
         price_text = font.render(f"{500}", True, (255,255,255))
         text_rect = price_text.get_rect(center =(150,305))
         screen.blit(price_text, text_rect)
-        ######hand2######
+        ######armor4#####        
         price_text = font.render(f"{1000}", True, (255,255,255))
         text_rect = price_text.get_rect(center =(450,305))
         screen.blit(price_text, text_rect)
-        ######hand3######
+        #######aRmor5#########        
         price_text = font.render(f"{2000}", True, (255,255,255))
         text_rect = price_text.get_rect(center =(750,305))
         screen.blit(price_text, text_rect)
@@ -3845,23 +4097,23 @@ def equipment(username, lvl, coin, pull) :
         next_button.draw(screen)
 
         #SAving Data
-        equipments = ('hand3','hand4','hand5','shoe3','shoe4','shoe5')
+        equipments = ('armor3','armor4','armor5','shoe3','shoe4','shoe5')
             
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 on = False
             
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if hand3.check_input(pos_mouse):
-                    hand3_info(username, lvl, coin, pull)
+                if armor3.check_input(pos_mouse):
+                    armor3_info(username, lvl, coin, pull)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if hand4.check_input(pos_mouse):
-                    hand4_info(username, lvl, coin, pull)
+                if armor4.check_input(pos_mouse):
+                    armor4_info(username, lvl, coin, pull)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if hand5.check_input(pos_mouse):
-                    hand5_info(username, lvl, coin, pull)
+                if armor5.check_input(pos_mouse):
+                    armor5_info(username, lvl, coin, pull)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if shoe3.check_input(pos_mouse):
@@ -3884,7 +4136,7 @@ def equipment(username, lvl, coin, pull) :
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
                             equipments_list = user_backpack[3].split('/')
-                            if 'hand3' in equipments_list :
+                            if 'armor3' in equipments_list :
                                 alr_have2(username,lvl, coin, pull)
                             else :
                                 if coin >= 500 :
@@ -3899,7 +4151,7 @@ def equipment(username, lvl, coin, pull) :
                                     if no :
                                         no = False
                                     else :
-                                        no = True   
+                                        no = True  
 
                             equipments_str = '/'.join(equipments_list)
                             user_backpack[2] = str(equipments_str)
@@ -3914,7 +4166,7 @@ def equipment(username, lvl, coin, pull) :
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
                             equipments_list = user_backpack[3].split('/')
-                            if 'hand4' in equipments_list :
+                            if 'armor4' in equipments_list :
                                 alr_have2(username,lvl, coin, pull)
                             else :
                                 if coin >= 1000 :
@@ -3935,7 +4187,7 @@ def equipment(username, lvl, coin, pull) :
                             user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
- 
+                        
                 if buy_button3.check_input(pos_mouse):
                     with open('user_backpack.txt', 'r') as file:
                         lines = file.readlines()
@@ -3944,7 +4196,7 @@ def equipment(username, lvl, coin, pull) :
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
                             equipments_list = user_backpack[3].split('/')
-                            if 'hand5' in equipments_list :
+                            if 'armor5' in equipments_list :
                                 alr_have2(username,lvl, coin, pull)
                             else :
                                 if coin >= 2000 :
@@ -3959,7 +4211,7 @@ def equipment(username, lvl, coin, pull) :
                                     if no :
                                         no = False
                                     else :
-                                        no = True 
+                                        no = True
 
                             equipments_str = '/'.join(equipments_list)
                             user_backpack[2] = str(equipments_str)
@@ -4080,9 +4332,6 @@ def equipment2(username, lvl, coin, pull) :
     helmet3= Button("graphic/noob helmet.png",150,205,1,'')
     helmet4 = Button("graphic/noob helmet.png",450,205,1,'')
     helmet5 = Button("graphic/noob helmet.png",750,205,1,'')
-    armor3 = Button("graphic/noob armor.png",150,460,1,'')
-    armor4= Button("graphic/noob armor.png",450,460,1,'')
-    armor5= Button("graphic/noob armor.png",750,460,1,'')
                             
     while on:
         pygame.display.set_caption('Chicky Simulator - Store')
@@ -4114,9 +4363,7 @@ def equipment2(username, lvl, coin, pull) :
         helmet3.draw(screen)
         helmet4.draw(screen)
         helmet5.draw(screen)
-        armor3.draw(screen)
-        armor4.draw(screen)
-        armor5.draw(screen)
+
         #################
 
         #PRICE
@@ -4132,19 +4379,6 @@ def equipment2(username, lvl, coin, pull) :
         price_text = font.render(f"{2000}", True, (255,255,255))
         text_rect = price_text.get_rect(center =(750,305))
         screen.blit(price_text, text_rect)
-        ####armor3#####
-        price_text = font.render(f"{500}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(150,555))
-        screen.blit(price_text, text_rect)
-        ######armor4#####        
-        price_text = font.render(f"{1000}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(450,555))
-        screen.blit(price_text, text_rect)
-        #######aRmor5#########        
-        price_text = font.render(f"{2000}", True, (255,255,255))
-        text_rect = price_text.get_rect(center =(750,555))
-        screen.blit(price_text, text_rect)
-
 
         # BUY BUTTONS
         buy_button1 = Button('graphic/button2.png', 150, 350,0.15, "BUY")
@@ -4153,12 +4387,6 @@ def equipment2(username, lvl, coin, pull) :
         buy_button2.draw(screen)
         buy_button3 = Button('graphic/button2.png', 750, 350, 0.15, "BUY")
         buy_button3.draw(screen)
-        buy_button4 = Button('graphic/button2.png', 150, 600, 0.15, "BUY")
-        buy_button4.draw(screen)
-        buy_button5 = Button('graphic/button2.png', 450, 600, 0.15, "BUY")
-        buy_button5.draw(screen)
-        buy_button6 = Button('graphic/button2.png', 750, 600, 0.15, "BUY")
-        buy_button6.draw(screen)
         #########
 
         #Back page button#
@@ -4166,7 +4394,7 @@ def equipment2(username, lvl, coin, pull) :
         back_button.draw(screen)
 
         #Data saving
-        equipments =('helmet3','helmet4','helmet5','armor3','armor4','armor5')
+        equipments2 =('helmet3','helmet4','helmet5')
             
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -4184,17 +4412,7 @@ def equipment2(username, lvl, coin, pull) :
                 if helmet5.check_input(pos_mouse):
                     helmet5_info(username, lvl, coin, pull)
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if armor3.check_input(pos_mouse):
-                    armor3_info(username, lvl, coin, pull)
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if armor4.check_input(pos_mouse):
-                    armor4_info(username, lvl, coin, pull)
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if armor5.check_input(pos_mouse):
-                    armor5_info(username, lvl, coin, pull)
+            
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if buy_button1.check_input(pos_mouse):
@@ -4211,7 +4429,7 @@ def equipment2(username, lvl, coin, pull) :
                                 if coin >= 500 :
                                     coin -= 500
                                     update_coin(username, coin)
-                                    update_equipment(username, equipments[0])
+                                    update_equipment(username, equipments2[0])
                                     if buy :
                                         buy = False
                                     else :
@@ -4242,7 +4460,7 @@ def equipment2(username, lvl, coin, pull) :
                                 if coin >= 1000 :
                                     coin -= 1000
                                     update_coin(username, coin)
-                                    update_equipment(username, equipments[1])
+                                    update_equipment(username, equipments2[1])
                                     if buy :
                                         buy = False
                                     else :
@@ -4272,7 +4490,7 @@ def equipment2(username, lvl, coin, pull) :
                                 if coin >= 2000 :
                                     coin -= 2000
                                     update_coin(username, coin)
-                                    update_equipment(username, equipments[2])
+                                    update_equipment(username, equipments2[2])
                                     if buy :
                                         buy = False
                                     else :
@@ -4287,95 +4505,7 @@ def equipment2(username, lvl, coin, pull) :
                             user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
-                if buy_button4.check_input(pos_mouse):
-                    with open('user_backpack.txt', 'r') as file:
-                        lines = file.readlines()
-
-                    for i, line in enumerate(lines):
-                        user_backpack = line.strip().split(", ")
-                        if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
-                            if 'armor3' in equipments_list :
-                                alr_have3(username,lvl, coin, pull)
-                            else :
-                                if coin >= 500 :
-                                    coin -= 500
-                                    update_coin(username, coin)
-                                    update_equipment(username, equipments[3])
-                                    if buy :
-                                        buy = False
-                                    else :
-                                        buy = True
-                                else :
-                                    if no :
-                                        no = False
-                                    else :
-                                        no = True  
-
-                            equipments_str = '/'.join(equipments_list)
-                            user_backpack[2] = str(equipments_str)
-                            lines[i] = ', '.join(user_backpack) + '\n'
-                            break
-                    
-                if buy_button5.check_input(pos_mouse):
-                    with open('user_backpack.txt', 'r') as file:
-                        lines = file.readlines()
-
-                    for i, line in enumerate(lines):
-                        user_backpack = line.strip().split(", ")
-                        if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
-                            if 'armor4' in equipments_list :
-                                alr_have3(username,lvl, coin, pull)
-                            else :
-                                if coin >= 1000 :
-                                    coin -= 1000
-                                    update_coin(username, coin)
-                                    update_equipment(username, equipments[4])
-                                    if buy :
-                                        buy = False
-                                    else :
-                                        buy = True
-                                else :
-                                    if no :
-                                        no = False
-                                    else :
-                                        no = True  
-
-                            equipments_str = '/'.join(equipments_list)
-                            user_backpack[2] = str(equipments_str)
-                            lines[i] = ', '.join(user_backpack) + '\n'
-                            break
-                        
-                if buy_button6.check_input(pos_mouse):
-                    with open('user_backpack.txt', 'r') as file:
-                        lines = file.readlines()
-
-                    for i, line in enumerate(lines):
-                        user_backpack = line.strip().split(", ")
-                        if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
-                            if 'armor5' in equipments_list :
-                                alr_have3(username,lvl, coin, pull)
-                            else :
-                                if coin >= 2000 :
-                                    coin -= 2000
-                                    update_coin(username, coin)
-                                    update_equipment(username, equipments[5])
-                                    if buy :
-                                        buy = False
-                                    else :
-                                        buy = True
-                                else :
-                                    if no :
-                                        no = False
-                                    else :
-                                        no = True
-
-                            equipments_str = '/'.join(equipments_list)
-                            user_backpack[2] = str(equipments_str)
-                            lines[i] = ', '.join(user_backpack) + '\n'
-                            break
+                
 
                 if back_button.check_input(pos_mouse):
                     equipment(username, lvl, coin, pull)
@@ -4543,6 +4673,7 @@ def dunno2_lobby(c,username, lvl, coin, pull) :
     pygame.quit()
     sys.exit()
 
+
 def collection(c,username, lvl, coin, pull) :
     ##puo puo did this
     on = True
@@ -4599,6 +4730,7 @@ def collection(c,username, lvl, coin, pull) :
                 if sword.check_input(pos_mouse):
                     sword(c,username, lvl, coin, pull)
 
+
 def axe_info(username, lvl, coin, pull) :
 
     while True :
@@ -4616,6 +4748,7 @@ def axe_info(username, lvl, coin, pull) :
                 sys.exit()
 
         pygame.display.flip()
+
 
 def hammer_info(username, lvl, coin, pull) :
 
@@ -4635,6 +4768,7 @@ def hammer_info(username, lvl, coin, pull) :
 
         pygame.display.flip()
 
+
 def sword_info(username, lvl, coin, pull) :
 
     while True :
@@ -4653,59 +4787,6 @@ def sword_info(username, lvl, coin, pull) :
 
         pygame.display.flip()
 
-def hand3_info(username, lvl, coin, pull) :
-
-    while True :
-
-        surface = pygame.Surface((175,195))
-        surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Glove\n3-Star\nATK+3\nDEF+5',True,'white'),(5,5))
-        screen.blit(surface,(80,130))
-
-        for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                equipment(username, lvl, coin,pull)
-            if event.type == pygame.quit:
-                pygame.quit()
-                sys.exit()
-
-        pygame.display.flip()
-
-def hand4_info(username, lvl, coin, pull) :
-
-    while True :
-
-        surface = pygame.Surface((175,195))
-        surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Glove\n4-Star\nATK+5\nDEF+10',True,'white'),(5,5))
-        screen.blit(surface,(380,130))
-
-        for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                equipment(username, lvl, coin,pull)
-            if event.type == pygame.quit:
-                pygame.quit()
-                sys.exit()
-
-        pygame.display.flip()
-
-def hand5_info(username, lvl, coin, pull) :
-
-    while True :
-
-        surface = pygame.Surface((175,195))
-        surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Glove\n5-Star\nATK+10\nDEF+15',True,'white'),(5,5))
-        screen.blit(surface,(680,130))
-
-        for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                equipment(username, lvl, coin,pull)
-            if event.type == pygame.quit:
-                pygame.quit()
-                sys.exit()
-
-        pygame.display.flip()
 
 def shoe3_info(username, lvl, coin, pull) :
 
@@ -4713,7 +4794,7 @@ def shoe3_info(username, lvl, coin, pull) :
 
         surface = pygame.Surface((175,195))
         surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Boots\n3-Star\nATK+3\nDEF+5',True,'white'),(5,5))
+        surface.blit(font.render('Boots\n3-Star\nSPEED+2',True,'white'),(5,5))
         screen.blit(surface,(80,375))
 
         for event in pygame.event.get():
@@ -4724,6 +4805,7 @@ def shoe3_info(username, lvl, coin, pull) :
                 sys.exit()
 
         pygame.display.flip()
+
 
 def shoe4_info(username, lvl, coin, pull) :
 
@@ -4731,7 +4813,7 @@ def shoe4_info(username, lvl, coin, pull) :
 
         surface = pygame.Surface((175,195))
         surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Boots\n4-Star\nATK+5\nDEF+10',True,'white'),(5,5))
+        surface.blit(font.render('Boots\n4-Star\nSPEED+4',True,'white'),(5,5))
         screen.blit(surface,(380,375))
 
         for event in pygame.event.get():
@@ -4743,13 +4825,14 @@ def shoe4_info(username, lvl, coin, pull) :
 
         pygame.display.flip()
 
+
 def shoe5_info(username, lvl, coin, pull) :
 
     while True :
 
         surface = pygame.Surface((175,195))
         surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Boots\n5-Star\nATK+10\nDEF+15',True,'white'),(5,5))
+        surface.blit(font.render('Boots\n5-Star\nSPEED+6',True,'white'),(5,5))
         screen.blit(surface,(680,375))
 
         for event in pygame.event.get():
@@ -4761,13 +4844,14 @@ def shoe5_info(username, lvl, coin, pull) :
 
         pygame.display.flip()
 
+
 def shield3_info(username, lvl, coin, pull) :
 
     while True :
 
         surface = pygame.Surface((175,195))
         surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Shield\n3-Star\nDEF+10',True,'white'),(5,5))
+        surface.blit(font.render('Shield\n3-Star\nDEF+5',True,'white'),(5,5))
         screen.blit(surface,(80,375))
 
         for event in pygame.event.get():
@@ -4779,13 +4863,14 @@ def shield3_info(username, lvl, coin, pull) :
 
         pygame.display.flip()
 
+
 def shield4_info(username, lvl, coin, pull) :
 
     while True :
 
         surface = pygame.Surface((175,195))
         surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Shield\n4-Star\nDEF+20',True,'white'),(5,5))
+        surface.blit(font.render('Shield\n4-Star\nDEF+7',True,'white'),(5,5))
         screen.blit(surface,(380,375))
 
         for event in pygame.event.get():
@@ -4797,13 +4882,14 @@ def shield4_info(username, lvl, coin, pull) :
 
         pygame.display.flip()
 
+
 def shield5_info(username, lvl, coin, pull) :
 
     while True :
 
         surface = pygame.Surface((175,195))
         surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Shield\n5-Star\nDEF+30',True,'white'),(5,5))
+        surface.blit(font.render('Shield\n5-Star\nDEF+10',True,'white'),(5,5))
         screen.blit(surface,(680,375))
 
         for event in pygame.event.get():
@@ -4815,13 +4901,14 @@ def shield5_info(username, lvl, coin, pull) :
 
         pygame.display.flip()
 
+
 def helmet3_info(username, lvl, coin, pull) :
 
     while True :
 
         surface = pygame.Surface((175,195))
         surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Helmet\n3-Star\nHP+5\nDEF+5',True,'white'),(5,5))
+        surface.blit(font.render('Helmet\n3-Star\nDEF+5',True,'white'),(5,5))
         screen.blit(surface,(80,130))
 
         for event in pygame.event.get():
@@ -4833,13 +4920,14 @@ def helmet3_info(username, lvl, coin, pull) :
 
         pygame.display.flip()
 
+
 def helmet4_info(username, lvl, coin, pull) :
 
     while True :
 
         surface = pygame.Surface((175,195))
         surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Helmet\n4-Star\nHP+10\nDEF+7',True,'white'),(5,5))
+        surface.blit(font.render('Helmet\n4-Star\nDEF+7',True,'white'),(5,5))
         screen.blit(surface,(380,130))
 
         for event in pygame.event.get():
@@ -4851,13 +4939,14 @@ def helmet4_info(username, lvl, coin, pull) :
 
         pygame.display.flip()
 
+
 def helmet5_info(username, lvl, coin, pull) :
 
     while True :
 
         surface = pygame.Surface((175,195))
         surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Helmet\n5-Star\nHP+15\nDEF+10',True,'white'),(5,5))
+        surface.blit(font.render('Helmet\n5-Star\nDEF+10',True,'white'),(5,5))
         screen.blit(surface,(680,130))
 
         for event in pygame.event.get():
@@ -4869,23 +4958,25 @@ def helmet5_info(username, lvl, coin, pull) :
 
         pygame.display.flip()
 
+
 def armor3_info(username, lvl, coin, pull) :
 
     while True :
 
         surface = pygame.Surface((175,195))
         surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Armor\n3-Star\nHP+10\nDEF+5',True,'white'),(5,5))
-        screen.blit(surface,(80,375))
+        surface.blit(font.render('Armor\n3-Star\nDEF+5',True,'white'),(5,5))
+        screen.blit(surface,(80,130))
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                equipment2(username, lvl, coin,pull)
+                equipment(username, lvl, coin,pull)
             if event.type == pygame.quit:
                 pygame.quit()
                 sys.exit()
 
         pygame.display.flip()
+
 
 def armor4_info(username, lvl, coin, pull) :
 
@@ -4893,17 +4984,18 @@ def armor4_info(username, lvl, coin, pull) :
 
         surface = pygame.Surface((175,195))
         surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Armor\n4-Star\nHP+20\nDEF+10',True,'white'),(5,5))
-        screen.blit(surface,(380,375))
+        surface.blit(font.render('Armor\n4-Star\nDEF+7',True,'white'),(5,5))
+        screen.blit(surface,(380,130))
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                equipment2(username, lvl, coin,pull)
+                equipment(username, lvl, coin,pull)
             if event.type == pygame.quit:
                 pygame.quit()
                 sys.exit()
 
         pygame.display.flip()
+
 
 def armor5_info(username, lvl, coin, pull) :
 
@@ -4911,18 +5003,813 @@ def armor5_info(username, lvl, coin, pull) :
 
         surface = pygame.Surface((175,195))
         surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Armor\n5-Star\nHP+30\nDEF+15',True,'white'),(5,5))
-        screen.blit(surface,(680,375))
+        surface.blit(font.render('Armor\n5-Star\nDEF+10',True,'white'),(5,5))
+        screen.blit(surface,(680,130))
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                equipment2(username, lvl, coin,pull)
+                equipment(username, lvl, coin,pull)
             if event.type == pygame.quit:
                 pygame.quit()
                 sys.exit()
 
         pygame.display.flip()
 
+
+def collection(username, lvl, coin, pull):
+    on = True
+    armor3 = Button("graphic/noob armor.png",150,205,1,'')
+    armor4= Button("graphic/noob armor.png",450,205,1,'')
+    armor5= Button("graphic/noob armor.png",750,205,1,'')
+                            
+    while on:
+        pygame.display.set_caption('Chicky Simulator - Collection')
+        screen.blit(background_image,(0,0))
+        pos_mouse = pygame.mouse.get_pos()
+
+        #####Text Display        
+        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Collections', True, 'white')
+        store_text_rect = store_text.get_rect(center = (450,70))
+        screen.blit(store_text, store_text_rect)
+        #################
+
+        #white surface big
+        store_surface = pygame.Surface((850,500))
+        store_surface.fill('white')
+        store_surface.set_alpha(140)
+        store_surface_rect = store_surface.get_rect(center=(width/2,380))
+        screen.blit(store_surface, store_surface_rect)
+        #white surface 1
+        store_surface = pygame.Surface((230,240))
+        store_surface.fill('white')
+        store_surface.set_alpha(200)
+        store_surface_rect = store_surface.get_rect(center=(150,450))
+        screen.blit(store_surface, store_surface_rect)
+        #white surface 1
+        store_surface = pygame.Surface((230,240))
+        store_surface.fill('white')
+        store_surface.set_alpha(200)
+        store_surface_rect = store_surface.get_rect(center=(450,450))
+        screen.blit(store_surface, store_surface_rect)
+        #white surface 1
+        store_surface = pygame.Surface((230,240))
+        store_surface.fill('white')
+        store_surface.set_alpha(200)
+        store_surface_rect = store_surface.get_rect(center=(750,450))
+        screen.blit(store_surface, store_surface_rect)
+
+        #EQUIPMENT DIsPLAY
+        armor3.draw(screen)
+        armor4.draw(screen)
+        armor5.draw(screen)
+        #################
+
+        ####armor3#####
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Leather Armor', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(150,305))
+        screen.blit(info_text, text_rect)
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render('3-Star Armor\nMade by Leather\nBeginner Friendly\nIncrease max HP\nBest in level 1-9\n\n        DEF+5', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(150,450))
+        screen.blit(info_text, text_rect)
+        ######armor4#####        
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Iron Armor', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(450,305))
+        screen.blit(info_text, text_rect)
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render('4-Star Armor\nMade by Iron\nMid-Tier Armor\nIncrease max HP\nBest in level 1-19\n\n        DEF+7', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(450,450))
+        screen.blit(info_text, text_rect)
+        #######aRmor5#########        
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Diamond Armor', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(750,305))
+        screen.blit(info_text, text_rect)
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render('5-Star Armor\nMade by DIAMOND\nTop-Tier Armor\nIncrease max HP\nit\'s Perfect!!!\nit\'s Unstoppable in\n all level\n\n        DEF+10', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(750,450))
+        screen.blit(info_text, text_rect)
+
+        # Get BUTTONS
+        get_button1 = Button('graphic/button2.png', 150, 600, 0.15, "GET")
+        get_button1.draw(screen)
+        get_button2 = Button('graphic/button2.png', 450, 600, 0.15, "GET")
+        get_button2.draw(screen)
+        get_button3 = Button('graphic/button2.png', 750, 600, 0.15, "GET")
+        get_button3.draw(screen)
+        #########
+
+        #Back page button#
+        back_button = Button('graphic/botton1.png', 70, 70, 0.6, "<<")
+        back_button.draw(screen)
+
+        #Next page button#
+        next_button = Button('graphic/botton1.png', 850, 70, 0.6, ">>")
+        next_button.draw(screen)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                on = False
+            
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if get_button1.check_input(pos_mouse):
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'armor3' in equipments_list :
+                                alr_have2(username,lvl, coin, pull)
+                            else :
+                                equipment(username, lvl, coin, pull)    
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                    
+                if get_button2.check_input(pos_mouse):
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'armor4' in equipments_list :
+                                alr_have2(username,lvl, coin, pull)
+                            else :
+                                equipment(username, lvl, coin, pull)  
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                        
+                if get_button3.check_input(pos_mouse):
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'armor5' in equipments_list :
+                                alr_have2(username,lvl, coin, pull)
+                            else :
+                                equipment(username, lvl, coin, pull)  
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+
+                    
+                if back_button.check_input(pos_mouse):
+                    lobby(username, lvl, coin, pull)
+                if next_button.check_input(pos_mouse):
+                    collection2(username, lvl, coin, pull)
+
+
+        pygame.display.flip()
+
+    pygame.quit()
+    sys.exit()
+
+
+def collection2(username, lvl, coin, pull):
+    on = True
+    helmet3= Button("graphic/noob helmet.png",150,205,1,'')
+    helmet4 = Button("graphic/noob helmet.png",450,205,1,'')
+    helmet5 = Button("graphic/noob helmet.png",750,205,1,'')
+                            
+    while on:
+        pygame.display.set_caption('Chicky Simulator - Collection')
+        screen.blit(background_image,(0,0))
+        pos_mouse = pygame.mouse.get_pos()
+
+        #####Text Display        
+        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Collections', True, 'white')
+        store_text_rect = store_text.get_rect(center = (450,70))
+        screen.blit(store_text, store_text_rect)
+        #################
+
+        #white surface big
+        store_surface = pygame.Surface((850,500))
+        store_surface.fill('white')
+        store_surface.set_alpha(140)
+        store_surface_rect = store_surface.get_rect(center=(width/2,380))
+        screen.blit(store_surface, store_surface_rect)
+        #white surface 1
+        store_surface = pygame.Surface((230,240))
+        store_surface.fill('white')
+        store_surface.set_alpha(200)
+        store_surface_rect = store_surface.get_rect(center=(150,450))
+        screen.blit(store_surface, store_surface_rect)
+        #white surface 1
+        store_surface = pygame.Surface((230,240))
+        store_surface.fill('white')
+        store_surface.set_alpha(200)
+        store_surface_rect = store_surface.get_rect(center=(450,450))
+        screen.blit(store_surface, store_surface_rect)
+        #white surface 1
+        store_surface = pygame.Surface((230,240))
+        store_surface.fill('white')
+        store_surface.set_alpha(200)
+        store_surface_rect = store_surface.get_rect(center=(750,450))
+        screen.blit(store_surface, store_surface_rect)
+
+        #EQUIPMENT DIsPLAY
+        helmet3.draw(screen)
+        helmet4.draw(screen)
+        helmet5.draw(screen)
+        #################
+
+        ####armor3#####
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Leather HElmet', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(150,305))
+        screen.blit(info_text, text_rect)
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render('3-Star Helmet\nMade by Leather\nBeginner Friendly\nProvide Few DEF\nBest in level 1-9\n\n        def+5', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(150,450))
+        screen.blit(info_text, text_rect)
+        ######armor4#####        
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Iron Helmet', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(450,305))
+        screen.blit(info_text, text_rect)
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render('4-Star Helmet\nMade by Iron\nMid-Tier Helmet\nProvide More DEF\nBest in level 1-19\n\n        DEF+7', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(450,450))
+        screen.blit(info_text, text_rect)
+        #######aRmor5#########        
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Diamond Helmet', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(750,305))
+        screen.blit(info_text, text_rect)
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render('5-Star Helmet\nMade by DIAMOND\nTop-Tier Helmet\nProvide a LOT DEF\nit\'s Perfect!!!\nit\'s Unstoppable in\n all level\n\n        def+10', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(750,450))
+        screen.blit(info_text, text_rect)
+
+        # Get BUTTONS
+        get_button1 = Button('graphic/button2.png', 150, 600, 0.15, "GET")
+        get_button1.draw(screen)
+        get_button2 = Button('graphic/button2.png', 450, 600, 0.15, "GET")
+        get_button2.draw(screen)
+        get_button3 = Button('graphic/button2.png', 750, 600, 0.15, "GET")
+        get_button3.draw(screen)
+        #########
+
+        #Back page button#
+        back_button = Button('graphic/botton1.png', 70, 70, 0.6, "<<")
+        back_button.draw(screen)
+
+        #Next page button#
+        next_button = Button('graphic/botton1.png', 850, 70, 0.6, ">>")
+        next_button.draw(screen)
+
+            
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                on = False
+            
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if get_button1.check_input(pos_mouse):
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'helmet3' in equipments_list :
+                                alr_have2(username,lvl, coin, pull)
+                            else :
+                                equipment2(username, lvl, coin, pull)    
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                    
+                if get_button2.check_input(pos_mouse):
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'helmet4' in equipments_list :
+                                alr_have2(username,lvl, coin, pull)
+                            else :
+                                equipment2(username, lvl, coin, pull)  
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                        
+                if get_button3.check_input(pos_mouse):
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'helmet5' in equipments_list :
+                                alr_have2(username,lvl, coin, pull)
+                            else :
+                                equipment2(username, lvl, coin, pull)  
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+
+                    
+                if back_button.check_input(pos_mouse):
+                    collection(username, lvl, coin, pull)
+                if next_button.check_input(pos_mouse):
+                    collection3(username, lvl, coin, pull)
+
+
+        pygame.display.flip()
+
+    pygame.quit()
+    sys.exit()
+
+
+def collection3(username, lvl, coin, pull):
+    on = True
+    shoe3 = Button("graphic/leg.png",150,205,1,'')
+    shoe4= Button("graphic/leg.png",450,205,1,'')
+    shoe5= Button("graphic/noob leg.png",750,205,1,'')
+                            
+    while on:
+        pygame.display.set_caption('Chicky Simulator - Collection')
+        screen.blit(background_image,(0,0))
+        pos_mouse = pygame.mouse.get_pos()
+
+        #####Text Display        
+        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Collections', True, 'white')
+        store_text_rect = store_text.get_rect(center = (450,70))
+        screen.blit(store_text, store_text_rect)
+        #################
+
+        #white surface big
+        store_surface = pygame.Surface((850,500))
+        store_surface.fill('white')
+        store_surface.set_alpha(140)
+        store_surface_rect = store_surface.get_rect(center=(width/2,380))
+        screen.blit(store_surface, store_surface_rect)
+        #white surface 1
+        store_surface = pygame.Surface((230,240))
+        store_surface.fill('white')
+        store_surface.set_alpha(200)
+        store_surface_rect = store_surface.get_rect(center=(150,450))
+        screen.blit(store_surface, store_surface_rect)
+        #white surface 1
+        store_surface = pygame.Surface((230,240))
+        store_surface.fill('white')
+        store_surface.set_alpha(200)
+        store_surface_rect = store_surface.get_rect(center=(450,450))
+        screen.blit(store_surface, store_surface_rect)
+        #white surface 1
+        store_surface = pygame.Surface((230,240))
+        store_surface.fill('white')
+        store_surface.set_alpha(200)
+        store_surface_rect = store_surface.get_rect(center=(750,450))
+        screen.blit(store_surface, store_surface_rect)
+
+        #EQUIPMENT DIsPLAY
+        shoe3.draw(screen)
+        shoe4.draw(screen)
+        shoe5.draw(screen)
+        #################
+
+        ####armor3#####
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Leather boots', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(150,305))
+        screen.blit(info_text, text_rect)
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render('3-Star boots\nMade by Leather\nBeginner Friendly\nfinish 100m in 12sec\nBest in level 1-9\n\n       Speed+2', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(150,450))
+        screen.blit(info_text, text_rect)
+        ######armor4#####        
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Iron boots', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(450,305))
+        screen.blit(info_text, text_rect)
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render('4-Star boots\nMade by Iron\nMid-Tier boots\nOMG!usain bolt!\nBest in level 1-19\n\n       Speed+4', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(450,450))
+        screen.blit(info_text, text_rect)
+        #######aRmor5#########        
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Diamond boots', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(750,305))
+        screen.blit(info_text, text_rect)
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render('5-Star boots\nMade by DIAMOND\nTop-Tier boots\nThat\'s the flash!!\nit\'s Perfect!!!\nit\'s Unstoppable in\n all level\n\n       Speed+6', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(750,450))
+        screen.blit(info_text, text_rect)
+
+        # Get BUTTONS
+        get_button1 = Button('graphic/button2.png', 150, 600, 0.15, "GET")
+        get_button1.draw(screen)
+        get_button2 = Button('graphic/button2.png', 450, 600, 0.15, "GET")
+        get_button2.draw(screen)
+        get_button3 = Button('graphic/button2.png', 750, 600, 0.15, "GET")
+        get_button3.draw(screen)
+        #########
+
+        #Back page button#
+        back_button = Button('graphic/botton1.png', 70, 70, 0.6, "<<")
+        back_button.draw(screen)
+
+        #Next page button#
+        next_button = Button('graphic/botton1.png', 850, 70, 0.6, ">>")
+        next_button.draw(screen)
+
+            
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                on = False
+            
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if get_button1.check_input(pos_mouse):
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'shoe3' in equipments_list :
+                                alr_have2(username,lvl, coin, pull)
+                            else :
+                                equipment(username, lvl, coin, pull)    
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                    
+                if get_button2.check_input(pos_mouse):
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'shoe4' in equipments_list :
+                                alr_have2(username,lvl, coin, pull)
+                            else :
+                                equipment(username, lvl, coin, pull)  
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                        
+                if get_button3.check_input(pos_mouse):
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'shoe5' in equipments_list :
+                                alr_have2(username,lvl, coin, pull)
+                            else :
+                                equipment(username, lvl, coin, pull)  
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+
+                if back_button.check_input(pos_mouse):
+                    collection2(username, lvl, coin, pull)
+                if next_button.check_input(pos_mouse):
+                    collection4(username, lvl, coin, pull)
+
+
+        pygame.display.flip()
+
+    pygame.quit()
+    sys.exit()
+
+
+def collection4(username, lvl, coin, pull):
+    on = True
+    shield3 = Button("graphic/shield.png",150,205,1,'')
+    shield4= Button("graphic/shield.png",450,205,1,'')
+    shield5= Button("graphic/shield.png",750,205,1,'')
+                            
+    while on:
+        pygame.display.set_caption('Chicky Simulator - Collection')
+        screen.blit(background_image,(0,0))
+        pos_mouse = pygame.mouse.get_pos()
+
+        #####Text Display        
+        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Collections', True, 'white')
+        store_text_rect = store_text.get_rect(center = (450,70))
+        screen.blit(store_text, store_text_rect)
+        #################
+
+        #white surface big
+        store_surface = pygame.Surface((850,500))
+        store_surface.fill('white')
+        store_surface.set_alpha(140)
+        store_surface_rect = store_surface.get_rect(center=(width/2,380))
+        screen.blit(store_surface, store_surface_rect)
+        #white surface 1
+        store_surface = pygame.Surface((230,240))
+        store_surface.fill('white')
+        store_surface.set_alpha(200)
+        store_surface_rect = store_surface.get_rect(center=(150,450))
+        screen.blit(store_surface, store_surface_rect)
+        #white surface 1
+        store_surface = pygame.Surface((230,240))
+        store_surface.fill('white')
+        store_surface.set_alpha(200)
+        store_surface_rect = store_surface.get_rect(center=(450,450))
+        screen.blit(store_surface, store_surface_rect)
+        #white surface 1
+        store_surface = pygame.Surface((230,240))
+        store_surface.fill('white')
+        store_surface.set_alpha(200)
+        store_surface_rect = store_surface.get_rect(center=(750,450))
+        screen.blit(store_surface, store_surface_rect)
+
+        #EQUIPMENT DIsPLAY
+        shield3.draw(screen)
+        shield4.draw(screen)
+        shield5.draw(screen)
+        #################
+
+        ####armor3#####
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Wooden Shield', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(150,305))
+        screen.blit(info_text, text_rect)
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render('3-Star shield\nMade by Leather\nBeginner Friendly\nAbsorb few damage\nBest in level 1-9\n\n        DEF+5', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(150,450))
+        screen.blit(info_text, text_rect)
+        ######armor4#####        
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Iron Shield', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(450,305))
+        screen.blit(info_text, text_rect)
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render('4-Star shield\nMade by Iron\nMid-Tier shield\nimmune from tyson\nBest in level 1-19\n\n       DEF+7', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(450,450))
+        screen.blit(info_text, text_rect)
+        #######aRmor5#########        
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Diamond Shield', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(750,305))
+        screen.blit(info_text, text_rect)
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render('5-Star shield\nMade by DIAMOND\nTop-Tier shield\nWho can kill you?\nit\'s Perfect!!!\nit\'s Unstoppable in\n all level\n\n        DEF+10', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(750,450))
+        screen.blit(info_text, text_rect)
+
+        # Get BUTTONS
+        get_button1 = Button('graphic/button2.png', 150, 600, 0.15, "GET")
+        get_button1.draw(screen)
+        get_button2 = Button('graphic/button2.png', 450, 600, 0.15, "GET")
+        get_button2.draw(screen)
+        get_button3 = Button('graphic/button2.png', 750, 600, 0.15, "GET")
+        get_button3.draw(screen)
+        #########
+
+        #Back page button#
+        back_button = Button('graphic/botton1.png', 70, 70, 0.6, "<<")
+        back_button.draw(screen)
+
+        #Next page button#
+        next_button = Button('graphic/botton1.png', 850, 70, 0.6, ">>")
+        next_button.draw(screen)
+
+            
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                on = False
+            
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if get_button1.check_input(pos_mouse):
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'shield3' in equipments_list :
+                                alr_have2(username,lvl, coin, pull)
+                            else :
+                                equipment(username, lvl, coin, pull)    
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                    
+                if get_button2.check_input(pos_mouse):
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'shield4' in equipments_list :
+                                alr_have2(username,lvl, coin, pull)
+                            else :
+                                equipment(username, lvl, coin, pull)  
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                        
+                if get_button3.check_input(pos_mouse):
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'shield5' in equipments_list :
+                                alr_have2(username,lvl, coin, pull)
+                            else :
+                                equipment(username, lvl, coin, pull)  
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+
+                if back_button.check_input(pos_mouse):
+                    collection3(username, lvl, coin, pull)
+                if next_button.check_input(pos_mouse):
+                    collection5(username, lvl, coin, pull)
+
+
+        pygame.display.flip()
+
+    pygame.quit()
+    sys.exit()
+
+
+def collection5(username, lvl, coin, pull):
+    on = True
+    axe= Button("graphic/axe.png",150,205,1,'')
+    hammer = Button("graphic/hammer.png",450,205,1,'')
+    sword = Button("graphic/sword.png",750,205,1,'')
+                            
+    while on:
+        pygame.display.set_caption('Chicky Simulator - Collection')
+        screen.blit(background_image,(0,0))
+        pos_mouse = pygame.mouse.get_pos()
+
+        #####Text Display        
+        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Collections', True, 'white')
+        store_text_rect = store_text.get_rect(center = (450,70))
+        screen.blit(store_text, store_text_rect)
+        #################
+
+        #white surface big
+        store_surface = pygame.Surface((850,500))
+        store_surface.fill('white')
+        store_surface.set_alpha(140)
+        store_surface_rect = store_surface.get_rect(center=(width/2,380))
+        screen.blit(store_surface, store_surface_rect)
+        #white surface 1
+        store_surface = pygame.Surface((230,240))
+        store_surface.fill('white')
+        store_surface.set_alpha(200)
+        store_surface_rect = store_surface.get_rect(center=(150,450))
+        screen.blit(store_surface, store_surface_rect)
+        #white surface 1
+        store_surface = pygame.Surface((230,240))
+        store_surface.fill('white')
+        store_surface.set_alpha(200)
+        store_surface_rect = store_surface.get_rect(center=(450,450))
+        screen.blit(store_surface, store_surface_rect)
+        #white surface 1
+        store_surface = pygame.Surface((230,240))
+        store_surface.fill('white')
+        store_surface.set_alpha(200)
+        store_surface_rect = store_surface.get_rect(center=(750,450))
+        screen.blit(store_surface, store_surface_rect)
+
+        #EQUIPMENT DIsPLAY
+        axe.draw(screen)
+        hammer.draw(screen)
+        sword.draw(screen)
+        #################
+
+        ####armor3#####
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('axe', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(150,305))
+        screen.blit(info_text, text_rect)
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render('3-Star weapon\nMade by iron\nBeginner Friendly\nEasy cutting trees\nBest in level 1-9\n\n        atk+10', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(150,450))
+        screen.blit(info_text, text_rect)
+        ######armor4#####        
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('hammer', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(450,305))
+        screen.blit(info_text, text_rect)
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render('4-Star weapon\nMade by Iron\nMid-Tier weapon\n4 hit to destroy Car\nBest in level 1-19\n\n       atk+20', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(450,450))
+        screen.blit(info_text, text_rect)
+        #######aRmor5#########        
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('sword', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(750,305))
+        screen.blit(info_text, text_rect)
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render('5-Star weapond\nMade by DIAMOND\nTop-Tier weapon\nOnly 1 thing to do:\nKILLLLLLLLL!!!\nit\'s Perfect!!!\nit\'s Unstoppable in\n all level\n        atk+30', True, (0,0,0))
+        text_rect = info_text.get_rect(center =(750,450))
+        screen.blit(info_text, text_rect)
+
+        # Get BUTTONS
+        get_button1 = Button('graphic/button2.png', 150, 600, 0.15, "GET")
+        get_button1.draw(screen)
+        get_button2 = Button('graphic/button2.png', 450, 600, 0.15, "GET")
+        get_button2.draw(screen)
+        get_button3 = Button('graphic/button2.png', 750, 600, 0.15, "GET")
+        get_button3.draw(screen)
+        #########
+
+        #Back page button#
+        back_button = Button('graphic/botton1.png', 70, 70, 0.6, "<<")
+        back_button.draw(screen)
+
+            
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                on = False
+            
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if get_button1.check_input(pos_mouse):
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'axe' in equipments_list :
+                                alr_have(username,lvl, coin, pull)
+                            else :
+                                store(username, lvl, coin, pull)    
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                    
+                if get_button2.check_input(pos_mouse):
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'hammer' in equipments_list :
+                                alr_have(username,lvl, coin, pull)
+                            else :
+                                store(username, lvl, coin, pull)  
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+                        
+                if get_button3.check_input(pos_mouse):
+                    with open('user_backpack.txt', 'r') as file:
+                        lines = file.readlines()
+
+                    for i, line in enumerate(lines):
+                        user_backpack = line.strip().split(", ")
+                        if user_backpack[0] == username:
+                            equipments_list = user_backpack[3].split('/')
+                            if 'sword' in equipments_list :
+                                alr_have(username,lvl, coin, pull)
+                            else :
+                                store(username, lvl, coin, pull)  
+
+                            equipments_str = '/'.join(equipments_list)
+                            user_backpack[2] = str(equipments_str)
+                            lines[i] = ', '.join(user_backpack) + '\n'
+                            break
+
+                if back_button.check_input(pos_mouse):
+                    collection4(username, lvl, coin, pull)
+
+
+
+        pygame.display.flip()
+
+    pygame.quit()
+    sys.exit()
 
 
 log_or_reg()
