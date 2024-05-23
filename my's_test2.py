@@ -1,5 +1,6 @@
 import pygame
 import sys
+from backpack import Item, Slot, Info
 
 pygame.init()
 
@@ -15,32 +16,6 @@ WHITE = (255, 255, 255)
 clock = pygame.time.Clock()
 FPS = 60
 
-class Item(pygame.sprite.Sprite):
-    def __init__(self, name, image_path, info, scale):
-        super().__init__()
-        self.name = name
-        image = pygame.image.load(image_path)
-        width, height = image.get_size()
-        self.image = pygame.transform.scale(image, (int(width*scale), int(height*scale)))
-        self.rect = self.image.get_rect()
-        self.info = info
-
-    def draw(self, surface):
-        surface.blit(self.image, self.rect)
-
-
-class Slot(pygame.sprite.Sprite):
-    def __init__(self, x, y, width, height):
-        super().__init__()
-        self.rect = pygame.Rect(x, y, width, height)
-        self.item = None
-
-    def draw(self, surface):
-        pygame.draw.rect(surface, WHITE, self.rect, 2)
-        if self.item:
-            surface.blit(self.item.image, self.rect)
-
-# Inventory grid dimensions
 INVENTORY_ROWS = 5
 INVENTORY_COLS = 3
 SLOT_SIZE = 64
@@ -82,6 +57,7 @@ for i, item in enumerate(items):
 
 def main():
     selected_item = None
+    draging_item = None
     running = True
     while running:
         for event in pygame.event.get():
@@ -90,10 +66,13 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 for slot in inventory_slots + list(equip_slots.values()):
-                    if slot.rect.collidepoint(pos) and slot.item:
-                        selected_item = slot.item
-                        slot.item = None
-                        break
+                    for num, item in enumerate(items):
+                        if slot.rect.collidepoint(pos) and slot.item:
+                            selected_item = slot.item
+                            draging_item = num
+                            slot.item = None
+                            break
+                    
             elif event.type == pygame.MOUSEBUTTONUP:
                 if selected_item:
                     pos = pygame.mouse.get_pos()
@@ -101,6 +80,7 @@ def main():
                         if slot.rect.collidepoint(pos) and slot.item is None:
                             slot.item = selected_item
                             selected_item = None
+                            draging_item = None
                             break
                     if selected_item:
                         for slot in inventory_slots:
