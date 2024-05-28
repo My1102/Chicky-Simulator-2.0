@@ -1,4 +1,4 @@
-axe,graphic/axe.png,Axe\nAttack +10
+axe,graphic/axe.png,Axe\nAttack +10,10\0\0
 hammer,graphic/hammer.png,Hammer\n Attack +20
 sword,graphic/sword.png,Sword\nAttack +30
 woodshield,graphic/shield.png,Wood Shield\nDefence +5
