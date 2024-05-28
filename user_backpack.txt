@@ -1,4 +1,5 @@
-my, normal/0, shield4/hammer/axe/sword/shield5/shield3, helmet3/shoe4/shoe5/armor3/armor4/armor5/shoe3/helmet4/helmet5
+my, normal/0, shield4/hammer/axe/sword/shield5/shield3/helmet3/helmet4/helmet5/armor3/armor4/armor5/shoe5/shoe4/shoe3, no
+my, normal/tanker, no, no
 jy, normal/0, no, no
 pl, normal/0, no, no
 renliang, normal/0, no, no

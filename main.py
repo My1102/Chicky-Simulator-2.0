@@ -2192,13 +2192,24 @@ def backpack(username, lvl, coin, pull):
         "shoes": Slot(330, 550, slot_size, slot_size)
     }
 
-    items = [
-        Item('Sword', 'graphic/sword.png', 'Sword\nAttack +30', 0.65),
-        Item('Shield', 'graphic/shield.png', 'Wood Shield\nDefence +5', 0.65),
-        Item('Helmet', 'graphic/helmet.png', 'Leather Helmet\nDefence +5', 0.65),
-        Item('Armor', 'graphic/armor.png', 'Leather Armor\nDefence +5', 0.65),
-        Item('Shoes', 'graphic/noob leg.png', 'Leather Shoes\nSpeed +2', 0.65)
-    ]
+    with open('user_backpack.txt', 'r') as file:
+        lines = file.readlines()
+    for i, line in enumerate(lines):
+        user_backpack = line.split(", ")
+        if user_backpack[0] == username:
+            equipment_list = user_backpack[2].split('/')
+
+    with open('equipment_details.txt', 'r') as file:
+        for item in equipment_list:
+            items = [Item('Sword', 'graphic/sword.png', 'Sword\nAttack +30', 0.65),
+            Item('Shield', 'graphic/shield.png', 'Wood Shield\nDefence +5', 0.65),
+            Item('Helmet', 'graphic/helmet.png', 'Leather Helmet\nDefence +5', 0.65),
+            Item('Armor', 'graphic/armor.png', 'Leather Armor\nDefence +5', 0.65),
+            Item('Shoes', 'graphic/noob leg.png', 'Leather Shoes\nSpeed +2', 0.65)
+            ]
+
+
+    
 
     for i, item in enumerate(items):
         backpack_slots[i].item = item
@@ -6101,7 +6112,6 @@ def snake(username, lvl, coin, pull) :
         pygame.display.update()
 
         clock.tick(chick_speed)
-
-     
+    
 
 log_or_reg()
