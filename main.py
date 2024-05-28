@@ -2150,7 +2150,7 @@ def update_equipment(username, equipments):
     for i, line in enumerate(lines):
         user_backpack = line.strip().split(", ")
         if user_backpack[0] == username:
-            equipments_list = user_backpack[3].split('/')
+            equipments_list = user_backpack[2].split('/')
             if equipments_list[0] == 'no':
                 del equipments_list[0]
                 equipments_list.append(f'{equipments}')
@@ -2159,7 +2159,7 @@ def update_equipment(username, equipments):
             else:
                 equipments_list.append(f'{equipments}')
             equipments_str = '/'.join(equipments_list)
-            user_backpack[3] = str(equipments_str)
+            user_backpack[2] = str(equipments_str)
             lines[i] = ', '.join(user_backpack) + '\n'
             break
 
@@ -4097,7 +4097,7 @@ def equipment(username, lvl, coin, pull) :
             for i, line in enumerate(lines):
                 user_backpack = line.strip().split(", ")
                 if user_backpack[0] == username:
-                    equipments_list = user_backpack[3].split('/')
+                    equipments_list = user_backpack[2].split('/')
                     if 'armor3' in equipments_list :
                         view_button1.draw(screen)
                     elif 'armor3' not in equipments_list :
@@ -4164,7 +4164,7 @@ def equipment(username, lvl, coin, pull) :
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'armor3' in equipments_list :
                                 backpack(username,lvl, coin, pull)
                             else :
@@ -4183,7 +4183,7 @@ def equipment(username, lvl, coin, pull) :
                                         no = True  
 
                             equipments_str = '/'.join(equipments_list)
-                            user_backpack[3] = str(equipments_str)
+                            user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
                     
@@ -4194,7 +4194,7 @@ def equipment(username, lvl, coin, pull) :
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'armor4' in equipments_list :
                                 backpack(username,lvl, coin, pull)
                             else :
@@ -4213,7 +4213,7 @@ def equipment(username, lvl, coin, pull) :
                                         no = True  
 
                             equipments_str = '/'.join(equipments_list)
-                            user_backpack[3] = str(equipments_str)
+                            user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
                         
@@ -4224,7 +4224,7 @@ def equipment(username, lvl, coin, pull) :
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'armor5' in equipments_list :
                                 backpack(username,lvl, coin, pull)
                             else :
@@ -4243,7 +4243,7 @@ def equipment(username, lvl, coin, pull) :
                                         no = True
 
                             equipments_str = '/'.join(equipments_list)
-                            user_backpack[3] = str(equipments_str)
+                            user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
 
@@ -4254,7 +4254,7 @@ def equipment(username, lvl, coin, pull) :
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'shoe3' in equipments_list :
                                 backpack(username,lvl, coin, pull)
                             else :
@@ -4273,7 +4273,7 @@ def equipment(username, lvl, coin, pull) :
                                         no = True  
 
                             equipments_str = '/'.join(equipments_list)
-                            user_backpack[3] = str(equipments_str)
+                            user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
                     
@@ -4284,7 +4284,7 @@ def equipment(username, lvl, coin, pull) :
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'shoe4' in equipments_list :
                                 backpack(username,lvl, coin, pull)
                             else :
@@ -4303,7 +4303,7 @@ def equipment(username, lvl, coin, pull) :
                                         no = True  
 
                             equipments_str = '/'.join(equipments_list)
-                            user_backpack[3] = str(equipments_str)
+                            user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
                         
@@ -4314,7 +4314,7 @@ def equipment(username, lvl, coin, pull) :
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'shoe5' in equipments_list :
                                 backpack(username,lvl, coin, pull)
                             else :
@@ -4333,7 +4333,7 @@ def equipment(username, lvl, coin, pull) :
                                         no = True
 
                             equipments_str = '/'.join(equipments_list)
-                            user_backpack[3] = str(equipments_str)
+                            user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
                     
@@ -4434,7 +4434,7 @@ def equipment2(username, lvl, coin, pull) :
             for i, line in enumerate(lines):
                 user_backpack = line.strip().split(", ")
                 if user_backpack[0] == username:
-                    equipments_list = user_backpack[3].split('/')
+                    equipments_list = user_backpack[2].split('/')
                     if 'helmet3' in equipments_list :
                         view_button1.draw(screen)
                     elif 'helmet3' not in equipments_list :
@@ -4449,7 +4449,7 @@ def equipment2(username, lvl, coin, pull) :
                         buy_button3.draw(screen)
 
                 weapon_str = '/'.join(equipments_list)
-                user_backpack[3] = str(weapon_str)
+                user_backpack[2] = str(weapon_str)
                 lines[i] = ', '.join(user_backpack) + '\n'
                 break
             
@@ -4479,7 +4479,7 @@ def equipment2(username, lvl, coin, pull) :
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'helmet3' in equipments_list :
                                 backpack(username,lvl, coin, pull)
                             else :
@@ -4498,7 +4498,7 @@ def equipment2(username, lvl, coin, pull) :
                                         no = True
 
                             equipments_str = '/'.join(equipments_list)
-                            user_backpack[3] = str(equipments_str)
+                            user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
                                                          
@@ -4510,7 +4510,7 @@ def equipment2(username, lvl, coin, pull) :
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'helmet4' in equipments_list :
                                 backpack(username,lvl, coin, pull)
                             else :
@@ -4540,7 +4540,7 @@ def equipment2(username, lvl, coin, pull) :
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'helmet5' in equipments_list :
                                 backpack(username,lvl, coin, pull)
                             else :
@@ -4559,7 +4559,7 @@ def equipment2(username, lvl, coin, pull) :
                                         no = True
 
                             equipments_str = '/'.join(equipments_list)
-                            user_backpack[3] = str(equipments_str)
+                            user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
                 
