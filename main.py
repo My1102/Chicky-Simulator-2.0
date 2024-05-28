@@ -2172,6 +2172,7 @@ def backpack(username, lvl, coin, pull):
 
     FPS = 60
     selected_item = None
+    offset_x, offset_y = None, None
     backpack_rows = 5
     backpack_cols = 3
     slot_size = 100
@@ -2193,9 +2194,9 @@ def backpack(username, lvl, coin, pull):
 
     items = [
         Item('Sword', 'graphic/sword.png', 'Sword\nAttack +30', 0.65),
-        Item('Shield', 'graphic/shield.png', 'Wood Shield\nDefend +5', 0.65),
-        Item('Helmet', 'graphic/helmet.png', 'Leather Helmet\nDefend +5', 0.65),
-        Item('Armor', 'graphic/armor.png', 'Leather Armor\nDefend +5', 0.65),
+        Item('Shield', 'graphic/shield.png', 'Wood Shield\nDefence +5', 0.65),
+        Item('Helmet', 'graphic/helmet.png', 'Leather Helmet\nDefence +5', 0.65),
+        Item('Armor', 'graphic/armor.png', 'Leather Armor\nDefence +5', 0.65),
         Item('Shoes', 'graphic/noob leg.png', 'Leather Shoes\nSpeed +2', 0.65)
     ]
 
@@ -2244,31 +2245,36 @@ def backpack(username, lvl, coin, pull):
                 for slot in backpack_slots + list(equip_slots.values()):
                     if slot.rect.collidepoint(pos_mouse) and slot.item:
                         selected_item = slot.item
-                        info = Info(50, 140, selected_item.info)
-                        info.draw(screen)
+                        offset_x = slot.rect.x - pos_mouse[0]
+                        offset_y = slot.rect.y - pos_mouse[1]
+                        selected_item.rect.x = pos_mouse[0] + offset_x
+                        selected_item.rect.y = pos_mouse[1] + offset_y
                         slot.item = None
                         break
 
                 if back_button.check_input(pos_mouse):
                     lobby(username, lvl, coin, pull)
 
+            elif event.type == pygame.MOUSEMOTION:
+                if selected_item:
+                    selected_item.rect.x = pos_mouse[0] + offset_x
+                    selected_item.rect.y = pos_mouse[1] + offset_y
+
             elif event.type == pygame.MOUSEBUTTONUP:
                 if selected_item:
                     for slot in backpack_slots + list(equip_slots.values()):
-                        if slot.rect.collidepoint(pos_mouse) and slot.item is None:
+                        if (slot.rect.collidepoint(pos_mouse)) and (slot.item is None):
                             slot.item = selected_item
                             selected_item = None
+                            offset_x, offset_y = None, None
                             break
                     if selected_item:
                         for slot in backpack_slots:
                             if slot.item is None:
                                 slot.item = selected_item
                                 selected_item = None
+                                offset_x, offset_y = None, None
                                 break
-
-            # elif selected_item.check_input(pos_mouse):
-                # info = Info(50, 140, selected_item.info)
-                # info.draw(screen)
 
         for slot in backpack_slots:
             slot.draw(screen)
@@ -2277,8 +2283,9 @@ def backpack(username, lvl, coin, pull):
             slot.draw(screen)
 
         if selected_item:
-            info = Info(50, 150, selected_item.info)
-            info.draw(screen)
+            screen.blit(selected_item.image, selected_item.rect.topleft)
+            info = Info(50, 320, selected_item.info)
+            info.draw_info(screen)
 
         pygame.display.flip()
         clock.tick(FPS)
