@@ -1,5 +1,2 @@
 echo .DS_Store >> .gitignore
-__pycache__/backpack.cpython-312.pyc
-__pycache__/button.cpython-312.pyc
-__pycache__/lock.cpython-312.pyc
-__pycache__/rank.cpython-312.pyc
+**/__pycache__/

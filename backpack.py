@@ -31,5 +31,5 @@ class Info():
         self.pos_y = y
         # self.info_rect = self.info.get_rect(center=(self.pos_x, self.pos_y))
 
-    def draw(self, screen):
+    def draw_info(self, screen):
         screen.blit(self.info, (self.pos_x, self.pos_y))
