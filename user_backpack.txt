@@ -1,4 +1,4 @@
-my, normal/0, sword/shield3/shoe3/helmet3/armor3/axe/shield5/shield4
+my, normal/0, sword/hammer/axe/shield3/shoe3, no
 my, normal/tanker, no
 jy, normal/0, no
 pl, normal/0, no
