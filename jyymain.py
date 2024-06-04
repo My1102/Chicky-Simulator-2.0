@@ -291,66 +291,55 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
         world = World(world_data)
 
         return world
-    
-    def load_chicky_details(chicky_details.txt):
-        attack_data = []
-        with open(chicky_details.txt, 'r') as file:
-            for line in file:
-                parts = line.strip().split(', ')
-                type = parts[0]
-                damage = int(parts[1])
-                walk_cooldown = int(parts[2])
-                attack_data.append((type, damage, walk_cooldown))
-        return attack_data
 
     class chicky():
-        def __init__(self, x, y, hp, max_hp, damage, cd):
+        def __init__(self,x,y,hp,max_hp,damage,cd):
+            # chic = pygame.image.load(c)
+            # self.image = pygame.transform.scale(chic,(30,30))
             self.animation_list = []
+            self.images_right = []
+            self.images_left = []
+            self.images_attack = []
             self.index = 0
             self.counter = 0
-            self.action = 0  #0=walk 1=attack 2=hurt
-            self.alive = True
+            self.action = 0
             self.update_time = pygame.time.get_ticks()
 
-            # Walk
-            alist = []
+            #walk
             for num in range(1, 6):
-                img = pygame.image.load(f'graphic/walk/{num}.png')
-                img = pygame.transform.scale(img, (30, 30))
-                alist.append(img)
-            self.animation_list.append(alist)
-    
-            # Attack
-            alist = []
+                img_right = pygame.image.load(f'graphic/chickytest/{num}.png')
+                img_right = pygame.transform.scale(img_right, (30, 30))
+                img_left = pygame.transform.flip(img_right, True, False)
+                self.images_right.append(img_right)
+                self.images_left.append(img_left) 
+            # self.image = self.images_right[self.index]
+            self.animation_list.append(self.images_left)
+            self.animation_list.append(self.images_right)
+            
+            #attack
             for num in range(1, 6):
-                img = pygame.image.load(f'graphic/attack/{num}.png')
-                img = pygame.transform.scale(img, (30, 30))
-                alist.append(img)
-            self.animation_list.append(alist)
-
-            # hurt
-            alist = []
-            for num in range(1, 6):
-                img = pygame.image.load(f'graphic/hurt/{num}.png')
-                img = pygame.transform.scale(img, (30, 30))
-                alist.append(img)
-            self.animation_list.append(alist)
-
+                img_attack = pygame.image.load(f'graphic/attack/ji{num}.png')
+                img_attack = pygame.transform.scale(img_attack, (30, 30))
+                self.images_attack.append(self.images_attack)
+                
+            self.animation_list.append(self.images_attack)
+           
 
             self.image = self.animation_list[self.action][self.index]
             self.rect = self.image.get_rect()
             self.rect.x = x
             self.rect.y = y
             self.max_hp = max_hp
-            self.hp = max_hp
+            self.hp = hp
             self.damage = damage
             self.cd = cd
             self.last_attack_time = 0
             self.update_time = pygame.time.get_ticks()
             self.direction = 0
 
-        def attack(self, yuen_group, jy_group, puolin_group):
+        def attack(self,yuen_group,jy_group,puolin_group):
             current_time = pygame.time.get_ticks()
+            
             if current_time - self.last_attack_time > self.cd:
                 # Perform attack
                 for yuen in pygame.sprite.spritecollide(self, yuen_group, False):
@@ -362,21 +351,23 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
                     puolin.hp -= self.damage
 
                 # Set last attack time
-                self.action = 1  # Set action to attack
+                self.action = 1
                 self.index = 0
                 self.last_attack_time = current_time
 
-        def update(self, gameover):
+
+        def update(self,gameover):
             current_time = pygame.time.get_ticks()
             if gameover == 0:
-                dx, dy = 0, 0
+                dx = 0 
+                dy = 0 
                 walk_cooldown = 5
-                
-                self.image = self.animation_list[self.action][self.index]
+
                 key = pygame.key.get_pressed()
                 if key[pygame.K_w]:
                     dy -= 3
                     self.counter += 1
+            
                 if key[pygame.K_a]:
                     dx -= 3
                     self.counter += 1
@@ -387,57 +378,77 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
                 if key[pygame.K_d]:
                     dx += 3
                     self.counter += 1
-                    self.direction = 1
+                    self.direction = 1 
+  
+
                 if key[pygame.K_SPACE]:
-                    self.attack(yuen_group, jy_group, puolin_group)
-                if not any([key[pygame.K_w], key[pygame.K_a], key[pygame.K_s], key[pygame.K_d]]):
+                    
+                    Chicky.attack(yuen_group, jy_group, puolin_group)
+
+               
+
+                if key[pygame.K_a] == False and key[pygame.K_d] == False and key[pygame.K_w] == False and key[pygame.K_s] == False:
                     self.counter = 0
                     self.action = 0
                     self.index = 0
-                    
-                if self.index >= len(self.animation_list[self.action]):
-                    if self.action == 2:
-                        self.index = len(self.animation_list[self.action]) - 1
+                    if self.direction == 1:
+                        self.image = self.images_right[self.index]
+                    if self.direction == -1:
+                        self.image = self.images_left[self.index]
 
-                # if self.counter > walk_cooldown:
-                #     self.counter = 0
-                #     self.index += 1
-                #     if self.index >= 5:
-                #         self.index = 0
-                #     self.image = self.images_right[self.index] if self.direction == 1 else self.images_left[self.index]
+                if self.counter > walk_cooldown:
+                    self.counter = 0
+                    self.index += 1
+                    if self.index >= len(self.images_right):
+                        self.index = 0
+                    if self.direction == 1:
+                        self.image = self.images_right[self.index]
+                    if self.direction == -1:
+                        self.image = self.images_left[self.index]
 
-                # Collision with blocks
+               
+
+                
+                # collision with blocks
                 for item in world.block_list:
-                    if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20, 10, 10):
-                        dx, dy = 0, 0
-                # Collision with coins
+                    if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20 , 10, 10):
+                        dx = 0
+                        dy = 0
+                # collision with coins
                 for item in world.coin_list:
-                    if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20, 10, 10):
+                    if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20 , 10, 10):
                         world.coin_list.remove(item)
+
                 for item in world.exit_list:
-                    if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20, 10, 10):
-                        if not world.coin_list:
+                    if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20 , 10, 10):
+                        
+                        if world.coin_list == [] :
+                            # set timer stop 
                             pygame.time.set_timer(pygame.USEREVENT, 0)
+                            # save in list 
                             time_use.append(time)
                             gameover = 1
+                            # win(c,lvl,username,coin)
 
-                self.rect.x += dx
-                self.rect.y += dy
+                if self.action == 1:
+                    if current_time - self.last_attack_time > self.cd:
+                        self.last_attack_time = current_time
+                        self.index += 1
+                        if self.index >= len(self.animation_list[self.action]):
+                            self.index = 0
+                            self.action = 1
+                        self.image = self.animation_list[self.action][self.index]
+                            
 
-            elif gameover == -1:
+            elif gameover == -1 :
                 self.rect.x = 35
                 self.rect.y = 35
+            
+            self.rect.x += dx
+            self.rect.y += dy
 
-            if self.action == 2:
-                if current_time - self.last_attack_time > self.cd:
-                    self.last_attack_time = current_time
-                    self.index += 1
-                    if self.index >= len(self.animation_list[self.action]):
-                        self.index = 0
-                        self.action = 0  # Return to idle/walking
-                    self.image = self.animation_list[self.action][self.index]
+            screen.blit(self.image,self.rect)
 
-            screen.blit(self.image, self.rect)
             return gameover
         
     class HealthBar():
@@ -514,7 +525,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
 
 
     class Monster1(pygame.sprite.Sprite):
-        def __init__(self, x, y, max_hp, damage, cd):
+        def __init__(self,x,y,max_hp,damage,cd):
             pygame.sprite.Sprite.__init__(self)
             self.image = pygame.image.load('graphic/monster1.png')
             self.image = pygame.transform.scale(self.image, (tile_size, tile_size))
@@ -528,31 +539,34 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             self.damage = damage
             self.cd = cd
             self.last_attack_time = 0
-
-        def update(self,max_hp,damage,cd):
+            
+        def update(self,hp,max_hp,damage,cd):
             current_time = pygame.time.get_ticks()
+            # last_attack_time = pygame.time.get_ticks()
+            # self.rect.x = x
+            # self.rect.y = y
+          
+            self.cd = cd
             self.rect.x += self.move_direction
             self.move_counter += 1
-            if self.move_counter > 100:
+            if self.move_counter > 100 :
                 self.move_direction *= -1
                 self.move_counter *= -1
+            self.hp = hp
+            self.max_hp = max_hp
+            self.damage = damage
             if current_time - self.last_attack_time > self.cd:
                 for yuen in pygame.sprite.spritecollide(Chicky, yuen_group, False):
                     Chicky.hp -= self.damage
-                    self.last_attack_time = current_time
             self.draw_health_bar()
-
-        # class Mon1_HealthBar():
-        #     def __init__(self,x,y,hp,max_hp):
-        #         self.x = x
-        #         self.y =y 
-        #         self.hp = hp
-        #         self.max_hp = max_hp
-
+                    
         def draw_health_bar(self):
-            ratio = self.hp / self.max_hp
-            pygame.draw.rect(screen, red, (self.rect.x, self.rect.y - 5, 35, 5))
-            pygame.draw.rect(screen, green, (self.rect.x, self.rect.y - 5, 35 * ratio, 5))
+            ratio = self.hp/self.max_hp
+            pygame.draw.rect(screen,red,(self.rect.x ,self.rect.y -5 ,35,5))
+            pygame.draw.rect(screen,green,(self.rect.x*ratio ,self.rect.y -5 ,35,5))
+            
+            # if pygame.sprite.collide_rect(self,Chicky):
+            #     Chicky.hp -= yuen_group.damage
                 
 
     class Monster2(pygame.sprite.Sprite):
@@ -611,17 +625,14 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             self.rect = self.image.get_rect()
             self.rect.x = x
             self.rect.y = y
-
-    
             
     Chicky = chicky(35,35,100,100,10,5000)
-    attack_data = load_chicky_details('damage_cd.txt')
+
     yuen_group = pygame.sprite.Group()
     puolin_group = pygame.sprite.Group()
     jy_group = pygame.sprite.Group()  
 
     chicky_health_bar = HealthBar(750,200,Chicky.hp,Chicky.max_hp)
-    
     
 
     if path.exists(f'level{lvl}_data'):
@@ -630,7 +641,10 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
         print('yes im here')
     world = World(world_data)
 
-    
+    # restart_button = Button('graphic/button2.png', width // 2 - 50, height//2 + 100, 0.35, "restart")
+    # start_button = Button('graphic/button2.png', width // 2 - 250, height // 2, 0.35,'start')
+    # exit_button = Button('graphic/button2.png', width // 2 + 100, height // 2,0.35, 'exit')
+
 
     run = True
     while run:
@@ -643,7 +657,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                run = False
+                on = False
                 pygame.quit()
                 sys.exit()
 
@@ -659,11 +673,10 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
         
 
         if gameover == 0:
-            
             for jy in jy_group:
                 jy.update(75,75,15,5000)
             for yuen in yuen_group:
-                yuen.update(100,10,5000)
+                yuen.update(100, 100, 10,5000)
             for puolin in puolin_group:
                 puolin.update(150, 150, 5,5000)
             
@@ -698,9 +711,6 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             if event.type == pygame.QUIT:
                 run = False
         pygame.display.update()
-
-
-
 
 
 def level1(lvl, username, coin, pull, c, equip, stats): # This one easier to read
