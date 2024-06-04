@@ -52,7 +52,7 @@ username_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((
 password_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((300,450), (300,50)), manager = Manager, object_id = '#password')
 
 # added later
-def caution(c, lvl, username, coin, pull):
+def caution(lvl, username, coin, pull, c, equip, stats):
     while True:
         #program setup / screen display
         pygame.display.set_caption('Chicky Simulator - Caution')
@@ -80,10 +80,10 @@ def caution(c, lvl, username, coin, pull):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if next_button.check_input(pos_mouse):
-                    tutorial2(c, lvl, username, coin, pull)
+                    tutorial2(lvl, username, coin, pull, c, equip, stats)
 
                 if back_button.check_input(pos_mouse):
-                    choose_level(c, lvl, username, coin, pull)
+                    choose_level(lvl, username, coin, pull, c, equip, stats)
 
                 Manager.process_events(event)
 
@@ -91,7 +91,7 @@ def caution(c, lvl, username, coin, pull):
         pygame.display.update()
 
 
-def tutorial1(c, lvl, username, coin, pull):
+def tutorial1(lvl, username, coin, pull, c, equip, stats):
     while True:
         #program setup / screen display
         pygame.display.set_caption('Chicky Simulator - Tutorial')
@@ -119,10 +119,10 @@ def tutorial1(c, lvl, username, coin, pull):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if next_button.check_input(pos_mouse):
-                    caution(c, lvl, username, coin, pull)
+                    caution(lvl, username, coin, pull, c, equip, stats)
 
                 if back_button.check_input(pos_mouse):
-                    choose_level(c, lvl, username, coin, pull)
+                    choose_level(lvl, username, coin, pull, c, equip, stats)
 
                 Manager.process_events(event)
 
@@ -130,7 +130,7 @@ def tutorial1(c, lvl, username, coin, pull):
         pygame.display.update()        
 
 
-def tutorial2(c, lvl, username, coin, pull):
+def tutorial2(lvl, username, coin, pull, c, equip, stats):
     while True:
         #program setup /screen display
         pygame.display.set_caption('Chicky Simulator - Tutorial')
@@ -158,10 +158,10 @@ def tutorial2(c, lvl, username, coin, pull):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start_button.check_input(pos_mouse):
-                    leveltest(c, lvl, username, coin, pull)
+                    leveltest(lvl, username, coin, pull, c, equip, stats)
 
                 if back_button.check_input(pos_mouse):
-                    choose_level(c, lvl, username, coin, pull)
+                    choose_level(lvl, username, coin, pull, c, equip, stats)
 
                 Manager.process_events(event)
 
@@ -169,7 +169,7 @@ def tutorial2(c, lvl, username, coin, pull):
         pygame.display.update()   
 
 
-def tutorial4(c, lvl, username, coin, pull):
+def tutorial4(lvl, username, coin, pull, c, equip, stats):
     #screen display / program setup
     screen = pygame.display.set_mode((width,height))
     pygame.display.set_caption('Chicky Simulator - Tutorial')
@@ -199,15 +199,15 @@ def tutorial4(c, lvl, username, coin, pull):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start_button.check_input(pos_mouse):
-                    level3(c, lvl, username, coin, pull)
+                    level3(lvl, username, coin, pull, c, equip, stats)
 
                 if back_button.check_input(pos_mouse):
-                    choose_level(c, lvl, username, coin, pull)
+                    choose_level(lvl, username, coin, pull, c, equip, stats)
 
         pygame.display.update()   
 
 
-def tutorial3(c, lvl, username, coin, pull):
+def tutorial3(lvl, username, coin, pull, c, equip, stats):
     #screen display / program setup
     screen = pygame.display.set_mode((width,height))
     pygame.display.set_caption('Chicky Simulator - Toutorial')
@@ -237,15 +237,15 @@ def tutorial3(c, lvl, username, coin, pull):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start_button.check_input(pos_mouse):
-                    level2(c, lvl, username, coin, pull)
+                    level2(lvl, username, coin, pull, c, equip, stats)
 
                 if back_button.check_input(pos_mouse):
-                    choose_level(c, lvl, username, coin, pull)
+                    choose_level(lvl, username, coin, pull, c, equip, stats)
 
         pygame.display.update()   
 
 
-def leveltest(c, lvl, username, coin, pull):
+def leveltest(lvl, username, coin, pull, c, equip, stats):
     width, height = 900, 700
     screen = pygame.display.set_mode((width,height))
     pygame.display.set_caption('Chicky Simulator')
@@ -704,7 +704,7 @@ def leveltest(c, lvl, username, coin, pull):
         pygame.display.update()
 
 
-def level1(c, lvl, username, coin, pull): # This one easier to read
+def level1(lvl, username, coin, pull, c, equip, stats): # This one easier to read
     # by 'Puo Puo'(Puo Lin) & Jia Ying
     import pygame as pg # change pygame to pg 
 
@@ -769,7 +769,7 @@ def level1(c, lvl, username, coin, pull): # This one easier to read
                             # save in list 
                             time_use.append(time)
                             levl = 2 #added later  #for navigation in win - by my
-                            win(c, lvl, username, levl, coin, pull)
+                            win(lvl, username, levl, coin, pull, c, equip, stats)
                             
                 # collision with monsters(This one jy use sprite collide becoz they are moving objects)
                 if pg.sprite.spritecollide(self,yuen_group,False):
@@ -951,7 +951,7 @@ def level1(c, lvl, username, coin, pull): # This one easier to read
         pygame.display.update()
 
 
-def level2(c, lvl, username, coin, pull):
+def level2(lvl, username, coin, pull, c, equip, stats):
     # by 'Puo Puo'(Puo Lin) & Jia Ying
     import pygame as pg #change pygame to pg 
 
@@ -1016,7 +1016,7 @@ def level2(c, lvl, username, coin, pull):
                             # save time
                             time_use.append(time)
                             levl = 3
-                            win(c, lvl, username, levl, coin, pull)
+                            win(lvl, username, levl, coin, pull, c, equip, stats)
                             
                 #collision with monsters
                 if pg.sprite.spritecollide(self,yuen_group,False):
@@ -1192,7 +1192,7 @@ def level2(c, lvl, username, coin, pull):
         pygame.display.update()
 
 
-def level3(c, lvl, username, coin, pull):
+def level3(lvl, username, coin, pull, c, equip, stats):
     # by 'Puo Puo'(Puo Lin) & Jia Ying
     import pygame as pg #change pg
 
@@ -1256,7 +1256,7 @@ def level3(c, lvl, username, coin, pull):
                             # save in list 
                             time_use.append(time)
                             levl = 4
-                            win(c, lvl, username, levl, coin, pull)
+                            win(lvl, username, levl, coin, pull, c, equip, stats)
                             
                 #collision with monsters
                 if pg.sprite.spritecollide(self,yuen_group,False):
@@ -1433,7 +1433,7 @@ def level3(c, lvl, username, coin, pull):
         pygame.display.update()
 
 
-def level4(c, lvl, username, coin, pull):
+def level4(lvl, username, coin, pull, c, equip, stats):
     # by 'Puo Puo'(Puo Lin) & Jia Ying
     import pygame as pg #change pg
 
@@ -1499,7 +1499,7 @@ def level4(c, lvl, username, coin, pull):
                             # save in list 
                             time_use.append(time)
                             levl = 5
-                            win(c, lvl, username, levl, coin, pull)
+                            win(lvl, username, levl, coin, pull, c, equip, stats)
                             
                 #collision with monsters
                 if pg.sprite.spritecollide(self,yuen_group,False):
@@ -1675,7 +1675,7 @@ def level4(c, lvl, username, coin, pull):
         pygame.display.update()
 
 
-def level5(c, lvl, username, coin, pull):
+def level5(lvl, username, coin, pull, c, equip, stats):
     # by 'Puo Puo'(Puo Lin) & Jia Ying
     import pygame as pg #change pg
 
@@ -1741,7 +1741,7 @@ def level5(c, lvl, username, coin, pull):
                             # save in list and save in text file
                             time_use.append(time)
                             update_time(username, time_use[0])
-                            win5(c, lvl, username, coin, pull)
+                            win5(lvl, username, coin, pull, c, equip, stats)
                             
                             
                 #collision with monsters
@@ -1934,7 +1934,7 @@ def level5(c, lvl, username, coin, pull):
         pygame.display.update()
 
 
-def win5(c, lvl, username, coin, pull):
+def win5(lvl, username, coin, pull, c, equip, stats):
     # winning condition for lvl 5
 
     # screen display / setup
@@ -1966,15 +1966,15 @@ def win5(c, lvl, username, coin, pull):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if level_button.check_input(pos_mouse):
-                    choose_level(c, lvl, username, coin, pull)
+                    choose_level(lvl, username, coin, pull, c, equip, stats)
 
                 if rank_button.check_input(pos_mouse):
-                    ranking(username, lvl, coin, pull)
+                    ranking(username, lvl, coin, pull, c, equip, stats)
 
         pygame.display.update()
 
 
-def win(c, lvl, username, levl, coin, pull):
+def win(lvl, username, levl, coin, pull, c, equip, stats):
     # winning condition for lvl 1, 2, 3, 4
 
     # screen display / setup
@@ -2011,17 +2011,17 @@ def win(c, lvl, username, levl, coin, pull):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if level_button.check_input(pos_mouse):
-                    choose_level(c, lvl, username, coin, pull)
+                    choose_level(lvl, username, coin, pull, c, equip, stats)
 
                 if next_button.check_input(pos_mouse): #changed later
                     if levl == 2:
-                        tutorial3(c, lvl, username, coin, pull)
+                        tutorial3(lvl, username, coin, pull, c, equip, stats)
                     elif levl == 3:
-                        tutorial4(c, lvl, username, coin, pull)
+                        tutorial4(lvl, username, coin, pull, c, equip, stats)
                     elif levl == 4:
-                        level4(c, lvl, username, coin, pull)
+                        level4(lvl, username, coin, pull, c, equip, stats)
                     elif levl == 5:
-                        level5(c, lvl, username, coin, pull)
+                        level5(lvl, username, coin, pull, c, equip, stats)
 
         pygame.display.update()
 
@@ -2118,7 +2118,7 @@ def update_chicky(username, chicky):
     return
 
 
-def update_weapon(username, weapon):
+def update_equipment(username, weapon):
     with open('user_backpack.txt', 'r') as file:
         lines = file.readlines()
 
@@ -2143,32 +2143,7 @@ def update_weapon(username, weapon):
     return
 
 
-def update_equipment(username, equipments):
-    with open('user_backpack.txt', 'r') as file:
-        lines = file.readlines()
-
-    for i, line in enumerate(lines):
-        user_backpack = line.strip().split(", ")
-        if user_backpack[0] == username:
-            equipments_list = user_backpack[3].split('/')
-            if equipments_list[0] == 'no':
-                del equipments_list[0]
-                equipments_list.append(f'{equipments}')
-            elif equipments in equipments_list:
-                break
-            else:
-                equipments_list.append(f'{equipments}')
-            equipments_str = '/'.join(equipments_list)
-            user_backpack[3] = str(equipments_str)
-            lines[i] = ', '.join(user_backpack) + '\n'
-            break
-
-    with open('user_backpack.txt', 'w') as file:
-        file.writelines(lines)
-    return
-
-
-def backpack(username, lvl, coin, pull):
+def backpack(username, lvl, coin, pull, chicky, equip, stats):
 
     FPS = 60
     selected_item = None
@@ -2192,16 +2167,39 @@ def backpack(username, lvl, coin, pull):
         "shoes": Slot(330, 550, slot_size, slot_size)
     }
 
-    items = [
-        Item('Sword', 'graphic/sword.png', 'Sword\nAttack +30', 0.65),
-        Item('Shield', 'graphic/shield.png', 'Wood Shield\nDefence +5', 0.65),
-        Item('Helmet', 'graphic/helmet.png', 'Leather Helmet\nDefence +5', 0.65),
-        Item('Armor', 'graphic/armor.png', 'Leather Armor\nDefence +5', 0.65),
-        Item('Shoes', 'graphic/noob leg.png', 'Leather Shoes\nSpeed +2', 0.65)
-    ]
+    equipment_list = []
+    with open('user_backpack.txt', 'r') as file1:
+        lines = file1.readlines()
+        for line in lines:
+            user_backpack = line.split(", ")
+            if user_backpack[0] == username:
+                equipment_list = user_backpack[2].split('/')
+                print(equipment_list)
+                break
+
+    items = []
+    with open('equipment_details.txt', 'r') as file2:
+        lines = file2.readlines()
+        for line in lines:
+            item_details = line.split(", ")
+            if item_details[0] in equipment_list:
+                item_graphic = (f'{item_details[1]}')
+                item_info = (f'{item_details[2]}\n{item_details[3]}')
+                item = Item(item_graphic, item_info, 0.65)
+                items.append(item)
+                
+            #items = [Item('Sword', 'graphic/sword.png', 'Sword\nAttack +30', 0.65),
+            #Item('Shield', 'graphic/shield.png', 'Wood Shield\nDefence +5', 0.65),
+            #Item('Helmet', 'graphic/helmet.png', 'Leather Helmet\nDefence +5', 0.65),
+            #Item('Armor', 'graphic/armor.png', 'Leather Armor\nDefence +5', 0.65),
+            #Item('Shoes', 'graphic/noob leg.png', 'Leather Shoes\nSpeed +2', 0.65)
+            #]
 
     for i, item in enumerate(items):
-        backpack_slots[i].item = item
+        if i <= len(backpack_slots):
+            backpack_slots[i].item = item
+
+    #for i,item in enumerate(equips):
 
     while True:
 
@@ -2242,7 +2240,7 @@ def backpack(username, lvl, coin, pull):
                 sys.exit()
             
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                for slot in backpack_slots + list(equip_slots.values()):
+                for slot in backpack_slots:
                     if slot.rect.collidepoint(pos_mouse) and slot.item:
                         selected_item = slot.item
                         offset_x = slot.rect.x - pos_mouse[0]
@@ -2252,8 +2250,34 @@ def backpack(username, lvl, coin, pull):
                         slot.item = None
                         break
 
+                for slot in list(equip_slots.values()):
+                    if slot.rect.collidepoint(pos_mouse) and slot.item:
+                        selected_item = slot.item
+                        offset_x = slot.rect.x - pos_mouse[0]
+                        offset_y = slot.rect.y - pos_mouse[1]
+                        selected_item.rect.x = pos_mouse[0] + offset_x
+                        selected_item.rect.y = pos_mouse[1] + offset_y
+                        slot.item = None
+                        break
+                        #if slot.item == None:
+                            #with open('user_details.txt', 'r') as file1:
+                                #lines = file1.readlines()
+                                #for line in lines:
+                                    #user_default = line.strip().split(", ")
+                                    #if user_default[0] == username:
+                                        #equip_list = user_default[7].split('/')
+                                        #with open('equipment_details.txt', 'r') as file2:
+                                            #lines = file2.readlines()
+                                            #for line in lines:
+                                                #item_details = line.split(", ")
+                                                #if item_details[0] in equip_list:
+                                                    #a, d, s = item_details[4].split('/')
+                                                    #Atk -= a
+                                                    #Def -= d
+                                                    #Spd -= s
+
                 if back_button.check_input(pos_mouse):
-                    lobby(username, lvl, coin, pull)
+                    lobby(username, lvl, coin, pull, chicky, equip, stats)
 
             elif event.type == pygame.MOUSEMOTION:
                 if selected_item:
@@ -2282,9 +2306,20 @@ def backpack(username, lvl, coin, pull):
         for slot in equip_slots.values():
             slot.draw(screen)
 
-        if selected_item:
+        if selected_item == None:
+            Hp,Def,Atk,Spd,Mag = stats.split('/')
+            default1 = Info(50, 135, (f'Hp={Hp}\nDef={Def}'))
+            default2 = Info(200, 135, (f'Atk={Atk}\nSpd={Spd}'))
+            default1.draw_info(screen)
+            default2.draw_info(screen)
+        else:
             screen.blit(selected_item.image, selected_item.rect.topleft)
-            info = Info(50, 320, selected_item.info)
+            Hp,Def,Atk,Spd,Mag = stats.split('/')
+            default1 = Info(50, 135, (f'Hp={Hp}\nDef={Def}'))
+            default2 = Info(200, 135, (f'Atk={Atk}\nSpd={Spd}'))
+            default1.draw_info(screen)
+            default2.draw_info(screen)
+            info = Info(50, 330, selected_item.info)
             info.draw_info(screen)
 
         pygame.display.flip()
@@ -2293,7 +2328,7 @@ def backpack(username, lvl, coin, pull):
         pygame.display.update()
 
 
-def items(username, lvl, coin, times, itemget, pull):
+def items(username, lvl, coin, times, itemget, pull, c, equip, stats):
 
     while True:
         pygame.display.set_caption('Chicky Simulator - Items Get')
@@ -2527,7 +2562,7 @@ def items(username, lvl, coin, times, itemget, pull):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.check_input(pos_mouse):
-                    wish(username, lvl, coin, pull)
+                    wish(username, lvl, coin, pull, c, equip, stats)
 
             Manager.process_events(event)
 
@@ -2536,7 +2571,7 @@ def items(username, lvl, coin, times, itemget, pull):
         pygame.display.update()
 
 
-def shooting_stars(username, lvl, coin, times, itemget, pull):
+def shooting_stars(username, lvl, coin, times, itemget, pull, c, equip, stats):
 
     while True:
         chicky = ('kitty','tanker','worrier','speedy','magnet')
@@ -2560,10 +2595,10 @@ def shooting_stars(username, lvl, coin, times, itemget, pull):
 
                         if event.type == pygame.MOUSEBUTTONDOWN:
                             vid.stop()
-                            items(username, lvl, coin, times, itemget, pull)
+                            items(username, lvl, coin, times, itemget, pull, c, equip, stats)
                 
                 vid.close()
-                items(username, lvl, coin, times, itemget, pull)
+                items(username, lvl, coin, times, itemget, pull, c, equip, stats)
 
             else:
                 vid = Video('graphic/onepurple.mp4')
@@ -2584,10 +2619,10 @@ def shooting_stars(username, lvl, coin, times, itemget, pull):
 
                         if event.type == pygame.MOUSEBUTTONDOWN:
                             vid.stop()
-                            items(username, lvl, coin, times, itemget, pull)
+                            items(username, lvl, coin, times, itemget, pull, c, equip, stats)
                 
                 vid.close()
-                items(username, lvl, coin, times, itemget, pull)
+                items(username, lvl, coin, times, itemget, pull, c, equip, stats)
 
         else:
             item_list = itemget.split(',')
@@ -2611,10 +2646,10 @@ def shooting_stars(username, lvl, coin, times, itemget, pull):
 
                         if event.type == pygame.MOUSEBUTTONDOWN:
                             vid.stop()
-                            items(username, lvl, coin, times, itemget, pull)
+                            items(username, lvl, coin, times, itemget, pull, c, equip, stats)
                 
                 vid.close()
-                items(username, lvl, coin, times, itemget, pull)
+                items(username, lvl, coin, times, itemget, pull, c, equip, stats)
 
             else:
                 vid = Video('graphic/fivepurple.mp4')
@@ -2635,15 +2670,15 @@ def shooting_stars(username, lvl, coin, times, itemget, pull):
 
                         if event.type == pygame.MOUSEBUTTONDOWN:
                             vid.stop()
-                            items(username, lvl, coin, times, itemget, pull)
+                            items(username, lvl, coin, times, itemget, pull, c, equip, stats)
                 
                 vid.close()
-                items(username, lvl, coin, times, itemget, pull)
+                items(username, lvl, coin, times, itemget, pull, c, equip, stats)
 
         pygame.display.update()
 
 
-def wish(username, lvl, coin, pull):
+def wish(username, lvl, coin, pull, c, equip, stats):
 
     while True:
         pygame.display.set_caption('Chicky Simulator - Wishes')
@@ -2838,7 +2873,7 @@ def wish(username, lvl, coin, pull):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.check_input(pos_mouse):
-                    lobby(username, lvl, coin, pull)
+                    lobby(username, lvl, coin, pull, c, equip, stats)
 
                 if one_pull_button.check_input(pos_mouse):
                     if coin >= 100:
@@ -2860,7 +2895,7 @@ def wish(username, lvl, coin, pull):
                         
                         update_pull(username, pull)
                         update_coin(username, coin)
-                        shooting_stars(username, lvl, coin, times, itemget, pull)
+                        shooting_stars(username, lvl, coin, times, itemget, pull, c, equip, stats)
                     else:
                         break
 
@@ -2892,7 +2927,7 @@ def wish(username, lvl, coin, pull):
 
                         update_pull(username, pull)
                         update_coin(username, coin)
-                        shooting_stars(username, lvl, coin, times, itemsget, pull)
+                        shooting_stars(username, lvl, coin, times, itemsget, pull, c, equip, stats)
                     else:
                         break
 
@@ -2901,7 +2936,7 @@ def wish(username, lvl, coin, pull):
         pygame.display.update()
 
 
-def ranking(username, lvl, coin, pull):
+def ranking(username, lvl, coin, pull, chicky, equip, stats):
     # leaderboard functions by my
     while True:
 
@@ -2930,7 +2965,7 @@ def ranking(username, lvl, coin, pull):
         with open('user_details.txt', 'r') as file:
             data = [tuple(line.strip().split(',')) for line in file]
             sorted_data = sorted(data, key=lambda x:int(x[3])) 
-            for rank, (Username, Password, Level, Time, Coin, Pull) in enumerate(sorted_data[0:9], start=1):
+            for rank, (Username, Password, Level, Time, Coin, Pull, Chicky, Equip, Stats) in enumerate(sorted_data[0:9], start=1):
                 first = Ranking(130+(rank*50), str(rank), Username, Time)
                 first.show(screen)
 
@@ -2941,7 +2976,7 @@ def ranking(username, lvl, coin, pull):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.check_input(pos_mouse):
-                    lobby(username, lvl, coin, pull)
+                    lobby(username, lvl, coin, pull, chicky, equip, stats)
 
             Manager.process_events(event)
 
@@ -2949,7 +2984,7 @@ def ranking(username, lvl, coin, pull):
         pygame.display.update()
 
 
-def chick(username, lvl, coin, pull):
+def chick(username, lvl, coin, pull, c, equip, stats):
     # let user pick their character - by my
 
     while True:
@@ -2984,18 +3019,18 @@ def chick(username, lvl, coin, pull):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if chick1_button.check_input(pos_mouse):
                     c = 'graphic/kunchic.png' # link to later use
-                    choose_level(c, lvl, username, coin, pull)
+                    choose_level(lvl, username, coin, pull, c, equip, stats)
 
                 if chick2_button.check_input(pos_mouse):
                     c = 'graphic/geekchic.png'
-                    choose_level(c, lvl, username, coin, pull)
+                    choose_level(lvl, username, coin, pull, c, equip, stats)
 
                 if chick3_button.check_input(pos_mouse):
                     c = 'graphic/pinkchic.png'
-                    choose_level(c, lvl, username, coin, pull)
+                    choose_level(lvl, username, coin, pull, c, equip, stats)
 
                 if back_button.check_input(pos_mouse):
-                    lobby(username, lvl, coin, pull)
+                    lobby(username, lvl, coin, pull, c, equip, stats)
 
                 Manager.process_events(event)
             
@@ -3003,7 +3038,7 @@ def chick(username, lvl, coin, pull):
         pygame.display.update()
 
 
-def choose_level(c, lvl, username, coin, pull):
+def choose_level(lvl, username, coin, pull, chicky, equip, stats):
     # level selection - by my
 
     while True:
@@ -3088,29 +3123,29 @@ def choose_level(c, lvl, username, coin, pull):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if lvl1_button.check_input(pos_mouse):
-                    tutorial1(c, lvl, username, coin, pull)
+                    tutorial1(lvl, username, coin, pull, chicky, equip, stats)
 
                 if lvl2_button.check_input(pos_mouse):
                     if lock2_con == True:
-                        tutorial3(c, lvl, username, coin, pull)
+                        tutorial3(lvl, username, coin, pull, chicky, equip, stats)
 
                 if lvl3_button.check_input(pos_mouse):
                     if lock3_con == True:
-                        tutorial4(c, lvl, username, coin, pull)
+                        tutorial4(lvl, username, coin, pull, chicky, equip, stats)
 
                 if lvl4_button.check_input(pos_mouse):
                     if lock4_con == True:
-                        level4(c, lvl, username, coin, pull)
+                        level4(lvl, username, coin, pull, chicky, equip, stats)
 
                 if lvl5_button.check_input(pos_mouse):
                     if lock5_con == True:
-                        level5(c, lvl, username, coin, pull)
+                        level5(lvl, username, coin, pull, chicky, equip, stats)
 
                 if back_button.check_input(pos_mouse):
-                    chick(username, lvl, coin, pull)
+                    chick(username, lvl, coin, pull, chicky, equip, stats)
                 
                 if next_button.check_input(pos_mouse):
-                    arcade_lobby(c,lvl,username , coin, pull)
+                    arcade_lobby(lvl,username , coin, pull, chicky, equip, stats)
             
             Manager.process_events(event)
 
@@ -3118,7 +3153,7 @@ def choose_level(c, lvl, username, coin, pull):
         pygame.display.update()
 
 
-def lobby(username, lvl, coin, pull):
+def lobby(username, lvl, coin, pull, chicky, equip, stats):
 
 
     while True:
@@ -3168,22 +3203,22 @@ def lobby(username, lvl, coin, pull):
                 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button.check_input(pos_mouse):
-                    chick(username, lvl, coin, pull)  
+                    chick(username, lvl, coin, pull, chicky, equip, stats)  
 
                 if rank_button.check_input(pos_mouse):
-                    ranking(username, lvl, coin, pull)
+                    ranking(username, lvl, coin, pull, chicky, equip, stats)
                 
                 if wish_button.check_input(pos_mouse):
-                    wish(username, lvl, coin, pull)
+                    wish(username, lvl, coin, pull, chicky, equip, stats)
                 
                 if store_button.check_input(pos_mouse):
-                    store(username, lvl, coin, pull)
+                    store(username, lvl, coin, pull, chicky, equip, stats)
                     
                 if collection_button.check_input(pos_mouse):
-                    collection(username, lvl, coin, pull)
+                    collection(username, lvl, coin, pull, chicky, equip, stats)
 
                 if backpack_button.check_input(pos_mouse):
-                    backpack(username, lvl, coin, pull)
+                    backpack(username, lvl, coin, pull, chicky, equip, stats)
 
                 if back_button.check_input(pos_mouse):
                     log_or_reg()
@@ -3198,18 +3233,68 @@ def lobby(username, lvl, coin, pull):
         pygame.display.update()
 
 
+def check_default(username):
+    with open('user_details.txt', 'r') as file1:
+        lines = file1.readlines()
+        for line in lines:
+            user_default = line.strip().split(", ")
+            if user_default[0] == username:
+                chicky = user_default[6]
+                if chicky == 'normal':
+                    chicky_graphic = 'graphic/chicky.png'
+                    Hp, Def, Atk, Spd, Mag = 100, 0, 10, 10, 0
+                    break
+                elif chicky == 'kitty':
+                    chicky_graphic = 'graphic/miaoji.png'
+                    Hp, Def, Atk, Spd, Mag = 150, 0, 10, 10, 0
+                    break
+                elif chicky == 'worrier':
+                    chicky_graphic = 'graphic/ninjachic.png'
+                    Hp, Def, Atk, Spd, Mag = 75, 0, 20, 10, 0
+                    break
+                elif chicky == 'magnet':
+                    chicky_graphic = 'graphic/magnetchic.png'
+                    Hp, Def, Atk, Spd, Mag= 100, 0, 10, 10, 1
+                    break
+                elif chicky == 'speedy':
+                    chicky_graphic = 'graphic/speedychic.png'
+                    Hp, Def, Atk, Spd, Mag = 75, 0, 10, 20, 0
+                    break
+                elif chicky == 'tanker':
+                    chicky_graphic = 'graphic/tank chic.png'
+                    Hp, Def, Atk, Spd, Mag = 200, 0, 10, 5, 0
+                    break
+
+                equip_list = user_default[7].split('/')
+                with open('equipment_details.txt', 'r') as file2:
+                    lines = file2.readlines()
+                    for line in lines:
+                        item_details = line.split(", ")
+                        if item_details[0] in equip_list:
+                            a, d, s = item_details[4].split('/')
+                            Atk += a
+                            Def += d
+                            Spd += s
+
+    stats = str(f'{Hp}/{Def}/{Atk}/{Spd}/{Mag}')
+    return stats
+
+
 def read_userinput(username, password):
     # checking username and password for login part - by my
     while True:
         file = open('user_details.txt', 'r')
         for i in file:
-            Username, Password, Level, Time, Coin, Pull, = i.split(",")
+            Username, Password, Level, Time, Coin, Pull, Chicky, Equip= i.split(",")
             Password = Password.strip()
             Level = Level.strip()
             Coin = Coin.strip()
             Pull = Pull.strip()
+            Chicky = Chicky.strip()
+            Equip = Equip.strip()
+            Stats = check_default(username)
             if (Username == username and Password == password):
-                return Level, Coin, Pull
+                return Level, Coin, Pull, Chicky, Equip, Stats
             
             else:
                 screen.blit(background_image,(0,0))
@@ -3251,7 +3336,7 @@ def save_userinput(username, password):
         file = open('user_details.txt', 'r')
         for i in file:
             #list = i.split(",")
-            Username, Password, Level, Time, Coin, Pull = i.strip().split(",")
+            Username, Password, Level, Time, Coin, Pull, Chicky, Equip = i.strip().split(",")
 
             # check if the name has been used before
             if username == Username:
@@ -3300,18 +3385,21 @@ def save_userinput(username, password):
 
         else:
             file = open('user_details.txt', 'a')
-            file.write(f'{username}, {password}, 1, 10000, 0, 0' + '\n')
-            # username, password, level, time, coin, pull
+            file.write(f'{username}, {password}, 1, 10000, 0, 0, normal, no' + '\n')
+            # username, password, level, time, coin, pull, chicky, equip
             file.close()
 
             file2 = open('user_backpack.txt', 'a')
-            file2.write(f'{username}, normal/0, no, no')
+            file2.write(f'{username}, normal/0, no')
             file2.close()
 
             lvl = 1
             coin = 0
             pull = 0
-            return lvl, coin, pull
+            chicky = 'normal'
+            equip = 'no'
+            stats = check_default(username)
+            return lvl, coin, pull, chicky, equip, stats
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -3329,7 +3417,7 @@ def save_userinput(username, password):
         pygame.display.update()
 
 
-def welcome_user(username, lvl, coin, pull):
+def welcome_user(username, lvl, coin, pull, chicky, equip, stats):
     # screen display after user done with login/register part - my
     while True:
         for event in pygame.event.get():
@@ -3338,7 +3426,7 @@ def welcome_user(username, lvl, coin, pull):
                 sys.exit()
             
             if event.type == pygame.MOUSEBUTTONDOWN:
-                lobby(username, lvl, coin, pull)
+                lobby(username, lvl, coin, pull, chicky, equip, stats)
 
             Manager.process_events(event)
 
@@ -3399,8 +3487,8 @@ def login():
 
             if event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED:
                 if '#username' in username_input.get_object_ids() and '#password' in password_input.get_object_ids():
-                    lvl, coin, pull = read_userinput(username_input.text, password_input.text)
-                    welcome_user(username_input.text, int(lvl), int(coin), int(pull))
+                    lvl, coin, pull, chicky, equip, stats = read_userinput(username_input.text, password_input.text)
+                    welcome_user(username_input.text, int(lvl), int(coin), int(pull), chicky, equip, stats)
             
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.check_input(pos_mouse):
@@ -3499,7 +3587,7 @@ def log_or_reg():
         pygame.display.update()
 
 
-def store(username, lvl, coin, pull):
+def store(username, lvl, coin, pull, chicky, equip, stats):
     ##puo puo did this
     on = True
     buy = False
@@ -3649,27 +3737,27 @@ def store(username, lvl, coin, pull):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if axe.check_input(pos_mouse):
-                    axe_info(username, lvl, coin, pull)
+                    axe_info(username, lvl, coin, pull, chicky, equip, stats)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if hammer.check_input(pos_mouse):
-                    hammer_info(username, lvl, coin, pull)
+                    hammer_info(username, lvl, coin, pull, chicky, equip, stats)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if sword.check_input(pos_mouse):
-                    sword_info(username, lvl, coin, pull)
+                    sword_info(username, lvl, coin, pull, chicky, equip, stats)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if shield3.check_input(pos_mouse):
-                    shield3_info(username, lvl, coin, pull)
+                    shield3_info(username, lvl, coin, pull, chicky, equip, stats)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if shield4.check_input(pos_mouse):
-                    shield4_info(username, lvl, coin, pull)
+                    shield4_info(username, lvl, coin, pull, chicky, equip, stats)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if shield5.check_input(pos_mouse):
-                    shield5_info(username, lvl, coin, pull)
+                    shield5_info(username, lvl, coin, pull, chicky, equip, stats)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if buy_button1.check_input(pos_mouse):
@@ -3681,12 +3769,12 @@ def store(username, lvl, coin, pull):
                         if user_backpack[0] == username:
                             weapon_list = user_backpack[2].split('/')
                             if 'axe' in weapon_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
                                 if coin >= 500:
                                     coin -= 500
                                     update_coin(username, coin)
-                                    update_weapon(username,weapon[0])
+                                    update_equipment(username,weapon[0])
 
                                     if buy :
                                         buy = False
@@ -3711,12 +3799,12 @@ def store(username, lvl, coin, pull):
                         if user_backpack[0] == username:
                             weapon_list = user_backpack[2].split('/')
                             if 'hammer' in weapon_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
                                 if coin >= 1000 :
                                     coin -= 1000
                                     update_coin(username, coin)
-                                    update_weapon(username,weapon[1])
+                                    update_equipment(username,weapon[1])
 
                                     if buy :
                                         buy = False
@@ -3743,12 +3831,12 @@ def store(username, lvl, coin, pull):
                         if user_backpack[0] == username:
                             weapon_list = user_backpack[2].split('/')
                             if 'sword' in weapon_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username, lvl, coin, pull, chicky, equip, stats)
                             else :
                                 if coin >= 2000 :
                                     coin -= 2000
                                     update_coin(username, coin)
-                                    update_weapon(username,weapon[2])
+                                    update_equipment(username,weapon[2])
                                     if buy :
                                         buy = False
                                     else :
@@ -3773,12 +3861,12 @@ def store(username, lvl, coin, pull):
                         if user_backpack[0] == username:
                             weapon_list = user_backpack[2].split('/')
                             if 'shield3' in weapon_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username, lvl, coin, pull, chicky, equip, stats)
                             else :
                                 if coin >= 500 :
                                     coin -= 500
                                     update_coin(username, coin)
-                                    update_weapon(username,weapon[3])
+                                    update_equipment(username,weapon[3])
                                     if buy :
                                         buy = False
                                     else :
@@ -3803,12 +3891,12 @@ def store(username, lvl, coin, pull):
                         if user_backpack[0] == username:
                             weapon_list = user_backpack[2].split('/')
                             if 'shield4' in weapon_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username, lvl, coin, pull, chicky, equip, stats)
                             else :
                                 if coin >= 1000 :
                                     coin -= 1000
                                     update_coin(username, coin)
-                                    update_weapon(username,weapon[4])
+                                    update_equipment(username,weapon[4])
                                     if buy :
                                         buy = False
                                     else :
@@ -3833,12 +3921,12 @@ def store(username, lvl, coin, pull):
                         if user_backpack[0] == username:
                             weapon_list = user_backpack[2].split('/')
                             if 'shield5' in weapon_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
                                 if coin >= 2000 :
                                     coin -= 2000
                                     update_coin(username, coin)
-                                    update_weapon(username,weapon[5])
+                                    update_equipment(username,weapon[5])
                                     if buy :
                                         buy = False
                                     else :
@@ -3855,21 +3943,21 @@ def store(username, lvl, coin, pull):
                             break
 
                 if next_button.check_input(pos_mouse):
-                    equipment(username, lvl, coin, pull)
+                    equipment(username, lvl, coin, pull, chicky, equip, stats)
                 if back_button.check_input(pos_mouse):
-                    lobby(username, lvl, coin, pull)           
+                    lobby(username, lvl, coin, pull, chicky, equip, stats)           
 
         if buy :
-            bought1(username, lvl, coin, pull)
+            bought1(username, lvl, coin, pull, chicky, equip, stats)
         elif no :
-            no_money(username, lvl, coin, pull)
+            no_money(username, lvl, coin, pull, chicky, equip, stats)
         pygame.display.flip()
 
     pygame.quit()
     sys.exit()
 
 
-def bought1(username, lvl, coin, pull) :
+def bought1(username, lvl, coin, pull, chicky, equip, stats) :
     #puopuo did this too
 
     pygame.display.set_caption('Chicky Simulator - Store')
@@ -3885,7 +3973,7 @@ def bought1(username, lvl, coin, pull) :
                 sys.exit()      
                       
             if event.type == pygame.MOUSEBUTTONDOWN:
-                store(username, lvl, coin, pull)
+                store(username, lvl, coin, pull, chicky, equip, stats)
 
             Manager.process_events(event)
         
@@ -3893,7 +3981,7 @@ def bought1(username, lvl, coin, pull) :
         pygame.display.flip()
 
 
-def bought2(username, lvl, coin, pull) :
+def bought2(username, lvl, coin, pull, chicky, equip, stats) :
     #puopuo did this too
 
     pygame.display.set_caption('Chicky Simulator - Store')
@@ -3903,7 +3991,7 @@ def bought2(username, lvl, coin, pull) :
     while True :
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                equipment(username, lvl, coin, pull)
+                equipment(username, lvl, coin, pull, chicky, equip, stats)
 
             if event.type == pygame.quit:
                 pygame.quit()
@@ -3912,7 +4000,7 @@ def bought2(username, lvl, coin, pull) :
         pygame.display.flip()
 
 
-def bought3(username, lvl, coin, pull) :
+def bought3(username, lvl, coin, pull, chicky, equip, stats) :
     #puopuo did this too
 
     pygame.display.set_caption('Chicky Simulator - Store')
@@ -3923,7 +4011,7 @@ def bought3(username, lvl, coin, pull) :
     while True :
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                equipment2(username, lvl, coin, pull)
+                equipment2(username, lvl, coin, pull, chicky, equip, stats)
 
             if event.type == pygame.quit:
                 pygame.quit()
@@ -3932,7 +4020,7 @@ def bought3(username, lvl, coin, pull) :
         pygame.display.flip()
 
 
-def no_money(username, lvl, coin, pull) :
+def no_money(username, lvl, coin, pull, chicky, equip, stats) :
     #puopuo did this too
 
     pygame.display.set_caption('Chicky Simulator - Store')
@@ -3942,7 +4030,7 @@ def no_money(username, lvl, coin, pull) :
     while True :
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                store(username, lvl, coin, pull)
+                store(username, lvl, coin, pull, chicky, equip, stats)
 
             if event.type == pygame.quit:
                 pygame.quit()
@@ -3951,7 +4039,7 @@ def no_money(username, lvl, coin, pull) :
         pygame.display.flip()
 
 
-def no_money2(username, lvl, coin, pull) :
+def no_money2(username, lvl, coin, pull, chicky, equip, stats) :
     #puopuo did this too
 
     pygame.display.set_caption('Chicky Simulator - Store')
@@ -3961,7 +4049,7 @@ def no_money2(username, lvl, coin, pull) :
     while True :
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                equipment(username, lvl, coin, pull)
+                equipment(username, lvl, coin, pull, chicky, equip, stats)
 
             if event.type == pygame.quit:
                 pygame.quit()
@@ -3970,7 +4058,7 @@ def no_money2(username, lvl, coin, pull) :
         pygame.display.flip()
 
 
-def no_money3(username, lvl, coin, pull) :
+def no_money3(username, lvl, coin, pull, chicky, equip, stats) :
     #puopuo did this too
 
     screen.blit(background_image,(0,0))
@@ -3979,7 +4067,7 @@ def no_money3(username, lvl, coin, pull) :
     while True :
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                equipment2(username, lvl, coin, pull)
+                equipment2(username, lvl, coin, pull, chicky, equip, stats)
 
             if event.type == pygame.quit:
                 pygame.quit()
@@ -3988,7 +4076,7 @@ def no_money3(username, lvl, coin, pull) :
         pygame.display.flip()
 
 
-def equipment(username, lvl, coin, pull) :
+def equipment(username, lvl, coin, pull, chicky, equip, stats) :
     #puopuo did this also
     on = True
     buy = False
@@ -4097,7 +4185,7 @@ def equipment(username, lvl, coin, pull) :
             for i, line in enumerate(lines):
                 user_backpack = line.strip().split(", ")
                 if user_backpack[0] == username:
-                    equipments_list = user_backpack[3].split('/')
+                    equipments_list = user_backpack[2].split('/')
                     if 'armor3' in equipments_list :
                         view_button1.draw(screen)
                     elif 'armor3' not in equipments_list :
@@ -4124,7 +4212,7 @@ def equipment(username, lvl, coin, pull) :
                         buy_button6.draw(screen)
 
                 weapon_str = '/'.join(equipments_list)
-                user_backpack[3] = str(weapon_str)
+                user_backpack[2] = str(weapon_str)
                 lines[i] = ', '.join(user_backpack) + '\n'
                 break
 
@@ -4134,27 +4222,27 @@ def equipment(username, lvl, coin, pull) :
             
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if armor3.check_input(pos_mouse):
-                    armor3_info(username, lvl, coin, pull)
+                    armor3_info(username, lvl, coin, pull, chicky, equip, stats)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if armor4.check_input(pos_mouse):
-                    armor4_info(username, lvl, coin, pull)
+                    armor4_info(username, lvl, coin, pull, chicky, equip, stats)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if armor5.check_input(pos_mouse):
-                    armor5_info(username, lvl, coin, pull)
+                    armor5_info(username, lvl, coin, pull, chicky, equip, stats)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if shoe3.check_input(pos_mouse):
-                    shoe3_info(username, lvl, coin, pull)
+                    shoe3_info(username, lvl, coin, pull, chicky, equip, stats)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if shoe4.check_input(pos_mouse):
-                    shoe4_info(username, lvl, coin, pull)
+                    shoe4_info(username, lvl, coin, pull, chicky, equip, stats)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if shoe5.check_input(pos_mouse):
-                    shoe5_info(username, lvl, coin, pull)
+                    shoe5_info(username, lvl, coin, pull, chicky, equip, stats)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if buy_button1.check_input(pos_mouse):
@@ -4164,9 +4252,9 @@ def equipment(username, lvl, coin, pull) :
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'armor3' in equipments_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
                                 if coin >= 500 :
                                     coin -= 500
@@ -4183,7 +4271,7 @@ def equipment(username, lvl, coin, pull) :
                                         no = True  
 
                             equipments_str = '/'.join(equipments_list)
-                            user_backpack[3] = str(equipments_str)
+                            user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
                     
@@ -4194,9 +4282,9 @@ def equipment(username, lvl, coin, pull) :
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'armor4' in equipments_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
                                 if coin >= 1000 :
                                     coin -= 1000
@@ -4213,7 +4301,7 @@ def equipment(username, lvl, coin, pull) :
                                         no = True  
 
                             equipments_str = '/'.join(equipments_list)
-                            user_backpack[3] = str(equipments_str)
+                            user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
                         
@@ -4224,9 +4312,9 @@ def equipment(username, lvl, coin, pull) :
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'armor5' in equipments_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
                                 if coin >= 2000 :
                                     coin -= 2000
@@ -4243,7 +4331,7 @@ def equipment(username, lvl, coin, pull) :
                                         no = True
 
                             equipments_str = '/'.join(equipments_list)
-                            user_backpack[3] = str(equipments_str)
+                            user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
 
@@ -4254,9 +4342,9 @@ def equipment(username, lvl, coin, pull) :
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'shoe3' in equipments_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
                                 if coin >= 500 :
                                     coin -= 500
@@ -4273,7 +4361,7 @@ def equipment(username, lvl, coin, pull) :
                                         no = True  
 
                             equipments_str = '/'.join(equipments_list)
-                            user_backpack[3] = str(equipments_str)
+                            user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
                     
@@ -4284,9 +4372,9 @@ def equipment(username, lvl, coin, pull) :
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'shoe4' in equipments_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
                                 if coin >= 1000 :
                                     coin -= 1000
@@ -4303,7 +4391,7 @@ def equipment(username, lvl, coin, pull) :
                                         no = True  
 
                             equipments_str = '/'.join(equipments_list)
-                            user_backpack[3] = str(equipments_str)
+                            user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
                         
@@ -4314,9 +4402,9 @@ def equipment(username, lvl, coin, pull) :
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'shoe5' in equipments_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
                                 if coin >= 2000 :
                                     coin -= 2000
@@ -4333,14 +4421,14 @@ def equipment(username, lvl, coin, pull) :
                                         no = True
 
                             equipments_str = '/'.join(equipments_list)
-                            user_backpack[3] = str(equipments_str)
+                            user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
                     
                 if back_button.check_input(pos_mouse):
-                    store(username, lvl, coin, pull)
+                    store(username, lvl, coin, pull, chicky, equip, stats)
                 if next_button.check_input(pos_mouse):
-                    equipment2(username, lvl, coin, pull)
+                    equipment2(username, lvl, coin, pull, chicky, equip, stats)
 
         if buy :
             bought2(username, lvl, coin, pull)
@@ -4353,7 +4441,7 @@ def equipment(username, lvl, coin, pull) :
     sys.exit()
 
 
-def equipment2(username, lvl, coin, pull) :
+def equipment2(username, lvl, coin, pull, chicky, equip, stats) :
     #puopuo also did this
     on = True
     buy = False
@@ -4434,7 +4522,7 @@ def equipment2(username, lvl, coin, pull) :
             for i, line in enumerate(lines):
                 user_backpack = line.strip().split(", ")
                 if user_backpack[0] == username:
-                    equipments_list = user_backpack[3].split('/')
+                    equipments_list = user_backpack[2].split('/')
                     if 'helmet3' in equipments_list :
                         view_button1.draw(screen)
                     elif 'helmet3' not in equipments_list :
@@ -4449,7 +4537,7 @@ def equipment2(username, lvl, coin, pull) :
                         buy_button3.draw(screen)
 
                 weapon_str = '/'.join(equipments_list)
-                user_backpack[3] = str(weapon_str)
+                user_backpack[2] = str(weapon_str)
                 lines[i] = ', '.join(user_backpack) + '\n'
                 break
             
@@ -4459,15 +4547,15 @@ def equipment2(username, lvl, coin, pull) :
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if helmet3.check_input(pos_mouse):
-                    helmet3_info(username, lvl, coin, pull)
+                    helmet3_info(username, lvl, coin, pull, chicky, equip, stats)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if helmet4.check_input(pos_mouse):
-                    helmet4_info(username, lvl, coin, pull)
+                    helmet4_info(username, lvl, coin, pull, chicky, equip, stats)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if helmet5.check_input(pos_mouse):
-                    helmet5_info(username, lvl, coin, pull)
+                    helmet5_info(username, lvl, coin, pull, chicky, equip, stats)
 
             
 
@@ -4479,9 +4567,9 @@ def equipment2(username, lvl, coin, pull) :
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'helmet3' in equipments_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
                                 if coin >= 500 :
                                     coin -= 500
@@ -4498,7 +4586,7 @@ def equipment2(username, lvl, coin, pull) :
                                         no = True
 
                             equipments_str = '/'.join(equipments_list)
-                            user_backpack[3] = str(equipments_str)
+                            user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
                                                          
@@ -4510,9 +4598,9 @@ def equipment2(username, lvl, coin, pull) :
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'helmet4' in equipments_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
                                 if coin >= 1000 :
                                     coin -= 1000
@@ -4540,9 +4628,9 @@ def equipment2(username, lvl, coin, pull) :
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'helmet5' in equipments_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
                                 if coin >= 2000 :
                                     coin -= 2000
@@ -4559,18 +4647,18 @@ def equipment2(username, lvl, coin, pull) :
                                         no = True
 
                             equipments_str = '/'.join(equipments_list)
-                            user_backpack[3] = str(equipments_str)
+                            user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
                 
 
                 if back_button.check_input(pos_mouse):
-                    equipment(username, lvl, coin, pull)
+                    equipment(username, lvl, coin, pull, chicky, equip, stats)
                 
         if buy :
-            bought3(username, lvl, coin, pull)
+            bought3(username, lvl, coin, pull, chicky, equip, stats)
         elif no :
-            no_money3(username, lvl, coin, pull)
+            no_money3(username, lvl, coin, pull, chicky, equip, stats)
 
         pygame.display.flip()
 
@@ -4578,7 +4666,7 @@ def equipment2(username, lvl, coin, pull) :
     sys.exit()
 
 
-def arcade_lobby(c,username, lvl, coin, pull):
+def arcade_lobby(username, lvl, coin, pull, chicky, equip, stats):
     ## also puo puo did this
     on = True
     font = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50)
@@ -4610,13 +4698,13 @@ def arcade_lobby(c,username, lvl, coin, pull):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button1.check_input(pos_mouse):
-                    snake_lobby(c, username, lvl, coin, pull)                                   
+                    snake_lobby(username, lvl, coin, pull, chicky, equip, stats)                                   
                         
                 if play_button2.check_input(pos_mouse):
-                    dunno1_lobby(c, username, lvl, coin, pull)
+                    dunno1_lobby(username, lvl, coin, pull, chicky, equip, stats)
 
                 if back_button.check_input(pos_mouse):
-                    choose_level(c, username, lvl, coin, pull)           
+                    choose_level(username, lvl, coin, pull, chicky, equip, stats)           
 
         pygame.display.flip()
 
@@ -4624,7 +4712,7 @@ def arcade_lobby(c,username, lvl, coin, pull):
     sys.exit()
 
 
-def snake_lobby(c,username, lvl, coin, pull) :
+def snake_lobby(username, lvl, coin, pull, chicky, equip, stats) :
     # puo puo did also this
     on = True
     while on :
@@ -4649,9 +4737,9 @@ def snake_lobby(c,username, lvl, coin, pull) :
                 on = False
             if event.type == pygame.MOUSEBUTTONDOWN :
                 if back_button.check_input(pos_mouse):
-                    arcade_lobby(c,username, lvl, coin, pull)
+                    arcade_lobby(username, lvl, coin, pull, chicky, equip, stats)
                 if play_button.check_input(pos_mouse):
-                    snake(username, lvl, coin, pull)
+                    snake(username, lvl, coin, pull, chicky, equip, stats)
         
         
         pygame.display.flip()
@@ -4660,7 +4748,7 @@ def snake_lobby(c,username, lvl, coin, pull) :
     sys.exit()
 
 
-def dunno1_lobby(c,username, lvl, coin, pull) :
+def dunno1_lobby(username, lvl, coin, pull, chicky, equip, stats) :
     # puo puo did also this
     on = True
     while on :
@@ -4685,7 +4773,7 @@ def dunno1_lobby(c,username, lvl, coin, pull) :
                 on = False
             if event.type == pygame.MOUSEBUTTONDOWN :
                 if back_button.check_input(pos_mouse):
-                    arcade_lobby(c, username, lvl, coin, pull)
+                    arcade_lobby(username, lvl, coin, pull, chicky, equip, stats)
         
         
         pygame.display.flip()
@@ -4694,7 +4782,7 @@ def dunno1_lobby(c,username, lvl, coin, pull) :
     sys.exit()
 
 
-def collection(c,username, lvl, coin, pull) :
+def collection(username, lvl, coin, pull, chicky, equip, stats) :
     ##puo puo did this
     on = True
     buy = False
@@ -4748,10 +4836,10 @@ def collection(c,username, lvl, coin, pull) :
                 on = False
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if sword.check_input(pos_mouse):
-                    sword(c,username, lvl, coin, pull)
+                    sword(username, lvl, coin, pull, chicky, equip, stats)
 
 
-def axe_info(username, lvl, coin, pull) :
+def axe_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
@@ -4762,7 +4850,7 @@ def axe_info(username, lvl, coin, pull) :
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                store(username, lvl, coin,pull)
+                store(username, lvl, coin, pull, chicky, equip, stats)
             if event.type == pygame.quit:
                 pygame.quit()
                 sys.exit()
@@ -4770,7 +4858,7 @@ def axe_info(username, lvl, coin, pull) :
         pygame.display.flip()
 
 
-def hammer_info(username, lvl, coin, pull) :
+def hammer_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
@@ -4781,7 +4869,7 @@ def hammer_info(username, lvl, coin, pull) :
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                store(username, lvl, coin,pull)
+                store(username, lvl, coin, pull, chicky, equip, stats)
             if event.type == pygame.quit:
                 pygame.quit()
                 sys.exit()
@@ -4789,7 +4877,7 @@ def hammer_info(username, lvl, coin, pull) :
         pygame.display.flip()
 
 
-def sword_info(username, lvl, coin, pull) :
+def sword_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
@@ -4800,7 +4888,7 @@ def sword_info(username, lvl, coin, pull) :
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                store(username, lvl, coin,pull)
+                store(username, lvl, coin, pull, chicky, equip, stats)
             if event.type == pygame.quit:
                 pygame.quit()
                 sys.exit()
@@ -4808,7 +4896,7 @@ def sword_info(username, lvl, coin, pull) :
         pygame.display.flip()
 
 
-def shoe3_info(username, lvl, coin, pull) :
+def shoe3_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
@@ -4819,7 +4907,7 @@ def shoe3_info(username, lvl, coin, pull) :
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                equipment(username, lvl, coin,pull)
+                equipment(username, lvl, coin, pull, chicky, equip, stats)
             if event.type == pygame.quit:
                 pygame.quit()
                 sys.exit()
@@ -4827,7 +4915,7 @@ def shoe3_info(username, lvl, coin, pull) :
         pygame.display.flip()
 
 
-def shoe4_info(username, lvl, coin, pull) :
+def shoe4_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
@@ -4838,7 +4926,7 @@ def shoe4_info(username, lvl, coin, pull) :
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                equipment(username, lvl, coin,pull)
+                equipment(username, lvl, coin, pull, chicky, equip, stats)
             if event.type == pygame.quit:
                 pygame.quit()
                 sys.exit()
@@ -4846,7 +4934,7 @@ def shoe4_info(username, lvl, coin, pull) :
         pygame.display.flip()
 
 
-def shoe5_info(username, lvl, coin, pull) :
+def shoe5_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
@@ -4857,7 +4945,7 @@ def shoe5_info(username, lvl, coin, pull) :
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                equipment(username, lvl, coin,pull)
+                equipment(username, lvl, coin, pull, chicky, equip, stats)
             if event.type == pygame.quit:
                 pygame.quit()
                 sys.exit()
@@ -4865,7 +4953,7 @@ def shoe5_info(username, lvl, coin, pull) :
         pygame.display.flip()
 
 
-def shield3_info(username, lvl, coin, pull) :
+def shield3_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
@@ -4876,7 +4964,7 @@ def shield3_info(username, lvl, coin, pull) :
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                store(username, lvl, coin,pull)
+                store(username, lvl, coin, pull, chicky, equip, stats)
             if event.type == pygame.quit:
                 pygame.quit()
                 sys.exit()
@@ -4884,7 +4972,7 @@ def shield3_info(username, lvl, coin, pull) :
         pygame.display.flip()
 
 
-def shield4_info(username, lvl, coin, pull) :
+def shield4_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
@@ -4895,7 +4983,7 @@ def shield4_info(username, lvl, coin, pull) :
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                store(username, lvl, coin,pull)
+                store(username, lvl, coin, pull, chicky, equip, stats)
             if event.type == pygame.quit:
                 pygame.quit()
                 sys.exit()
@@ -4903,7 +4991,7 @@ def shield4_info(username, lvl, coin, pull) :
         pygame.display.flip()
 
 
-def shield5_info(username, lvl, coin, pull) :
+def shield5_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
@@ -4914,7 +5002,7 @@ def shield5_info(username, lvl, coin, pull) :
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                store(username, lvl, coin,pull)
+                store(username, lvl, coin, pull, chicky, equip, stats)
             if event.type == pygame.quit:
                 pygame.quit()
                 sys.exit()
@@ -4922,7 +5010,7 @@ def shield5_info(username, lvl, coin, pull) :
         pygame.display.flip()
 
 
-def helmet3_info(username, lvl, coin, pull) :
+def helmet3_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
@@ -4933,7 +5021,7 @@ def helmet3_info(username, lvl, coin, pull) :
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                equipment2(username, lvl, coin,pull)
+                equipment2(username, lvl, coin, pull, chicky, equip, stats)
             if event.type == pygame.quit:
                 pygame.quit()
                 sys.exit()
@@ -4941,7 +5029,7 @@ def helmet3_info(username, lvl, coin, pull) :
         pygame.display.flip()
 
 
-def helmet4_info(username, lvl, coin, pull) :
+def helmet4_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
@@ -4952,7 +5040,7 @@ def helmet4_info(username, lvl, coin, pull) :
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                equipment2(username, lvl, coin,pull)
+                equipment2(username, lvl, coin, pull, chicky, equip, stats)
             if event.type == pygame.quit:
                 pygame.quit()
                 sys.exit()
@@ -4960,7 +5048,7 @@ def helmet4_info(username, lvl, coin, pull) :
         pygame.display.flip()
 
 
-def helmet5_info(username, lvl, coin, pull) :
+def helmet5_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
@@ -4971,7 +5059,7 @@ def helmet5_info(username, lvl, coin, pull) :
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                equipment2(username, lvl, coin,pull)
+                equipment2(username, lvl, coin, pull, chicky, equip, stats)
             if event.type == pygame.quit:
                 pygame.quit()
                 sys.exit()
@@ -4979,7 +5067,7 @@ def helmet5_info(username, lvl, coin, pull) :
         pygame.display.flip()
 
 
-def armor3_info(username, lvl, coin, pull) :
+def armor3_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
@@ -4990,7 +5078,7 @@ def armor3_info(username, lvl, coin, pull) :
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                equipment(username, lvl, coin,pull)
+                equipment(username, lvl, coin, pull, chicky, equip, stats)
             if event.type == pygame.quit:
                 pygame.quit()
                 sys.exit()
@@ -4998,7 +5086,7 @@ def armor3_info(username, lvl, coin, pull) :
         pygame.display.flip()
 
 
-def armor4_info(username, lvl, coin, pull) :
+def armor4_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
@@ -5009,7 +5097,7 @@ def armor4_info(username, lvl, coin, pull) :
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                equipment(username, lvl, coin,pull)
+                equipment(username, lvl, coin, pull, chicky, equip, stats)
             if event.type == pygame.quit:
                 pygame.quit()
                 sys.exit()
@@ -5017,7 +5105,7 @@ def armor4_info(username, lvl, coin, pull) :
         pygame.display.flip()
 
 
-def armor5_info(username, lvl, coin, pull) :
+def armor5_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
@@ -5028,7 +5116,7 @@ def armor5_info(username, lvl, coin, pull) :
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                equipment(username, lvl, coin,pull)
+                equipment(username, lvl, coin, pull, chicky, equip, stats)
             if event.type == pygame.quit:
                 pygame.quit()
                 sys.exit()
@@ -5036,7 +5124,7 @@ def armor5_info(username, lvl, coin, pull) :
         pygame.display.flip()
 
 
-def collection(username, lvl, coin, pull):
+def collection(username, lvl, coin, pull, chicky, equip, stats):
     on = True
     armor3 = Button("graphic/noob armor.png",150,205,1,'')
     armor4= Button("graphic/noob armor.png",450,205,1,'')
@@ -5132,7 +5220,7 @@ def collection(username, lvl, coin, pull):
             for i, line in enumerate(lines):
                 user_backpack = line.strip().split(", ")
                 if user_backpack[0] == username:
-                    equipments_list = user_backpack[3].split('/')
+                    equipments_list = user_backpack[2].split('/')
                     if 'armor3' in equipments_list :
                         view_button1.draw(screen)
                     elif 'armor3' not in equipments_list :
@@ -5147,7 +5235,7 @@ def collection(username, lvl, coin, pull):
                         get_button3.draw(screen)
 
                 weapon_str = '/'.join(equipments_list)
-                user_backpack[3] = str(weapon_str)
+                user_backpack[2] = str(weapon_str)
                 lines[i] = ', '.join(user_backpack) + '\n'
                 break
 
@@ -5164,14 +5252,14 @@ def collection(username, lvl, coin, pull):
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'armor3' in equipments_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
-                                equipment(username, lvl, coin, pull)    
+                                equipment(username, lvl, coin, pull, chicky, equip, stats)    
 
                             equipments_str = '/'.join(equipments_list)
-                            user_backpack[3] = str(equipments_str)
+                            user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
                     
@@ -5182,14 +5270,14 @@ def collection(username, lvl, coin, pull):
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'armor4' in equipments_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
-                                equipment(username, lvl, coin, pull)  
+                                equipment(username, lvl, coin, pull, chicky, equip, stats)  
 
                             equipments_str = '/'.join(equipments_list)
-                            user_backpack[3] = str(equipments_str)
+                            user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
                         
@@ -5200,22 +5288,22 @@ def collection(username, lvl, coin, pull):
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'armor5' in equipments_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
-                                equipment(username, lvl, coin, pull)  
+                                equipment(username, lvl, coin, pull, chicky, equip, stats)  
 
                             equipments_str = '/'.join(equipments_list)
-                            user_backpack[3] = str(equipments_str)
+                            user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
 
                     
                 if back_button.check_input(pos_mouse):
-                    lobby(username, lvl, coin, pull)
+                    lobby(username, lvl, coin, pull, chicky, equip, stats)
                 if next_button.check_input(pos_mouse):
-                    collection2(username, lvl, coin, pull)
+                    collection2(username, lvl, coin, pull, chicky, equip, stats)
 
 
         pygame.display.flip()
@@ -5224,7 +5312,7 @@ def collection(username, lvl, coin, pull):
     sys.exit()
 
 
-def collection2(username, lvl, coin, pull):
+def collection2(username, lvl, coin, pull, chicky, equip, stats):
     on = True
     helmet3= Button("graphic/noob helmet.png",150,205,1,'')
     helmet4 = Button("graphic/noob helmet.png",450,205,1,'')
@@ -5320,7 +5408,7 @@ def collection2(username, lvl, coin, pull):
             for i, line in enumerate(lines):
                 user_backpack = line.strip().split(", ")
                 if user_backpack[0] == username:
-                    equipments_list = user_backpack[3].split('/')
+                    equipments_list = user_backpack[2].split('/')
                     if 'helmet3' in equipments_list :
                         view_button1.draw(screen)
                     elif 'helmet3' not in equipments_list :
@@ -5348,14 +5436,14 @@ def collection2(username, lvl, coin, pull):
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'helmet3' in equipments_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
-                                equipment2(username, lvl, coin, pull)    
+                                equipment2(username, lvl, coin, pull, chicky, equip, stats)    
 
                             equipments_str = '/'.join(equipments_list)
-                            user_backpack[3] = str(equipments_str)
+                            user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
                     
@@ -5366,14 +5454,14 @@ def collection2(username, lvl, coin, pull):
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'helmet4' in equipments_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
-                                equipment2(username, lvl, coin, pull)  
+                                equipment2(username, lvl, coin, pull, chicky, equip, stats)  
 
                             equipments_str = '/'.join(equipments_list)
-                            user_backpack[3] = str(equipments_str)
+                            user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
                         
@@ -5384,22 +5472,22 @@ def collection2(username, lvl, coin, pull):
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'helmet5' in equipments_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
-                                equipment2(username, lvl, coin, pull)  
+                                equipment2(username, lvl, coin, pull, chicky, equip, stats)  
 
                             equipments_str = '/'.join(equipments_list)
-                            user_backpack[3] = str(equipments_str)
+                            user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
 
                     
                 if back_button.check_input(pos_mouse):
-                    collection(username, lvl, coin, pull)
+                    collection(username, lvl, coin, pull, chicky, equip, stats)
                 if next_button.check_input(pos_mouse):
-                    collection3(username, lvl, coin, pull)
+                    collection3(username, lvl, coin, pull, chicky, equip, stats)
 
 
         pygame.display.flip()
@@ -5408,7 +5496,7 @@ def collection2(username, lvl, coin, pull):
     sys.exit()
 
 
-def collection3(username, lvl, coin, pull):
+def collection3(username, lvl, coin, pull, chicky, equip, stats):
     on = True
     shoe3 = Button("graphic/leg.png",150,205,1,'')
     shoe4= Button("graphic/leg.png",450,205,1,'')
@@ -5504,7 +5592,7 @@ def collection3(username, lvl, coin, pull):
             for i, line in enumerate(lines):
                 user_backpack = line.strip().split(", ")
                 if user_backpack[0] == username:
-                    equipments_list = user_backpack[3].split('/')
+                    equipments_list = user_backpack[2].split('/')
                     if 'shoe3' in equipments_list :
                         view_button1.draw(screen)
                     elif 'shoe3' not in equipments_list :
@@ -5532,14 +5620,14 @@ def collection3(username, lvl, coin, pull):
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'shoe3' in equipments_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
-                                equipment(username, lvl, coin, pull)    
+                                equipment(username, lvl, coin, pull, chicky, equip, stats)    
 
                             equipments_str = '/'.join(equipments_list)
-                            user_backpack[3] = str(equipments_str)
+                            user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
                     
@@ -5550,14 +5638,14 @@ def collection3(username, lvl, coin, pull):
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'shoe4' in equipments_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
-                                equipment(username, lvl, coin, pull)  
+                                equipment(username, lvl, coin, pull, chicky, equip, stats)  
 
                             equipments_str = '/'.join(equipments_list)
-                            user_backpack[3] = str(equipments_str)
+                            user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
                         
@@ -5568,21 +5656,21 @@ def collection3(username, lvl, coin, pull):
                     for i, line in enumerate(lines):
                         user_backpack = line.strip().split(", ")
                         if user_backpack[0] == username:
-                            equipments_list = user_backpack[3].split('/')
+                            equipments_list = user_backpack[2].split('/')
                             if 'shoe5' in equipments_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
-                                equipment(username, lvl, coin, pull)  
+                                equipment(username, lvl, coin, pull, chicky, equip, stats)  
 
                             equipments_str = '/'.join(equipments_list)
-                            user_backpack[3] = str(equipments_str)
+                            user_backpack[2] = str(equipments_str)
                             lines[i] = ', '.join(user_backpack) + '\n'
                             break
 
                 if back_button.check_input(pos_mouse):
-                    collection2(username, lvl, coin, pull)
+                    collection2(username, lvl, coin, pull, chicky, equip, stats)
                 if next_button.check_input(pos_mouse):
-                    collection4(username, lvl, coin, pull)
+                    collection4(username, lvl, coin, pull, chicky, equip, stats)
 
 
         pygame.display.flip()
@@ -5591,7 +5679,7 @@ def collection3(username, lvl, coin, pull):
     sys.exit()
 
 
-def collection4(username, lvl, coin, pull):
+def collection4(username, lvl, coin, pull, chicky, equip, stats):
     on = True
     shield3 = Button("graphic/shield.png",150,205,1,'')
     shield4= Button("graphic/shield.png",450,205,1,'')
@@ -5718,9 +5806,9 @@ def collection4(username, lvl, coin, pull):
                         if user_backpack[0] == username:
                             equipments_list = user_backpack[2].split('/')
                             if 'shield3' in equipments_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
-                                store(username, lvl, coin, pull)    
+                                store(username, lvl, coin, pull, chicky, equip, stats)    
 
                             equipments_str = '/'.join(equipments_list)
                             user_backpack[2] = str(equipments_str)
@@ -5736,9 +5824,9 @@ def collection4(username, lvl, coin, pull):
                         if user_backpack[0] == username:
                             equipments_list = user_backpack[2].split('/')
                             if 'shield4' in equipments_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
-                                store(username, lvl, coin, pull)  
+                                store(username, lvl, coin, pull, chicky, equip, stats)  
 
                             equipments_str = '/'.join(equipments_list)
                             user_backpack[2] = str(equipments_str)
@@ -5754,9 +5842,9 @@ def collection4(username, lvl, coin, pull):
                         if user_backpack[0] == username:
                             equipments_list = user_backpack[2].split('/')
                             if 'shield5' in equipments_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
-                                store(username, lvl, coin, pull)  
+                                store(username, lvl, coin, pull, chicky, equip, stats)  
 
                             equipments_str = '/'.join(equipments_list)
                             user_backpack[2] = str(equipments_str)
@@ -5764,9 +5852,9 @@ def collection4(username, lvl, coin, pull):
                             break
 
                 if back_button.check_input(pos_mouse):
-                    collection3(username, lvl, coin, pull)
+                    collection3(username, lvl, coin, pull, chicky, equip, stats)
                 if next_button.check_input(pos_mouse):
-                    collection5(username, lvl, coin, pull)
+                    collection5(username, lvl, coin, pull, chicky, equip, stats)
 
 
         pygame.display.flip()
@@ -5775,7 +5863,7 @@ def collection4(username, lvl, coin, pull):
     sys.exit()
 
 
-def collection5(username, lvl, coin, pull):
+def collection5(username, lvl, coin, pull, chicky, equip, stats):
     on = True
     axe= Button("graphic/axe.png",150,205,1,'')
     hammer = Button("graphic/hammer.png",450,205,1,'')
@@ -5899,9 +5987,9 @@ def collection5(username, lvl, coin, pull):
                         if user_backpack[0] == username:
                             equipments_list = user_backpack[2].split('/')
                             if 'axe' in equipments_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
-                                store(username, lvl, coin, pull)    
+                                store(username, lvl, coin, pull, chicky, equip, stats)    
 
                             equipments_str = '/'.join(equipments_list)
                             user_backpack[2] = str(equipments_str)
@@ -5917,9 +6005,9 @@ def collection5(username, lvl, coin, pull):
                         if user_backpack[0] == username:
                             equipments_list = user_backpack[2].split('/')
                             if 'hammer' in equipments_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
-                                store(username, lvl, coin, pull)  
+                                store(username, lvl, coin, pull, chicky, equip, stats)  
 
                             equipments_str = '/'.join(equipments_list)
                             user_backpack[2] = str(equipments_str)
@@ -5935,9 +6023,9 @@ def collection5(username, lvl, coin, pull):
                         if user_backpack[0] == username:
                             equipments_list = user_backpack[2].split('/')
                             if 'sword' in equipments_list :
-                                backpack(username,lvl, coin, pull)
+                                backpack(username,lvl, coin, pull, chicky, equip, stats)
                             else :
-                                store(username, lvl, coin, pull)  
+                                store(username, lvl, coin, pull, chicky, equip, stats)  
 
                             equipments_str = '/'.join(equipments_list)
                             user_backpack[2] = str(equipments_str)
@@ -5945,7 +6033,7 @@ def collection5(username, lvl, coin, pull):
                             break
 
                 if back_button.check_input(pos_mouse):
-                    collection4(username, lvl, coin, pull)
+                    collection4(username, lvl, coin, pull, chicky, equip, stats)
 
 
 
@@ -5955,7 +6043,7 @@ def collection5(username, lvl, coin, pull):
     sys.exit()
 
 
-def snake(username, lvl, coin, pull) :
+def snake(username, lvl, coin, pull, chicky, equip, stats) :
 
     width, height = 900, 700
     screen = pygame.display.set_mode((width,height))
@@ -5989,7 +6077,7 @@ def snake(username, lvl, coin, pull) :
     chick_index = 0
     # [0,0,0]
     
-    def game_over(username, lvl, coin, pull) :
+    def game_over(username, lvl, coin, pull, chicky, equip, stats) :
         font = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50)
         # coin_text = font.render(f"hi", True, (255,255,255))
         # text_rect = coin_text.get_rect(center = (width//2,height//2))
@@ -6007,7 +6095,7 @@ def snake(username, lvl, coin, pull) :
             # pygame.time.wait(5000)
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    lobby(username, lvl, coin, pull)
+                    lobby(username, lvl, coin, pull, chicky, equip, stats)
 
                 if event.type == pygame.QUIT:
                     on = False
@@ -6075,20 +6163,20 @@ def snake(username, lvl, coin, pull) :
         # Game Over conditions
         #left right
         if chick_position[0] < 0 or chick_position[0] > width-35:
-            game_over(username, lvl, coin, pull)
+            game_over(username, lvl, coin, pull, chicky, equip, stats)
         #up down
         if chick_position[1] < 0 or chick_position[1] > height-35:
-            game_over(username, lvl, coin, pull)
+            game_over(username, lvl, coin, pull, chicky, equip, stats)
         
         #timer
         time = 60 - (pygame.time.get_ticks() - ticks) // 1000
         if time <= 0 :
-            game_over(username, lvl, coin, pull)
+            game_over(username, lvl, coin, pull, chicky, equip, stats)
 
         #collision
         for block in chick_body[1:]:
             if chick_position == block:
-                game_over(username, lvl, coin, pull)
+                game_over(username, lvl, coin, pull, chicky, equip, stats)
         
         timer_text = font.render(f"{time}", True, (255,255,255))
         text_rect = timer_text.get_rect(center = (width//2,50))
@@ -6101,7 +6189,6 @@ def snake(username, lvl, coin, pull) :
         pygame.display.update()
 
         clock.tick(chick_speed)
-
-     
+    
 
 log_or_reg()
