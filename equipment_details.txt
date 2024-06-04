@@ -1,15 +1,15 @@
-axe,graphic/axe.png,Axe\nAttack +10
-hammer,graphic/hammer.png,Hammer\n Attack +20
-sword,graphic/sword.png,Sword\nAttack +30
-woodshield,graphic/shield.png,Wood Shield\nDefence +5
-ironshield,graphic/shield.png,Iron Shield\nDefence +7
-diamondshield,graphic/shield.png,Diamond Shield\nDefence +10
-leatherhelmet,graphic/noob helmet.png,Leather Helmet\nDefence +5
-ironhelmet,graphic/helmet.png,Iron Helmet\nDefence +7
-diamondhelmet,graphic/helmet3.png,Diamond Helmet\nDefence +10
-leatherarmor,graphic/noob armor.png,Leather Armor\nDefence +5
-ironarmor,graphic/armor.png,Iron Armor\nDefence +7
-diamondarmor,graphic/armor.png,Diamond Armor\nDefence +10
-leathershoes,graphic/noob leg.png, Leather Shoes\nSpeed +2
-ironshoes,graphic/leg.png, Iron Shoes\nSpeed +4
-diamondshoes,graphic/leg.png, Diamond Shoes\nSpeed +6
+axe, graphic/axe.png, Axe, Attack +10, 10/0/0
+hammer, graphic/hammer.png, Hammer, Attack +20, 20/0/0
+sword, graphic/sword.png, Sword, Attack +30, 30/0/0
+shield3, graphic/shield.png, Wood Shield, Defence +5, 0/5/0
+shield4, graphic/shield.png, Iron Shield, Defence +7, 0/7/0
+shield5, graphic/shield.png, Diamond Shield, Defence +10, 0/10/0
+helmet3, graphic/noob helmet.png, Leather Helmet, Defence +5, 0/5/0
+helmet4, graphic/helmet.png, Iron Helmet, Defence +7, 0/7/0
+helmet5, graphic/helmet3.png, Diamond Helmet, Defence +10, 0/10/0
+armor3, graphic/noob armor.png, Leather Armor, Defence +5, 0/5/0
+armor4, graphic/armor.png, Iron Armor, Defence +7, 0/7/0
+armor5, graphic/armor.png, Diamond Armor, Defence +10, 0/10/0
+shoe3, graphic/noob leg.png, Leather Shoes, Speed +2, 0/0/2
+shoe4, graphic/leg.png, Iron Shoes, Speed +4, 0/0/4
+shoe5, graphic/leg.png, Diamond Shoes, Speed +6, 0/0/6
