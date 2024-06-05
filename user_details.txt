@@ -1,4 +1,4 @@
-my, 1234, 3, 105, 8000, 0, speedy, axe/shield3/shoe3
+my, 1234, 3, 105, 498155, 42, kitty, axe/shield3/shoe3
 jy, 1q2w3e, 5, 246, 1000, 0, normal, no/
 pl, 1234, 5, 208, 1000, 0, normal, no/
 renliang, 1234, 5, 568, 1000, 0, normal, no/
@@ -9,4 +9,3 @@ kaijian, 1234, 5, 454, 1000, 0, normal, no/
 raziq, 1234, 5, 788, 1000, 0, normal, no/
 lhs, LHMM8328, 5, 1270, 1000, 0, normal, no/
 Angelyn, 1234, 5, 420, 1000, 0, normal, no/
-pog, 1234, 3, 10000, 0, 0, normal, no/
