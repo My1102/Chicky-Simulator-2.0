@@ -255,11 +255,8 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
     level_image = pygame.image.load('graphic/garden.png')
     font = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100)
     clock = pygame.time.Clock()
-
     Manager = pygame_gui.UIManager((width,height))
     UI_REFRESH_RATE = clock.tick(60)
-    pygame.time.set_timer(pygame.USEREVENT+1, 1000)
-    time_use =[]
     # info = pygame.image.load('graphic/brown.png')
     # pygame.transform.scale(info,(200,700))
 
@@ -270,14 +267,6 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
     gameover = 0
     lvl = 1
     maxlevel = 30
-
-    jy_hp = 30
-    my_hp =50
-    pl_hp =70
-
-    jy_dmg = 20
-    my_dmg = 15
-    pl_dmg = 10
 
    
     
@@ -302,120 +291,83 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
         world = World(world_data)
 
         return world
-    
-    
 
     class chicky():
-        def __init__(self, x, y, Hp, Def,Atk,Cd,Mag,ctype):
-            
+        def __init__(self,x,y,hp,max_hp,damage,cd):
+            # chic = pygame.image.load(c)
+            # self.image = pygame.transform.scale(chic,(30,30))
             self.animation_list = []
+            self.images_right = []
+            self.images_left = []
+            self.images_attack = []
             self.index = 0
             self.counter = 0
-            self.action = 0 
-            self.alive = True
+            self.action = 0
             self.update_time = pygame.time.get_ticks()
-            self.ctype = ctype
 
-            # Walk = 0
-            alist = []
+            #walk
             for num in range(1, 6):
-                img = pygame.image.load(f'graphic/{ctype}/walk/{num}.png')
-                img = pygame.transform.scale(img, (35, 35))
-                alist.append(img)
-            self.animation_list.append(alist)
-    
-            # Attack = 1
-            alist = []
+                img_right = pygame.image.load(f'graphic/chickytest/{num}.png')
+                img_right = pygame.transform.scale(img_right, (30, 30))
+                img_left = pygame.transform.flip(img_right, True, False)
+                self.images_right.append(img_right)
+                self.images_left.append(img_left) 
+            # self.image = self.images_right[self.index]
+            self.animation_list.append(self.images_left)
+            self.animation_list.append(self.images_right)
+            
+            #attack
             for num in range(1, 6):
-                img = pygame.image.load(f'graphic/{ctype}/attack/{num}.png')
-                img = pygame.transform.scale(img, (35, 35))
-                alist.append(img)
-            self.animation_list.append(alist)
-
-            # hurt =2
-            alist = []
-            for num in range(1, 6):
-                img = pygame.image.load(f'graphic/{ctype}/hurt/{num}.png')
-                img = pygame.transform.scale(img, (35, 35))
-                alist.append(img)
-            self.animation_list.append(alist)
-
+                img_attack = pygame.image.load(f'graphic/attack/ji{num}.png')
+                img_attack = pygame.transform.scale(img_attack, (30, 30))
+                self.images_attack.append(self.images_attack)
+                
+            self.animation_list.append(self.images_attack)
+           
 
             self.image = self.animation_list[self.action][self.index]
             self.rect = self.image.get_rect()
             self.rect.x = x
             self.rect.y = y
-            self.Hp = Hp
-            self.hp = Hp
-            self.Def = Def
-            self.cdef = Def
-            self.Atk = Atk
-            self.Cd = Cd
-            self.Mag = Mag
+            self.max_hp = max_hp
+            self.hp = hp
+            self.damage = damage
+            self.cd = cd
             self.last_attack_time = 0
             self.update_time = pygame.time.get_ticks()
             self.direction = 0
 
-
-        def attack(self, yuen_group, jy_group, puolin_group):
+        def attack(self,yuen_group,jy_group,puolin_group):
             current_time = pygame.time.get_ticks()
-            self.action = 1  # Set action to attack
-            self.index = 0
-            if current_time - self.last_attack_time > self.Cd:
+            
+            if current_time - self.last_attack_time > self.cd:
                 # Perform attack
                 for yuen in pygame.sprite.spritecollide(self, yuen_group, False):
-                    yuen.hp -= self.Atk
+                    yuen.hp -= self.damage
                     print(yuen.hp)
                 for jy in pygame.sprite.spritecollide(self, jy_group, False):
-                    jy.hp -= self.Atk
+                    jy.hp -= self.damage
                 for puolin in pygame.sprite.spritecollide(self, puolin_group, False):
-                    puolin.hp -= self.Atk
+                    puolin.hp -= self.damage
 
                 # Set last attack time
+                self.action = 1
+                self.index = 0
                 self.last_attack_time = current_time
 
-        def draw_cooldown_bar(self, screen):
-            # Calculate the current cooldown percentage
-            current_time = pygame.time.get_ticks()
-            elapsed_time = current_time - self.last_attack_time
-            cooldown_percentage = max(0, min(1, elapsed_time / self.Cd))
 
-            # Draw the cooldown bar
-            bar_width = 50
-            bar_height = 5
-            filled_width = bar_width * cooldown_percentage
-            bar_x = self.rect.x + (self.rect.width // 2) - (bar_width // 2)
-            bar_y = self.rect.y - 10
-
-            pygame.draw.rect(screen, (128, 128, 128), (bar_x, bar_y, bar_width, bar_height))
-            pygame.draw.rect(screen, (255, 255, 255), (bar_x, bar_y, filled_width, bar_height))
-            
-        def draw_defense_bar(self, screen):
-            # Calculate the current defense percentage
-            defense_percentage = max(0, min(1, self.cdef / self.Def))
-
-            # Draw the defense bar
-            bar_width = 50
-            bar_height = 5
-            filled_width = bar_width * defense_percentage
-            bar_x = self.rect.x + (self.rect.width // 2) - (bar_width // 2)
-            bar_y = self.rect.y - 20
-
-            pygame.draw.rect(screen, (128, 128, 128), (bar_x, bar_y, bar_width, bar_height))
-            pygame.draw.rect(screen, (0, 0, 255), (bar_x, bar_y, filled_width, bar_height))
-                
-
-        def update(self, gameover):
+        def update(self,gameover):
             current_time = pygame.time.get_ticks()
             if gameover == 0:
-                dx, dy = 0, 0
+                dx = 0 
+                dy = 0 
                 walk_cooldown = 5
-                
-                self.image = self.animation_list[self.action][self.index]
+
                 key = pygame.key.get_pressed()
                 if key[pygame.K_w]:
                     dy -= 3
                     self.counter += 1
+            
                 if key[pygame.K_a]:
                     dx -= 3
                     self.counter += 1
@@ -426,89 +378,93 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
                 if key[pygame.K_d]:
                     dx += 3
                     self.counter += 1
-                    self.direction = 1
+                    self.direction = 1 
+  
+
                 if key[pygame.K_SPACE]:
-                    self.attack(yuen_group, jy_group, puolin_group)
-                if not any([key[pygame.K_w], key[pygame.K_a], key[pygame.K_s], key[pygame.K_d]]):
+                    
+                    Chicky.attack(yuen_group, jy_group, puolin_group)
+
+               
+
+                if key[pygame.K_a] == False and key[pygame.K_d] == False and key[pygame.K_w] == False and key[pygame.K_s] == False:
                     self.counter = 0
                     self.action = 0
                     self.index = 0
-                    
+                    if self.direction == 1:
+                        self.image = self.images_right[self.index]
+                    if self.direction == -1:
+                        self.image = self.images_left[self.index]
+
                 if self.counter > walk_cooldown:
                     self.counter = 0
                     self.index += 1
-                    if self.index >= len(self.animation_list[self.action]):
-                        if self.action == 1:  # Attack animation
-                            self.action = 0
+                    if self.index >= len(self.images_right):
                         self.index = 0
+                    if self.direction == 1:
+                        self.image = self.images_right[self.index]
+                    if self.direction == -1:
+                        self.image = self.images_left[self.index]
 
-                self.image = self.animation_list[self.action][self.index]
+               
+
                 
-
-                # Collision with blocks
+                # collision with blocks
                 for item in world.block_list:
-                    if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20, 10, 10):
-                        dx, dy = 0, 0
-                # Collision with coins
+                    if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20 , 10, 10):
+                        dx = 0
+                        dy = 0
+                # collision with coins
                 for item in world.coin_list:
-                    if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20, 10, 10):
+                    if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20 , 10, 10):
                         world.coin_list.remove(item)
+
                 for item in world.exit_list:
-                    if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20, 10, 10):
-                        if not world.coin_list:
+                    if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20 , 10, 10):
+                        
+                        if world.coin_list == [] :
+                            # set timer stop 
                             pygame.time.set_timer(pygame.USEREVENT, 0)
+                            # save in list 
                             time_use.append(time)
                             gameover = 1
+                            # win(c,lvl,username,coin)
 
-                self.rect.x += dx
-                self.rect.y += dy
+                if self.action == 1:
+                    if current_time - self.last_attack_time > self.cd:
+                        self.last_attack_time = current_time
+                        self.index += 1
+                        if self.index >= len(self.animation_list[self.action]):
+                            self.index = 0
+                            self.action = 1
+                        self.image = self.animation_list[self.action][self.index]
+                            
 
-                if self.hp <= 0:
-                    gameover = -1
-
-            elif gameover == -1:
+            elif gameover == -1 :
                 self.rect.x = 35
                 self.rect.y = 35
+            
+            self.rect.x += dx
+            self.rect.y += dy
 
+            screen.blit(self.image,self.rect)
 
-            self.draw_cooldown_bar(screen)
-            if self.Def != 0:
-                self.draw_defense_bar(screen)
-            screen.blit(self.image, self.rect)
             return gameover
         
     class HealthBar():
-        def __init__(self,x,y,hp,Hp):
+        def __init__(self,x,y,hp,max_hp):
             self.x = x
             self.y =y 
             self.hp = hp
-            self.Hp = Hp
+            self.max_hp = max_hp
 
         def draw(self,hp):
             self.hp = hp
-            ratio = self.hp/self.Hp
+            ratio = self.hp/self.max_hp
             pygame.draw.rect(screen,red,(self.x,self.y,60,200))
             pygame.draw.rect(screen,green,(self.x,self.y,60,200*ratio))
-
-    # class DefBar():
-    #     def __init__(self,x,y,cdef,Def):
-    #         self.x = x
-    #         self.y =y 
-    #         self.cdef = cdef
-    #         self.Def = Def
-
-    #     def draw(self,cdef):
-    #         self.cdef = cdef
-    #         ratio = self.cdef/self.Def
-    #         bar_width = 50
-    #         bar_height = 5
-    #         filled_width = bar_width * ratio
-    #         bar_x = self.rect.x + (self.rect.width // 2) - (bar_width // 2)
-    #         bar_y = self.rect.y - 20
-
-    #         pygame.draw.rect(screen, (128, 128, 128), (bar_x, bar_y, bar_width, bar_height))
-    #         pygame.draw.rect(screen, (0, 0, 255), (bar_x, bar_y, filled_width, bar_height))
-
+            
+    
     class World():
         def __init__(self,data):
             self.block_list = [ ] 
@@ -539,15 +495,15 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
                         self.coin_list.append(item)
                         
                     if tile == 3 :
-                        yuen = Monster1(col_count * tile_size,row_count * tile_size,my_hp,my_dmg,5000)
+                        yuen = Monster1(col_count * tile_size,row_count * tile_size,100,10,5000)
                         yuen_group.add(yuen)
                         
                     if tile == 4 :
-                        jy = Monster3(col_count * tile_size,row_count * tile_size,jy_hp,jy_dmg,5000)
+                        jy = Monster3(col_count * tile_size,row_count * tile_size,75,75,3000)
                         jy_group.add(jy)
 
                     if tile == 5 :
-                        puolin = Monster2(col_count * tile_size,row_count * tile_size,pl_hp,pl_dmg,5000)
+                        puolin = Monster2(col_count * tile_size,row_count * tile_size,150,150,5000)
                         puolin_group.add(puolin)
 
                     if tile == 6:
@@ -569,7 +525,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
 
 
     class Monster1(pygame.sprite.Sprite):
-        def __init__(self, x, y, max_hp, damage, cd):
+        def __init__(self,x,y,max_hp,damage,cd):
             pygame.sprite.Sprite.__init__(self)
             self.image = pygame.image.load('graphic/monster1.png')
             self.image = pygame.transform.scale(self.image, (tile_size, tile_size))
@@ -583,75 +539,58 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             self.damage = damage
             self.cd = cd
             self.last_attack_time = 0
-
-        def update(self,max_hp,damage,cd):
+            
+        def update(self,hp,max_hp,damage,cd):
             current_time = pygame.time.get_ticks()
+            # last_attack_time = pygame.time.get_ticks()
+            # self.rect.x = x
+            # self.rect.y = y
+          
+            self.cd = cd
             self.rect.x += self.move_direction
             self.move_counter += 1
-            if self.move_counter > 100:
+            if self.move_counter > 100 :
                 self.move_direction *= -1
                 self.move_counter *= -1
+            self.hp = hp
+            self.max_hp = max_hp
+            self.damage = damage
             if current_time - self.last_attack_time > self.cd:
                 for yuen in pygame.sprite.spritecollide(Chicky, yuen_group, False):
-                    Chicky.cdef -=self.damage
-                    if Chicky.cdef <= 0 :
-                        Chicky.hp -= self.damage
-                    self.last_attack_time = current_time
-                    
+                    Chicky.hp -= self.damage
             self.draw_health_bar()
-            for yuen in yuen_group:
-                if self.hp <= 0:
-                    yuen_group.remove(yuen)
-          
-
+                    
         def draw_health_bar(self):
-            ratio = self.hp / self.max_hp
-            pygame.draw.rect(screen, red, (self.rect.x, self.rect.y - 5, 35, 5))
-            pygame.draw.rect(screen, green, (self.rect.x, self.rect.y - 5, 35 * ratio, 5))
+            ratio = self.hp/self.max_hp
+            pygame.draw.rect(screen,red,(self.rect.x ,self.rect.y -5 ,35,5))
+            pygame.draw.rect(screen,green,(self.rect.x*ratio ,self.rect.y -5 ,35,5))
+            
+            # if pygame.sprite.collide_rect(self,Chicky):
+            #     Chicky.hp -= yuen_group.damage
                 
 
     class Monster2(pygame.sprite.Sprite):
-        def __init__(self,x,y,max_hp,damage,cd):
+        def __init__(self,x,y,hp,max_hp,damage):
             pygame.sprite.Sprite.__init__(self)
             self.image = pygame.image.load('graphic/monster2.png')
             self.image = pygame.transform.scale(self.image, (tile_size, tile_size))
             self.rect = self.image.get_rect()
             self.rect.x = x
             self.rect.y = y
-            self.hp = max_hp
+            self.hp = hp
             self.max_hp = max_hp
             self.damage = damage
-            self.cd = cd
-            self.last_attack_time = 0
 
-        def update(self,max_hp,damage,cd):
-            # self.hp = hp
-            # self.max_hp = max_hp
-            # self.damage = damage
-            # ratio = self.hp/self.max_hp
-            # pygame.draw.rect(screen,red,(self.rect.x ,self.rect.y -5 ,35,5))
-            # pygame.draw.rect(screen,green,(self.rect.x ,self.rect.y -5 ,35*ratio,5))
-
-            current_time = pygame.time.get_ticks()
-            if current_time - self.last_attack_time > self.cd:
-                for puolin in pygame.sprite.spritecollide(Chicky, puolin_group, False):
-                    Chicky.cdef -=self.damage
-                    if Chicky.cdef <= 0 :
-                        Chicky.hp -= self.damage
-                    self.last_attack_time = current_time
-                    
-            self.draw_health_bar()
-            for puolin in puolin_group:
-                if self.hp <= 0:
-                    puolin_group.remove(puolin)
-
-        def draw_health_bar(self):
-            ratio = self.hp / self.max_hp
-            pygame.draw.rect(screen, red, (self.rect.x, self.rect.y - 5, 35, 5))
-            pygame.draw.rect(screen, green, (self.rect.x, self.rect.y - 5, 35 * ratio, 5))
+        def update(self,hp,max_hp,damage,cd):
+            self.hp = hp
+            self.max_hp = max_hp
+            self.damage = damage
+            ratio = self.hp/self.max_hp
+            pygame.draw.rect(screen,red,(self.rect.x ,self.rect.y -5 ,35,5))
+            pygame.draw.rect(screen,green,(self.rect.x ,self.rect.y -5 ,35*ratio,5))
 
     class Monster3(pygame.sprite.Sprite):
-        def __init__(self,x,y,max_hp,damage,cd):
+        def __init__(self,x,y,hp,max_hp,damage):
             pygame.sprite.Sprite.__init__(self)
             self.image = pygame.image.load('graphic/monster3.png')
             self.image = pygame.transform.scale(self.image, (tile_size, tile_size))
@@ -660,35 +599,22 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             self.rect.y = y
             self.move_direction = 1
             self.move_counter = 0
-            self.hp = max_hp
+            self.hp = hp
             self.max_hp = max_hp
             self.damage = damage
-            self.cd = cd
-            self.last_attack_time = 0
             
-        def update(self,max_hp,damage,cd):
-            current_time = pygame.time.get_ticks()
+        def update(self,hp,max_hp,damage,cd):
             self.rect.y += self.move_direction
             self.move_counter += 1
             if self.move_counter > 250 :
                 self.move_direction *= -1
                 self.move_counter *= -1
-            if current_time - self.last_attack_time > self.cd:
-                for jy in pygame.sprite.spritecollide(Chicky, jy_group, False):
-                    Chicky.cdef -=self.damage
-                    if Chicky.cdef <= 0 :
-                        Chicky.hp -= self.damage
-                    self.last_attack_time = current_time
-                    
-            self.draw_health_bar()
-            for jy in jy_group:
-                if self.hp <= 0:
-                    jy_group.remove(jy)
-
-        def draw_health_bar(self):
+            self.hp = hp
+            self.max_hp = max_hp
+            self.damage = damage
             ratio = self.hp / self.max_hp
-            pygame.draw.rect(screen, red, (self.rect.x, self.rect.y - 5, 35, 5))
-            pygame.draw.rect(screen, green, (self.rect.x, self.rect.y - 5, 35 * ratio, 5))
+            pygame.draw.rect(screen,red,(self.rect.x ,self.rect.y -5 ,35,5))
+            pygame.draw.rect(screen,green,(self.rect.x ,self.rect.y -5 ,35*ratio,5))
 
 
     class Exit(pygame.sprite.Sprite):
@@ -699,18 +625,14 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             self.rect = self.image.get_rect()
             self.rect.x = x
             self.rect.y = y
+            
+    Chicky = chicky(35,35,100,100,10,5000)
 
-    Hp, Def, Atk, Cd, Mag,ctype = map(int, stats.split('/'))
-    Chicky = chicky(35,35,Hp, Def, Atk, Cd, Mag,ctype)
-    
-    
-    
     yuen_group = pygame.sprite.Group()
     puolin_group = pygame.sprite.Group()
     jy_group = pygame.sprite.Group()  
 
-    chicky_health_bar = HealthBar(750,200,Chicky.hp,Chicky.Hp)
-  
+    chicky_health_bar = HealthBar(750,200,Chicky.hp,Chicky.max_hp)
     
 
     if path.exists(f'level{lvl}_data'):
@@ -719,7 +641,10 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
         print('yes im here')
     world = World(world_data)
 
-    
+    # restart_button = Button('graphic/button2.png', width // 2 - 50, height//2 + 100, 0.35, "restart")
+    # start_button = Button('graphic/button2.png', width // 2 - 250, height // 2, 0.35,'start')
+    # exit_button = Button('graphic/button2.png', width // 2 + 100, height // 2,0.35, 'exit')
+
 
     run = True
     while run:
@@ -730,11 +655,9 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
         world.draw()
         gameover = Chicky.update(gameover)
 
-        
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                run = False
+                on = False
                 pygame.quit()
                 sys.exit()
 
@@ -750,13 +673,12 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
         
 
         if gameover == 0:
-            
             for jy in jy_group:
-                jy.update(jy_hp,jy_dmg,5000)
+                jy.update(75,75,15,5000)
             for yuen in yuen_group:
-                yuen.update(my_hp,my_dmg,5000)
+                yuen.update(100, 100, 10,5000)
             for puolin in puolin_group:
-                puolin.update(pl_hp, pl_dmg,5000)
+                puolin.update(150, 150, 5,5000)
             
 
 
@@ -768,17 +690,11 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
 
         if gameover == -1:
             # if restart_button.draw(screen):
-            world_data = []
-            world = reset_level(lvl)
-            Chicky = chicky(35,35,Hp, Def, Atk, Cd, Mag,ctype)
-            gameover = 0
-            
+                world_data = []
+                world = reset_level(lvl)
+                gameover = 0
 
         if gameover == 1:
-            # set timer stop 
-            pygame.time.set_timer(pygame.USEREVENT, 0)
-            # save in list 
-            time_use.append(time)
             lvl += 1
             #reset game and go to next level
             
@@ -787,7 +703,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
                 #reset level
                 world_data = []
                 world = reset_level(lvl)
-                Chicky = chicky(35,35,Hp, Def, Atk, Cd, Mag,ctype)
+                Chicky = chicky(35,35,100,100,10,5000)
                 gameover = 0
                 update_level(username, lvl)
 
@@ -795,9 +711,6 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             if event.type == pygame.QUIT:
                 run = False
         pygame.display.update()
-
-
-
 
 
 def level1(lvl, username, coin, pull, c, equip, stats): # This one easier to read
@@ -2214,22 +2127,22 @@ def update_chicky(username, chicky):
     return
 
 
-def update_equipment(username, equip):
+def update_equipment(username, weapon):
     with open('user_backpack.txt', 'r') as file:
         lines = file.readlines()
 
     for i, line in enumerate(lines):
         user_backpack = line.strip().split(", ")
         if user_backpack[0] == username:
-            equip_list = user_backpack[2].split('/')
-            if equip_list[0] == 'no':
-                del equip_list[0]
-                equip_list.append(f'{equip}')
-            elif equip in equip_list:
+            weapon_list = user_backpack[2].split('/')
+            if weapon_list[0] == 'no':
+                del weapon_list[0]
+                weapon_list.append(f'{weapon}')
+            elif weapon in weapon_list:
                 break
             else:
-                equip_list.append(f'{equip}')
-            weapon_str = '/'.join(equip_list)
+                weapon_list.append(f'{weapon}')
+            weapon_str = '/'.join(weapon_list)
             user_backpack[2] = str(weapon_str)
             lines[i] = ', '.join(user_backpack) + '\n'
             break
@@ -2238,417 +2151,6 @@ def update_equipment(username, equip):
         file.writelines(lines)
     return
 
-
-def update_equip(username, equip):
-    with open('user_details.txt', 'r') as file:
-        lines = file.readlines()
-
-    for i, line in enumerate(lines):
-        user_details = line.strip().split(", ")
-        if user_details[0] == username:
-            user_details[7] = str(equip)
-            lines[i] = ', '.join(user_details) + '\n'
-            break
-
-    with open('user_details.txt', 'w') as file:
-        file.writelines(lines)
-    return
-
-
-def update_equipchick(username, chicky):
-    with open('user_details.txt', 'r') as file:
-        lines = file.readlines()
-
-    for i, line in enumerate(lines):
-        user_details = line.strip().split(", ")
-        if user_details[0] == username:
-            user_details[6] = str(chicky)
-            lines[i] = ', '.join(user_details) + '\n'
-            break
-
-    with open('user_details.txt', 'w') as file:
-        file.writelines(lines)
-    return
-
-
-def check_coinget(username, coin, coinget):
-    if coinget == 'coin10':
-        coin += 10
-        coinsget = int(10)
-        update_coin(username, coin)
-
-    elif coinget == 'coin15':
-        coin += 15
-        coinsget = int(15)
-        update_coin(username, coin)
-
-    elif coinget == 'coin20':
-        coin += 20
-        coinsget = int(20)
-        update_coin(username, coin)
-
-    elif coinget == 'coin25':
-        coin += 25
-        coinsget = int(25)
-        update_coin(username, coin)
-
-    elif coinget == 'coin30':
-        coin += 30
-        coinsget = int(30)
-        update_coin(username, coin)
-
-    elif coinget == 'coin35':
-        coin += 35
-        coinsget = int(35)
-        update_coin(username, coin)
-
-    elif coinget == 'coin40':
-        coin += 40
-        coinsget = int(40)
-        update_coin(username, coin)
-
-    elif coinget == 'coin45':
-        coin += 45
-        coinsget = int(45)
-        update_coin(username, coin)
-
-    elif coinget == 'coin50':
-        coin += 50
-        coinsget = int(50)
-        update_coin(username, coin)
-
-    elif coinget == 'coin75':
-        coin += 75
-        coinsget = int(75)
-        update_coin(username, coin)
-
-    elif coinget == 'coin90':
-        coin += 90
-        coinsget = int(90)
-        update_coin(username, coin)
-
-    #update_coin(username, coin)
-    return coinsget, coin
-
-
-def achievement(username, lvl, coin, pull, chicky, equip, stats):
-
-    while True:
-        pygame.display.set_caption('Chicky Simulator - Achievement')
-        screen.blit(ranking_image,(0,0))
-
-        chicky_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Chicky', True, 'white')
-        chicky_text_rect = chicky_text.get_rect(center = (450,100))
-        screen.blit(chicky_text, chicky_text_rect)
-
-        store_surface = pygame.Surface((850,500))
-        store_surface.fill('white')
-        store_surface.set_alpha(150)
-        store_surface_rect = store_surface.get_rect(center=(width/2,380))
-        screen.blit(store_surface, store_surface_rect)
-
-        pos_mouse = pygame.mouse.get_pos()
-
-
-def equip_chick2(username, lvl, coin, pull, chicky, equip, stats):
-
-    while True:
-        pygame.display.set_caption('Chicky Simulator - Chicky')
-        screen.blit(ranking_image,(0,0))
-
-        chicky_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Chicky', True, 'white')
-        chicky_text_rect = chicky_text.get_rect(center = (450,100))
-        screen.blit(chicky_text, chicky_text_rect)
-
-        chick1_surface = pygame.Surface((250,500))
-        chick1_surface.fill('white')
-        chick1_surface.set_alpha(150)
-        chick1_surface_rect = chick1_surface.get_rect(center=(180,400))
-        screen.blit(chick1_surface, chick1_surface_rect)
-
-        worrier = Lock('graphic/ninjachic.png', 180, 265, 0.29)
-        worrier.draw(screen)
-
-        worrier_info = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('Ninja Chick\nHp = 75\nAtk = 20\nSpd = 10', True, 'black')
-        worrier_info_rect = worrier_info.get_rect(center = (180,460))
-        screen.blit(worrier_info, worrier_info_rect)
-
-        chick2_surface = pygame.Surface((250,500))
-        chick2_surface.fill('white')
-        chick2_surface.set_alpha(150)
-        chick2_surface_rect = chick2_surface.get_rect(center=(width/2,400))
-        screen.blit(chick2_surface, chick2_surface_rect)
-
-        kitty = Lock('graphic/miaoji.png', width/2, 260, 0.29)
-        kitty.draw(screen)
-
-        kitty_info = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('Kitty Chick\nHp = 150\nAtk = 10\nSpd = 10', True, 'black')
-        kitty_info_rect = kitty_info.get_rect(center = (width/2,460))
-        screen.blit(kitty_info, kitty_info_rect)
-
-        chick3_surface = pygame.Surface((250,500))
-        chick3_surface.fill('white')
-        chick3_surface.set_alpha(150)
-        chick3_surface_rect = chick3_surface.get_rect(center=(720,400))
-        screen.blit(chick3_surface, chick3_surface_rect)
-
-        speedy = Lock('graphic/speedychic.png', 720, 260, 0.3)
-        speedy.draw(screen)
-
-        speedy_info = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('Speedy Chick\nHp = 75\nAtk = 10\nSpd = 20', True, 'black')
-        speedy_info_rect = speedy_info.get_rect(center = (720,460))
-        screen.blit(speedy_info, speedy_info_rect)
-
-        back_button = Button('graphic/botton1.png', 100, 100, 0.6, "<<")
-        back_button.draw(screen)
-
-        pos_mouse = pygame.mouse.get_pos()
-
-        if chicky == 'worrier':
-            worrier_button = Button('graphic/button2.png', 180, 590, 0.25, "Using")
-            worrier_button.draw(screen)
-            kitty_button = Button('graphic/button2.png', width/2, 590, 0.25, "Use")
-            kitty_button.draw(screen)
-            speedy_button = Button('graphic/button2.png', 720, 590, 0.25, "Use")
-            speedy_button.draw(screen)
-
-        elif chicky == 'kitty':
-            worrier_button = Button('graphic/button2.png', 180, 590, 0.25, "Use")
-            worrier_button.draw(screen)
-            kitty_button = Button('graphic/button2.png', width/2, 590, 0.25, "Using")
-            kitty_button.draw(screen)
-            speedy_button = Button('graphic/button2.png', 720, 590, 0.25, "Use")
-            speedy_button.draw(screen)
-
-        elif chicky == 'speedy':
-            worrier_button = Button('graphic/button2.png', 180, 590, 0.25, "Use")
-            worrier_button.draw(screen)
-            kitty_button = Button('graphic/button2.png', width/2, 590, 0.25, "Use")
-            kitty_button.draw(screen)
-            speedy_button = Button('graphic/button2.png', 720, 590, 0.25, "Using")
-            speedy_button.draw(screen)
-        else:
-            worrier_button = Button('graphic/button2.png', 180, 590, 0.25, "Use")
-            worrier_button.draw(screen)
-            kitty_button = Button('graphic/button2.png', width/2, 590, 0.25, "Use")
-            kitty_button.draw(screen)
-            speedy_button = Button('graphic/button2.png', 720, 590, 0.25, "Use")
-            speedy_button.draw(screen)
-
-        locknin = Lock('graphic/lock.png', 180, 580, 0.23)
-        lockkit = Lock('graphic/lock.png', width/2, 580, 0.23)
-        lockspd = Lock('graphic/lock.png', 720, 580, 0.23)
-
-        locknin_con = False
-        lockkit_con = False
-        lockspd_con = False
-
-        with open('user_backpack.txt', 'r') as file:
-            lines = file.readlines()
-            for line in lines:
-                user_backpack = line.strip().split(", ")
-                if user_backpack[0] == username:
-                    chicky_list = user_backpack[1].split('/')
-                    if 'worrier' in chicky_list:
-                        locknin_con = True
-                    if 'kitty' in chicky_list:
-                        lockkit_con = True
-                    if 'speedy' in chicky_list:
-                        lockspd_con = True
-                    #chicky_str = '/'.join(chicky_list)
-                    #print(str(chicky_str))
-                    #print(lockmag_con, locktank_con)
-        
-        if locknin_con == False:
-            locknin.draw(screen)
-        if lockkit_con == False:
-            lockkit.draw(screen)
-        if lockspd_con == False:
-            lockspd.draw(screen)
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-                
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if worrier_button.check_input(pos_mouse):
-                    if locknin_con == True:
-                        c = str('worrier')
-                        update_equipchick(username, c)
-                        equip_chick2(username, lvl, coin, pull, c, equip, stats)
-
-                if kitty_button.check_input(pos_mouse):
-                    if lockkit_con == True:
-                        c = str('kitty')
-                        update_equipchick(username, c)
-                        equip_chick2(username, lvl, coin, pull, c, equip, stats)
-
-                if speedy_button.check_input(pos_mouse):
-                    if lockspd_con == True:
-                        c = str('speedy')
-                        update_equipchick(username, c)
-                        equip_chick2(username, lvl, coin, pull, c, equip, stats)
-
-                if back_button.check_input(pos_mouse):
-                    equip_chick(username, lvl, coin, pull, chicky, equip, stats)
-
-                Manager.process_events(event)
-
-            Manager.update(UI_REFRESH_RATE)
-
-        pygame.display.update()
-
-
-def equip_chick(username, lvl, coin, pull, chicky, equip, stats):
-
-    while True:
-        pygame.display.set_caption('Chicky Simulator - Chicky')
-        screen.blit(ranking_image,(0,0))
-
-        chicky_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Chicky', True, 'white')
-        chicky_text_rect = chicky_text.get_rect(center = (450,100))
-        screen.blit(chicky_text, chicky_text_rect)
-
-        chick1_surface = pygame.Surface((250,500))
-        chick1_surface.fill('white')
-        chick1_surface.set_alpha(150)
-        chick1_surface_rect = chick1_surface.get_rect(center=(180,400))
-        screen.blit(chick1_surface, chick1_surface_rect)
-
-        normal = Lock('graphic/chicky.png', 180, 270, 0.28)
-        normal.draw(screen)
-
-        normal_info = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('Normal Chick\nHp = 100\nAtk = 10\nSpd = 10', True, 'black')
-        normal_info_rect = normal_info.get_rect(center = (180,460))
-        screen.blit(normal_info, normal_info_rect)
-
-        chick2_surface = pygame.Surface((250,500))
-        chick2_surface.fill('white')
-        chick2_surface.set_alpha(150)
-        chick2_surface_rect = chick2_surface.get_rect(center=(width/2,400))
-        screen.blit(chick2_surface, chick2_surface_rect)
-
-        magnet = Lock('graphic/magnetchic.png', width/2, 260, 0.3)
-        magnet.draw(screen)
-
-        magnet_info = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('Magnet Chick\nHp = 100\nAtk = 10\nSpd = 10', True, 'black')
-        magnet_info_rect = magnet_info.get_rect(center = (width/2,460))
-        screen.blit(magnet_info, magnet_info_rect)
-
-        chick3_surface = pygame.Surface((250,500))
-        chick3_surface.fill('white')
-        chick3_surface.set_alpha(150)
-        chick3_surface_rect = chick3_surface.get_rect(center=(720,400))
-        screen.blit(chick3_surface, chick3_surface_rect)
-
-        tanker = Lock('graphic/tank chic.png', 720, 270, 0.3)
-        tanker.draw(screen)
-
-        tanker_info = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('Tanker Chick\nHp = 200\nAtk = 10\nSpd = 5', True, 'black')
-        tanker_info_rect = tanker_info.get_rect(center = (720,460))
-        screen.blit(tanker_info, tanker_info_rect)
-
-        back_button = Button('graphic/botton1.png', 100, 100, 0.6, "<<")
-        back_button.draw(screen)
-
-        next_button = Button('graphic/botton1.png', 800, 100, 0.6, ">>")
-        next_button.draw(screen)
-
-        pos_mouse = pygame.mouse.get_pos()
-
-        if chicky == 'normal':
-            normal_button = Button('graphic/button2.png', 180, 590, 0.25, "Using")
-            normal_button.draw(screen)
-            magnet_button = Button('graphic/button2.png', width/2, 590, 0.25, "Use")
-            magnet_button.draw(screen)
-            tanker_button = Button('graphic/button2.png', 720, 590, 0.25, "Use")
-            tanker_button.draw(screen)
-
-        elif chicky == 'magnet':
-            normal_button = Button('graphic/button2.png', 180, 590, 0.25, "Use")
-            normal_button.draw(screen)
-            magnet_button = Button('graphic/button2.png', width/2, 590, 0.25, "Using")
-            magnet_button.draw(screen)
-            tanker_button = Button('graphic/button2.png', 720, 590, 0.25, "Use")
-            tanker_button.draw(screen)
-
-        elif chicky == 'tanker':
-            normal_button = Button('graphic/button2.png', 180, 590, 0.25, "Use")
-            normal_button.draw(screen)
-            magnet_button = Button('graphic/button2.png', width/2, 590, 0.25, "Use")
-            magnet_button.draw(screen)
-            tanker_button = Button('graphic/button2.png', 720, 590, 0.25, "Using")
-            tanker_button.draw(screen)
-
-        else:
-            normal_button = Button('graphic/button2.png', 180, 590, 0.25, "Use")
-            normal_button.draw(screen)
-            magnet_button = Button('graphic/button2.png', width/2, 590, 0.25, "Use")
-            magnet_button.draw(screen)
-            tanker_button = Button('graphic/button2.png', 720, 590, 0.25, "Use")
-            tanker_button.draw(screen)
-
-        lockmag = Lock('graphic/lock.png', width/2, 580, 0.23)
-        locktank = Lock('graphic/lock.png', 720, 580, 0.23)
-
-        lockmag_con = False
-        locktank_con = False
-
-        with open('user_backpack.txt', 'r') as file:
-            lines = file.readlines()
-            for line in lines:
-                user_backpack = line.strip().split(", ")
-                if user_backpack[0] == username:
-                    chicky_list = user_backpack[1].split('/')
-                    if 'magnet' in chicky_list:
-                        lockmag_con = True
-                    if 'tanker' in chicky_list:
-                        locktank_con = True
-                    #chicky_str = '/'.join(chicky_list)
-                    #print(str(chicky_str))
-                    #print(lockmag_con, locktank_con)
-        
-        if lockmag_con == False:
-            lockmag.draw(screen)
-        if locktank_con == False:
-            locktank.draw(screen)
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-                
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if normal_button.check_input(pos_mouse):
-                    c = str('normal')
-                    update_equipchick(username, c)
-                    equip_chick(username, lvl, coin, pull, c, equip, stats)
-
-                if magnet_button.check_input(pos_mouse):
-                    if lockmag_con == True:
-                        c = str('magnet')
-                        update_equipchick(username, c)
-                        equip_chick(username, lvl, coin, pull, c, equip, stats)
-
-                if tanker_button.check_input(pos_mouse):
-                    if locktank_con == True:
-                        c = str('tanker')
-                        update_equipchick(username, c)
-                        equip_chick(username, lvl, coin, pull, c, equip, stats)
-
-                if back_button.check_input(pos_mouse):
-                    lobby(username, lvl, coin, pull, chicky, equip, stats)
-
-                if next_button.check_input(pos_mouse):
-                    equip_chick2(username, lvl, coin, pull, chicky, equip, stats)
-
-                Manager.process_events(event)
-
-            Manager.update(UI_REFRESH_RATE)
-
-        pygame.display.update()
-    
 
 def backpack(username, lvl, coin, pull, chicky, equip, stats):
 
@@ -2666,83 +2168,47 @@ def backpack(username, lvl, coin, pull, chicky, equip, stats):
             y = 140 + row * (slot_size + 10)
             backpack_slots.append(Slot(x, y, slot_size, slot_size))
 
-    #equip_slots = {
-        #"sword": Slot(105, 430, slot_size, slot_size),
-        #"shield": Slot(255, 430, slot_size, slot_size),
-        #"helmet": Slot(30, 550, slot_size, slot_size),
-        #"armor": Slot(180, 550, slot_size, slot_size),
-        #"shoes": Slot(330, 550, slot_size, slot_size)
-    #}
+    equip_slots = {
+        "sword": Slot(105, 430, slot_size, slot_size),
+        "shield": Slot(255, 430, slot_size, slot_size),
+        "helmet": Slot(30, 550, slot_size, slot_size),
+        "armor": Slot(180, 550, slot_size, slot_size),
+        "shoes": Slot(330, 550, slot_size, slot_size)
+    }
 
-    equip_slots = [Slot(105, 430, slot_size, slot_size),
-                   Slot(255, 430, slot_size, slot_size),
-                   Slot(30, 550, slot_size, slot_size),
-                   Slot(180, 550, slot_size, slot_size),
-                   Slot(330, 550, slot_size, slot_size)]
-
-    equipments_list = []
+    equipment_list = []
     with open('user_backpack.txt', 'r') as file1:
         lines = file1.readlines()
         for line in lines:
             user_backpack = line.split(", ")
             if user_backpack[0] == username:
-                equipments_list = user_backpack[2].split('/')
-                #print(equipments_list)
+                equipment_list = user_backpack[2].split('/')
+                print(equipment_list)
                 break
 
-    items_list = []
-    equips_list= []
-    equip_list = equip.split('/')  
-    for equipments in equipments_list:
-        if equipments in equip_list:
-            equips_list.append(equipments)
-        else:
-            items_list.append(equipments)
-
-
     items = []
-    equips = []
     with open('equipment_details.txt', 'r') as file2:
         lines = file2.readlines()
         for line in lines:
             item_details = line.split(", ")
-            if item_details[0] in items_list:
+            if item_details[0] in equipment_list:
                 item_graphic = (f'{item_details[1]}')
                 item_info = (f'{item_details[2]}\n{item_details[3]}')
                 item = Item(item_graphic, item_info, 0.65)
                 items.append(item)
-
-            if item_details[0] in equips_list:
-                equip_graphic = (f'{item_details[1]}')
-                equip_info = (f'{item_details[2]}\n{item_details[3]}')
-                equip = Item(equip_graphic, equip_info, 0.65)
-                equips.append(equip)
-
-    weapon = ['axe', 'hammer', 'sword']
-    shield = ['shield1', 'shield2', 'shield3']
-    helmet = ['helmet1', 'helmet2', 'helmet3']
-    armor = ['armor1', 'armor2', 'armor3']
-    shoe = ['shoe1', 'shoe2', 'shoe3']
-    equip_stats = [0,0,0,0,0]
-    for equipments in equip_list:
-        if equipments in weapon:
-            equip_stats[0] = 1
-        if equipments in shield:
-            equip_stats[1] = 1
-        if equipments in helmet:
-            equip_stats[2] = 1
-        if equipments in armor:
-            equip_stats[3] = 1
-        if equipments in shoe:
-            equip_stats[4] = 1
+                
+            #items = [Item('Sword', 'graphic/sword.png', 'Sword\nAttack +30', 0.65),
+            #Item('Shield', 'graphic/shield.png', 'Wood Shield\nDefence +5', 0.65),
+            #Item('Helmet', 'graphic/helmet.png', 'Leather Helmet\nDefence +5', 0.65),
+            #Item('Armor', 'graphic/armor.png', 'Leather Armor\nDefence +5', 0.65),
+            #Item('Shoes', 'graphic/noob leg.png', 'Leather Shoes\nSpeed +2', 0.65)
+            #]
 
     for i, item in enumerate(items):
         if i <= len(backpack_slots):
             backpack_slots[i].item = item
 
-    for n, equip in enumerate(equips):
-        if n <= len(equip_slots):
-            equip_slots[n].item = equip
+    #for i,item in enumerate(equips):
 
     while True:
 
@@ -2791,11 +2257,9 @@ def backpack(username, lvl, coin, pull, chicky, equip, stats):
                         selected_item.rect.x = pos_mouse[0] + offset_x
                         selected_item.rect.y = pos_mouse[1] + offset_y
                         slot.item = None
-                        if slot.item == None:
-                            items_list.remove(selected_item)
                         break
 
-                for slot in equip_slots:
+                for slot in list(equip_slots.values()):
                     if slot.rect.collidepoint(pos_mouse) and slot.item:
                         selected_item = slot.item
                         offset_x = slot.rect.x - pos_mouse[0]
@@ -2803,34 +2267,7 @@ def backpack(username, lvl, coin, pull, chicky, equip, stats):
                         selected_item.rect.x = pos_mouse[0] + offset_x
                         selected_item.rect.y = pos_mouse[1] + offset_y
                         slot.item = None
-
-                        if slot.item == None:
-                            if selected_item in weapon:
-                                equip_stats[0] = 0
-                                equip_list.remove(selected_item)
-                            elif selected_item in shield:
-                                equip_stats[1] = 0
-                                equip_list.remove(selected_item)
-                            elif selected_item in shield:
-                                equip_stats[2] = 0
-                                equip_list.remove(selected_item)
-                            elif selected_item in shield:
-                                equip_stats[3] = 0
-                                equip_list.remove(selected_item)
-                            elif selected_item in shield:
-                                equip_stats[4] = 0
-                                equip_list.remove(selected_item)
                         break
-
-                #for slot in list(equip_slots.values()):
-                    #if slot.rect.collidepoint(pos_mouse) and slot.item:
-                        #selected_item = slot.item
-                        #offset_x = slot.rect.x - pos_mouse[0]
-                        #offset_y = slot.rect.y - pos_mouse[1]
-                        #selected_item.rect.x = pos_mouse[0] + offset_x
-                        #selected_item.rect.y = pos_mouse[1] + offset_y
-                        #slot.item = None
-                        #break
                         #if slot.item == None:
                             #with open('user_details.txt', 'r') as file1:
                                 #lines = file1.readlines()
@@ -2858,13 +2295,7 @@ def backpack(username, lvl, coin, pull, chicky, equip, stats):
 
             elif event.type == pygame.MOUSEBUTTONUP:
                 if selected_item:
-                    for slot in backpack_slots:
-                        if (slot.rect.collidepoint(pos_mouse)) and (slot.item is None):
-                            slot.item = selected_item
-                            selected_item = None
-                            offset_x, offset_y = None, None
-                            break
-                    for slot in equip_slots:
+                    for slot in backpack_slots + list(equip_slots.values()):
                         if (slot.rect.collidepoint(pos_mouse)) and (slot.item is None):
                             slot.item = selected_item
                             selected_item = None
@@ -2878,36 +2309,25 @@ def backpack(username, lvl, coin, pull, chicky, equip, stats):
                                 offset_x, offset_y = None, None
                                 break
 
-                #if selected_item:
-                    #for slot in backpack_slots + list(equip_slots.values()):
-                        #if (slot.rect.collidepoint(pos_mouse)) and (slot.item is None):
-                            #slot.item = selected_item
-                            #selected_item = None
-                            #offset_x, offset_y = None, None
-                            #break
-                    #if selected_item:
-                        #for slot in backpack_slots:
-                            #if slot.item is None:
-                                #slot.item = selected_item
-                                #selected_item = None
-                                #offset_x, offset_y = None, None
-                                #break
-
         for slot in backpack_slots:
             slot.draw(screen)
 
-        for slot in equip_slots:
+        for slot in equip_slots.values():
             slot.draw(screen)
 
         if selected_item == None:
             Hp,Def,Atk,Spd,Mag = stats.split('/')
-            default = Info(50, 135, (f'Hp={Hp}\nDef={Def}\nAtk={Atk}\nSpd={Spd}'))
-            default.draw_info(screen)
+            default1 = Info(50, 135, (f'Hp={Hp}\nDef={Def}'))
+            default2 = Info(200, 135, (f'Atk={Atk}\nSpd={Spd}'))
+            default1.draw_info(screen)
+            default2.draw_info(screen)
         else:
             screen.blit(selected_item.image, selected_item.rect.topleft)
             Hp,Def,Atk,Spd,Mag = stats.split('/')
-            default = Info(50, 135, (f'Hp={Hp}\nDef={Def}\nAtk={Atk}\nSpd={Spd}'))
-            default.draw_info(screen)
+            default1 = Info(50, 135, (f'Hp={Hp}\nDef={Def}'))
+            default2 = Info(200, 135, (f'Atk={Atk}\nSpd={Spd}'))
+            default1.draw_info(screen)
+            default2.draw_info(screen)
             info = Info(50, 330, selected_item.info)
             info.draw_info(screen)
 
@@ -2918,157 +2338,6 @@ def backpack(username, lvl, coin, pull, chicky, equip, stats):
 
 
 def items(username, lvl, coin, times, itemget, pull, c, equip, stats):
-
-    if times == 1:
-            if itemget == 'kitty':
-                chicky = str('kitty')
-                update_chicky(username, chicky)
-
-            elif itemget == 'tanker':
-                chicky = str('tanker')
-                update_chicky(username, chicky)
-
-            elif itemget == 'magnet':
-                chicky = str('magnet')
-                update_chicky(username, chicky)
-
-            elif itemget == 'speedy':
-                chicky = str('speedy')
-                update_chicky(username, chicky)
-
-            elif itemget == 'worrier':
-                chicky = str('worrier')
-                update_chicky(username, chicky)
-
-            else:
-                coinget = str(itemget)
-                coinsget, ncoin = check_coinget(username, coin, coinget)
-                coinsget, ncoin = int(coinsget), int(ncoin)
-
-    else:
-        item1,item2,item3,item4,item5 = itemget.split(',')
-        if item1 == 'kitty':
-            chicky = str('kitty')
-            update_chicky(username, chicky)
-        elif item1 == 'tanker':
-            chicky = str('tanker')
-            update_chicky(username, chicky)
-
-        elif item1 == 'magnet':
-            chicky = str('magnet')
-            update_chicky(username, chicky)
-
-        elif item1 == 'speedy':
-            chicky = str('speedy')
-            update_chicky(username, chicky)
-
-        elif item1 == 'worrier':
-            chicky = str('worrier')
-            update_chicky(username, chicky)
-
-        else:
-            coinget = str(item1)
-            coinsget, ncoin = check_coinget(username, coin, coinget)
-            coinsget, coin = int(coinsget), int(ncoin)
-
-        if item2 == 'kitty':
-            chicky = str('kitty')
-            update_chicky(username, chicky)
-
-        elif item2 == 'tanker':
-            chicky = str('tanker')
-            update_chicky(username, chicky)
-
-        elif item2 == 'magnet':
-            chicky = str('magnet')
-            update_chicky(username, chicky)
-
-        elif item2 == 'speedy':
-            chicky = str('speedy')
-            update_chicky(username, chicky)
-
-        elif item2 == 'worrier':
-            chicky = str('worrier')
-            update_chicky(username, chicky)
-
-        else:
-            coinget = str(item2)
-            coinsget, ncoin = check_coinget(username, coin, coinget)
-            coinsget, coin = int(coinsget), int(ncoin)
-
-        if item3 == 'kitty':
-            chicky = str('kitty')
-            update_chicky(username, chicky)
-
-        elif item3 == 'tanker':
-            chicky = str('tanker')
-            update_chicky(username, chicky)
-
-        elif item3 == 'magnet':
-            chicky = str('magnet')
-            update_chicky(username, chicky)
-
-        elif item3 == 'speedy':
-            chicky = str('speedy')
-            update_chicky(username, chicky)
-
-        elif item3 == 'worrier':
-            chicky = str('worrier')
-            update_chicky(username, chicky)
-
-        else:
-            coinget = str(item3)
-            coinsget, ncoin = check_coinget(username, coin, coinget)
-            coinsget, coin = int(coinsget), int(ncoin)
-
-        if item4 == 'kitty':
-            chicky = str('kitty')
-            update_chicky(username, chicky)
-
-        elif item4 == 'tanker':
-            chicky = str('tanker')
-            update_chicky(username, chicky)
-
-        elif item4 == 'magnet':
-            chicky = str('magnet')
-            update_chicky(username, chicky)
-
-        elif item4 == 'speedy':
-            chicky = str('speedy')
-            update_chicky(username, chicky)
-
-        elif item4 == 'worrier':
-            chicky = str('worrier')
-            update_chicky(username, chicky)
-
-        else:
-            coinget = str(item4)
-            coinsget, ncoin = check_coinget(username, coin, coinget)
-            coinsget, coin = int(coinsget), int(ncoin)
-        
-        if item5 == 'kitty':
-            chicky = str('kitty')
-            update_chicky(username, chicky)
-
-        elif item5 == 'tanker':
-            chicky = str('tanker')
-            update_chicky(username, chicky)
-
-        elif item5 == 'magnet':
-            chicky = str('magnet')
-            update_chicky(username, chicky)
-
-        elif item5 == 'speedy':
-            chicky = str('speedy')
-            update_chicky(username, chicky)
-
-        elif item5 == 'worrier':
-            chicky = str('worrier')
-            update_chicky(username, chicky)
-        else:
-            coinget = str(item5)
-            coinsget, ncoin = check_coinget(username, coin, coinget)
-            coinsget, coin = int(coinsget), int(ncoin)
 
     while True:
         pygame.display.set_caption('Chicky Simulator - Items Get')
@@ -3084,175 +2353,216 @@ def items(username, lvl, coin, times, itemget, pull, c, equip, stats):
         item_surface_rect = item_surface.get_rect(center=(width/2,350))
         screen.blit(item_surface, item_surface_rect)
 
-        back_button = Button('graphic/button2.png', 450, 580, 0.25, "BACK")
+        back_button = Button('graphic/button2.png', 450, 580, 0.3, "BACK")
         back_button.draw(screen)
 
         pos_mouse = pygame.mouse.get_pos()
 
         if times == 1:
             if itemget == 'kitty':
+                chicky = str('kitty')
+                update_chicky(username, chicky)
                 kitty = Lock('graphic/miaoji.png', width/2, 350, 0.18)
                 kitty.draw(screen)
 
             elif itemget == 'tanker':
+                chicky = str('tanker')
+                update_chicky(username, chicky)
                 tanker = Lock('graphic/tank chic.png', width/2, 350, 0.18)
                 tanker.draw(screen)
 
             elif itemget == 'magnet':
+                chicky = str('magnet')
+                update_chicky(username, chicky)
                 magnet = Lock('graphic/magnetchic.png', width/2, 350, 0.18)
                 magnet.draw(screen)
 
             elif itemget == 'speedy':
+                chicky = str('speedy')
+                update_chicky(username, chicky)
                 speedy = Lock('graphic/speedychic.png', width/2, 350, 0.18)
                 speedy.draw(screen)
 
             elif itemget == 'worrier':
+                chicky = str('worrier')
+                update_chicky(username, chicky)
                 worrier = Lock('graphic/ninjachic.png', width/2, 350, 0.18)
                 worrier.draw(screen)
 
             else:
                 coins = Lock('graphic/itemcoin.png', width/2, 350, 1.5)
                 coins.draw(screen)
-                coinget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Coin x{coinsget}', True, 'black')
-                coinget_text_rect = coinget_text.get_rect(center = (width/2,420))
-                screen.blit(coinget_text, coinget_text_rect)
 
         else:
             item1,item2,item3,item4,item5 = itemget.split(',')
             if item1 == 'kitty':
+                chicky = str('kitty')
+                update_chicky(username, chicky)
                 kitty = Lock('graphic/miaoji.png', 200, 350, 0.18)
                 kitty.draw(screen)
 
             elif item1 == 'tanker':
+                chicky = str('tanker')
+                update_chicky(username, chicky)
                 tanker = Lock('graphic/tank chic.png', 200, 350, 0.18)
                 tanker.draw(screen)
 
             elif item1 == 'magnet':
+                chicky = str('magnet')
+                update_chicky(username, chicky)
                 magnet = Lock('graphic/magnetchic.png', 200, 350, 0.18)
                 magnet.draw(screen)
 
             elif item1 == 'speedy':
+                chicky = str('speedy')
+                update_chicky(username, chicky)
                 speedy = Lock('graphic/speedychic.png', 200, 350, 0.18)
                 speedy.draw(screen)
 
             elif item1 == 'worrier':
+                chicky = str('worrier')
+                update_chicky(username, chicky)
                 worrier = Lock('graphic/ninjachic.png', 200, 350, 0.18)
                 worrier.draw(screen)
 
             else:
                 coins = Lock('graphic/itemcoin.png', 200, 350, 1.5)
                 coins.draw(screen)
-                coinget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Coin x{coinsget}', True, 'black')
-                coinget_text_rect = coinget_text.get_rect(center = (200,420))
-                screen.blit(coinget_text, coinget_text_rect)
 
             if item2 == 'kitty':
+                chicky = str('kitty')
+                update_chicky(username, chicky)
                 kitty = Lock('graphic/miaoji.png', 325, 350, 0.18)
                 kitty.draw(screen)
 
             elif item2 == 'tanker':
+                chicky = str('tanker')
+                update_chicky(username, chicky)
                 tanker = Lock('graphic/tank chic.png', 325, 350, 0.18)
                 tanker.draw(screen)
 
             elif item2 == 'magnet':
+                chicky = str('magnet')
+                update_chicky(username, chicky)
                 magnet = Lock('graphic/magnetchic.png', 325, 350, 0.18)
                 magnet.draw(screen)
 
             elif item2 == 'speedy':
+                chicky = str('speedy')
+                update_chicky(username, chicky)
                 speedy = Lock('graphic/speedychic.png', 325, 350, 0.18)
                 speedy.draw(screen)
 
             elif item2 == 'worrier':
+                chicky = str('worrier')
+                update_chicky(username, chicky)
                 worrier = Lock('graphic/ninjachic.png', 325, 350, 0.18)
                 worrier.draw(screen)
 
             else:
                 coins = Lock('graphic/itemcoin.png', 325, 350, 1.5)
                 coins.draw(screen)
-                coinget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Coin x{coinsget}', True, 'black')
-                coinget_text_rect = coinget_text.get_rect(center = (325,420))
-                screen.blit(coinget_text, coinget_text_rect)
 
             if item3 == 'kitty':
+                chicky = str('kitty')
+                update_chicky(username, chicky)
                 kitty = Lock('graphic/miaoji.png', width/2, 350, 0.18)
                 kitty.draw(screen)
 
             elif item3 == 'tanker':
+                chicky = str('tanker')
+                update_chicky(username, chicky)
                 tanker = Lock('graphic/tank chic.png', width/2, 350, 0.18)
                 tanker.draw(screen)
 
             elif item3 == 'magnet':
+                chicky = str('magnet')
+                update_chicky(username, chicky)
                 magnet = Lock('graphic/magnetchic.png', width/2, 350, 0.18)
                 magnet.draw(screen)
 
             elif item3 == 'speedy':
+                chicky = str('speedy')
+                update_chicky(username, chicky)
                 speedy = Lock('graphic/speedychic.png', width/2, 350, 0.18)
                 speedy.draw(screen)
 
             elif item3 == 'worrier':
+                chicky = str('worrier')
+                update_chicky(username, chicky)
                 worrier = Lock('graphic/ninjachic.png', width/2, 350, 0.18)
                 worrier.draw(screen)
 
             else:
                 coins = Lock('graphic/itemcoin.png', width/2, 350, 1.5)
                 coins.draw(screen)
-                coinget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Coin x{coinsget}', True, 'black')
-                coinget_text_rect = coinget_text.get_rect(center = (width/2,420))
-                screen.blit(coinget_text, coinget_text_rect)
 
             if item4 == 'kitty':
+                chicky = str('kitty')
+                update_chicky(username, chicky)
                 kitty = Lock('graphic/miaoji.png', 575, 350, 0.18)
                 kitty.draw(screen)
 
             elif item4 == 'tanker':
+                chicky = str('tanker')
+                update_chicky(username, chicky)
                 tanker = Lock('graphic/tank chic.png', 575, 350, 0.18)
                 tanker.draw(screen)
 
             elif item4 == 'magnet':
+                chicky = str('magnet')
+                update_chicky(username, chicky)
                 magnet = Lock('graphic/magnetchic.png', 575, 350, 0.18)
                 magnet.draw(screen)
 
             elif item4 == 'speedy':
+                chicky = str('speedy')
+                update_chicky(username, chicky)
                 speedy = Lock('graphic/speedychic.png', 575, 350, 0.18)
                 speedy.draw(screen)
 
             elif item4 == 'worrier':
+                chicky = str('worrier')
+                update_chicky(username, chicky)
                 worrier = Lock('graphic/ninjachic.png', 575, 350, 0.18)
                 worrier.draw(screen)
 
             else:
                 coins = Lock('graphic/itemcoin.png', 575, 350, 1.5)
                 coins.draw(screen)
-                coinget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Coin x{coinsget}', True, 'black')
-                coinget_text_rect = coinget_text.get_rect(center = (575,420))
-                screen.blit(coinget_text, coinget_text_rect)
             
             if item5 == 'kitty':
+                chicky = str('kitty')
+                update_chicky(username, chicky)
                 kitty = Lock('graphic/miaoji.png', 700, 350, 0.18)
                 kitty.draw(screen)
 
             elif item5 == 'tanker':
+                chicky = str('tanker')
+                update_chicky(username, chicky)
                 tanker = Lock('graphic/tank chic.png', 700, 350, 0.18)
                 tanker.draw(screen)
 
             elif item5 == 'magnet':
+                chicky = str('magnet')
+                update_chicky(username, chicky)
                 magnet = Lock('graphic/magnetchic.png', 700, 350, 0.18)
                 magnet.draw(screen)
 
             elif item5 == 'speedy':
+                chicky = str('speedy')
+                update_chicky(username, chicky)
                 speedy = Lock('graphic/speedychic.png', 700, 350, 0.18)
                 speedy.draw(screen)
 
             elif item5 == 'worrier':
+                chicky = str('worrier')
+                update_chicky(username, chicky)
                 worrier = Lock('graphic/ninjachic.png', 700, 350, 0.18)
                 worrier.draw(screen)
-
             else:
                 coins = Lock('graphic/itemcoin.png', 700, 350, 1.5)
                 coins.draw(screen)
-                coinget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Coin x{coinsget}', True, 'black')
-                coinget_text_rect = coinget_text.get_rect(center = (700,420))
-                screen.blit(coinget_text, coinget_text_rect)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -3261,7 +2571,7 @@ def items(username, lvl, coin, times, itemget, pull, c, equip, stats):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.check_input(pos_mouse):
-                    wish(username, lvl, ncoin, pull, c, equip, stats)
+                    wish(username, lvl, coin, pull, c, equip, stats)
 
             Manager.process_events(event)
 
@@ -3375,24 +2685,6 @@ def shooting_stars(username, lvl, coin, times, itemget, pull, c, equip, stats):
                 items(username, lvl, coin, times, itemget, pull, c, equip, stats)
 
         pygame.display.update()
-
-
-def ohno(username, lvl, coin, pull, c, equip, stats) :
-
-    pygame.display.set_caption('Chicky Simulator - Wishes')
-    screen.blit(background_image,(0,0))
-    screen.blit(font.render('You do not have enough coin.',True,'white'),(180,300))
-    screen.blit(font.render('Click again to go back.',True,'white'),(230,350))
-    while True :
-        for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                wish(username, lvl, coin, pull, c, equip, stats)
-
-            if event.type == pygame.quit:
-                pygame.quit()
-                sys.exit()
-
-        pygame.display.flip()
 
 
 def wish(username, lvl, coin, pull, c, equip, stats):
@@ -3555,7 +2847,7 @@ def wish(username, lvl, coin, pull, c, equip, stats):
                 'coin45','coin45','coin45','coin45',
                 'coin50','coin50','coin50',
 
-                'coin90', 'kitty','tanker','worrier','speedy','magnet')
+                'coin90','kitty','tanker','worrier','speedy','magnet')
         
         pity = ('coin10','coin10','coin10',
                 'coin15','coin15','coin15','coin15',
@@ -3614,7 +2906,7 @@ def wish(username, lvl, coin, pull, c, equip, stats):
                         update_coin(username, coin)
                         shooting_stars(username, lvl, coin, times, itemget, pull, c, equip, stats)
                     else:
-                        ohno(username, lvl, coin, pull, c, equip, stats)
+                        break
 
                 if five_pull_button.check_input(pos_mouse):
                     if coin >= 500:
@@ -3646,7 +2938,7 @@ def wish(username, lvl, coin, pull, c, equip, stats):
                         update_coin(username, coin)
                         shooting_stars(username, lvl, coin, times, itemsget, pull, c, equip, stats)
                     else:
-                        ohno(username, lvl, coin, pull, c, equip, stats)
+                        break
 
             Manager.process_events(event)
 
@@ -3872,6 +3164,7 @@ def choose_level(lvl, username, coin, pull, chicky, equip, stats):
 
 def lobby(username, lvl, coin, pull, chicky, equip, stats):
 
+
     while True:
 
         #screen display / setup
@@ -3919,7 +3212,7 @@ def lobby(username, lvl, coin, pull, chicky, equip, stats):
                 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button.check_input(pos_mouse):
-                    choose_level(username, lvl, coin, pull, chicky, equip, stats)  
+                    chick(username, lvl, coin, pull, chicky, equip, stats)  
 
                 if rank_button.check_input(pos_mouse):
                     ranking(username, lvl, coin, pull, chicky, equip, stats)
@@ -3936,9 +3229,6 @@ def lobby(username, lvl, coin, pull, chicky, equip, stats):
                 if backpack_button.check_input(pos_mouse):
                     backpack(username, lvl, coin, pull, chicky, equip, stats)
 
-                if chicky_button.check_input(pos_mouse):
-                    equip_chick(username, lvl, coin, pull, chicky, equip, stats)
-
                 if back_button.check_input(pos_mouse):
                     log_or_reg()
 
@@ -3953,8 +3243,6 @@ def lobby(username, lvl, coin, pull, chicky, equip, stats):
 
 
 def check_default(username):
-    Hp, Def, Atk, Cd, Mag,ctype = 0, 0, 0, 0, 0,0  # Default initialization
-    
     with open('user_details.txt', 'r') as file1:
         lines = file1.readlines()
         for line in lines:
@@ -3963,54 +3251,42 @@ def check_default(username):
                 chicky = user_default[6]
                 if chicky == 'normal':
                     chicky_graphic = 'graphic/chicky.png'
-                    Hp, Def, Atk, Cd, Mag,ctype= 100, 0, 10, 5000, 0, 1
+                    Hp, Def, Atk, Spd, Mag = 100, 0, 10, 10, 0
                     break
                 elif chicky == 'kitty':
                     chicky_graphic = 'graphic/miaoji.png'
-                    Hp, Def, Atk, Cd, Mag,ctype = 150, 0, 10, 5000, 0,2
+                    Hp, Def, Atk, Spd, Mag = 150, 0, 10, 10, 0
                     break
                 elif chicky == 'worrier':
                     chicky_graphic = 'graphic/ninjachic.png'
-                    Hp, Def, Atk, Cd, Mag,ctype = 75, 0, 20, 5000, 0,3
+                    Hp, Def, Atk, Spd, Mag = 75, 0, 20, 10, 0
                     break
                 elif chicky == 'magnet':
                     chicky_graphic = 'graphic/magnetchic.png'
-                    Hp, Def, Atk, Cd, Mag,ctype= 100, 0, 10, 5000, 1,4
+                    Hp, Def, Atk, Spd, Mag= 100, 0, 10, 10, 1
                     break
                 elif chicky == 'speedy':
                     chicky_graphic = 'graphic/speedychic.png'
-                    Hp, Def, Atk, Cd, Mag ,ctype= 75, 0, 10, 2500, 0,5
+                    Hp, Def, Atk, Spd, Mag = 75, 0, 10, 20, 0
                     break
                 elif chicky == 'tanker':
                     chicky_graphic = 'graphic/tank chic.png'
-                    Hp, Def, Atk, Cd, Mag ,ctype= 200, 20, 10, 10000, 0,6
+                    Hp, Def, Atk, Spd, Mag = 200, 0, 10, 5, 0
                     break
 
-    with open('user_details.txt', 'r') as file2:
-        lines = file2.readlines()
-        for line in lines:
-            user_default = line.strip().split(", ")
-            if user_default[0] == username:
                 equip_list = user_default[7].split('/')
+                with open('equipment_details.txt', 'r') as file2:
+                    lines = file2.readlines()
+                    for line in lines:
+                        item_details = line.split(", ")
+                        if item_details[0] in equip_list:
+                            a, d, s = item_details[4].split('/')
+                            Atk += a
+                            Def += d
+                            Spd += s
 
-    with open('equipment_details.txt', 'r') as file3:
-        lines = file3.readlines()
-        for line in lines:
-            item_details = line.split(", ")
-            for equipments in equip_list:
-                if item_details[0] == equipments:
-                    a, d, s = item_details[4].split('/')
-                    Atk += int(a)
-                    Def += int(d)
-                    Cd += int(s)
-
-    stats = str(f'{Hp}/{Def}/{Atk}/{Cd}/{Mag}/{ctype}')
-    #equip_str = '/'.join(equip_list)
-    #print(str(equip_str))
-    #print(chicky)
-    # print(stats)
-    return stats 
-    
+    stats = str(f'{Hp}/{Def}/{Atk}/{Spd}/{Mag}')
+    return stats
 
 
 def read_userinput(username, password):
@@ -4117,24 +3393,20 @@ def save_userinput(username, password):
             pos_mouse = pygame.mouse.get_pos()
 
         else:
-            file1 = open('user_details.txt', 'a')
-            file1.write(f'{username}, {password}, 1, 10000, 0, 0, normal, no/' + '\n')
+            file = open('user_details.txt', 'a')
+            file.write(f'{username}, {password}, 1, 10000, 0, 0, normal, no' + '\n')
             # username, password, level, time, coin, pull, chicky, equip
-            file1.close()
+            file.close()
 
             file2 = open('user_backpack.txt', 'a')
-            file2.write(f'{username}, normal/0, no/, no' + '\n')
+            file2.write(f'{username}, normal/0, no')
             file2.close()
-
-            file3 = open('user_achievement.txt', 'a')
-            file3.write(f'{username}, 0/0/0/0/0/0, 0/0/0/0/0/0, 0/0/0/0/0/0' + '\n')
-            file3.close()
 
             lvl = 1
             coin = 0
             pull = 0
             chicky = 'normal'
-            equip = 'no/'
+            equip = 'no'
             stats = check_default(username)
             return lvl, coin, pull, chicky, equip, stats
         
@@ -4273,8 +3545,8 @@ def register():
 
             if event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED:
                 if '#username' in username_input.get_object_ids() and '#password' in password_input.get_object_ids():
-                    lvl, coin, pull, chicky, equip, stats = save_userinput(username_input.text, password_input.text) # link to later use
-                    welcome_user(username_input.text, int(lvl), int(coin), int(pull), chicky, equip, stats)
+                    lvl, coin, pull = save_userinput(username_input.text, password_input.text) # link to later use
+                    welcome_user(username_input.text, int(lvl), int(coin), int(pull))
             
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.check_input(pos_mouse):
@@ -5168,9 +4440,9 @@ def equipment(username, lvl, coin, pull, chicky, equip, stats) :
                     equipment2(username, lvl, coin, pull, chicky, equip, stats)
 
         if buy :
-            bought2(username, lvl, coin, pull, chicky, equip, stats)
+            bought2(username, lvl, coin, pull)
         elif no :
-            no_money2(username, lvl, coin, pull, chicky, equip, stats)
+            no_money2(username, lvl, coin, pull)
 
         pygame.display.flip()
 
@@ -5519,7 +4791,7 @@ def dunno1_lobby(username, lvl, coin, pull, chicky, equip, stats) :
     sys.exit()
 
 
-#def collection(username, lvl, coin, pull, chicky, equip, stats) :
+def collection(username, lvl, coin, pull, chicky, equip, stats) :
     ##puo puo did this
     on = True
     buy = False
