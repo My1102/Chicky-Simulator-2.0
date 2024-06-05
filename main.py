@@ -306,7 +306,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
     
 
     class chicky():
-        def __init__(self, x, y, Hp, Def,Atk,Cd,Mag,ctype):
+        def __init__(self, x, y, Hp, Def,Atk,Cd,Mag,c):
             
             self.animation_list = []
             self.index = 0
@@ -314,12 +314,12 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             self.action = 0 
             self.alive = True
             self.update_time = pygame.time.get_ticks()
-            self.ctype = ctype
+            self.c = c
 
             # Walk = 0
             alist = []
             for num in range(1, 6):
-                img = pygame.image.load(f'graphic/{ctype}/walk/{num}.png')
+                img = pygame.image.load(f'graphic/{c}/walk/{num}.png')
                 img = pygame.transform.scale(img, (35, 35))
                 alist.append(img)
             self.animation_list.append(alist)
@@ -327,7 +327,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             # Attack = 1
             alist = []
             for num in range(1, 6):
-                img = pygame.image.load(f'graphic/{ctype}/attack/{num}.png')
+                img = pygame.image.load(f'graphic/{c}/attack/{num}.png')
                 img = pygame.transform.scale(img, (35, 35))
                 alist.append(img)
             self.animation_list.append(alist)
@@ -335,7 +335,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             # hurt =2
             alist = []
             for num in range(1, 6):
-                img = pygame.image.load(f'graphic/{ctype}/hurt/{num}.png')
+                img = pygame.image.load(f'graphic/{c}/hurt/{num}.png')
                 img = pygame.transform.scale(img, (35, 35))
                 alist.append(img)
             self.animation_list.append(alist)
@@ -700,8 +700,8 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             self.rect.x = x
             self.rect.y = y
 
-    Hp, Def, Atk, Cd, Mag,ctype = map(int, stats.split('/'))
-    Chicky = chicky(35,35,Hp, Def, Atk, Cd, Mag,ctype)
+    Hp, Def, Atk, Cd, Mag = map(int, stats.split('/'))
+    Chicky = chicky(35,35,Hp, Def, Atk, Cd, Mag,c)
     
     
     
@@ -770,7 +770,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             # if restart_button.draw(screen):
             world_data = []
             world = reset_level(lvl)
-            Chicky = chicky(35,35,Hp, Def, Atk, Cd, Mag,ctype)
+            Chicky = chicky(35,35,Hp, Def, Atk, Cd, Mag,c)
             gameover = 0
             
 
@@ -787,7 +787,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
                 #reset level
                 world_data = []
                 world = reset_level(lvl)
-                Chicky = chicky(35,35,Hp, Def, Atk, Cd, Mag,ctype)
+                Chicky = chicky(35,35,Hp, Def, Atk, Cd, Mag,c)
                 gameover = 0
                 update_level(username, lvl)
 
@@ -3912,11 +3912,8 @@ def lobby(username, lvl, coin, pull, chicky, equip, stats):
                 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button.check_input(pos_mouse):
-<<<<<<< HEAD
+
                     mode(username, lvl, coin, pull, chicky, equip, stats)  
-=======
-                    choose_level(username, lvl, coin, pull, chicky, equip, stats)  
->>>>>>> d02773311bcd18cf75a865d7f81daee9c396f529
 
                 if rank_button.check_input(pos_mouse):
                     ranking(username, lvl, coin, pull, chicky, equip, stats)
@@ -3950,7 +3947,7 @@ def lobby(username, lvl, coin, pull, chicky, equip, stats):
 
 
 def check_default(username):
-    Hp, Def, Atk, Cd, Mag,ctype = 0, 0, 0, 0, 0,0  # Default initialization
+    Hp, Def, Atk, Cd, Mag = 0, 0, 0, 0, 0 # Default initialization
     
     with open('user_details.txt', 'r') as file1:
         lines = file1.readlines()
@@ -3960,27 +3957,27 @@ def check_default(username):
                 chicky = user_default[6]
                 if chicky == 'normal':
                     chicky_graphic = 'graphic/chicky.png'
-                    Hp, Def, Atk, Cd, Mag,ctype= 100, 0, 10, 5000, 0, 1
+                    Hp, Def, Atk, Cd, Mag= 100, 0, 10, 5000, 0
                     break
                 elif chicky == 'kitty':
                     chicky_graphic = 'graphic/miaoji.png'
-                    Hp, Def, Atk, Cd, Mag,ctype = 150, 0, 10, 5000, 0,2
+                    Hp, Def, Atk, Cd, Mag = 150, 0, 10, 5000, 0
                     break
                 elif chicky == 'worrier':
                     chicky_graphic = 'graphic/ninjachic.png'
-                    Hp, Def, Atk, Cd, Mag,ctype = 75, 0, 20, 5000, 0,3
+                    Hp, Def, Atk, Cd, Mag = 75, 0, 20, 5000, 0
                     break
                 elif chicky == 'magnet':
                     chicky_graphic = 'graphic/magnetchic.png'
-                    Hp, Def, Atk, Cd, Mag,ctype= 100, 0, 10, 5000, 1,4
+                    Hp, Def, Atk, Cd, Mag= 100, 0, 10, 5000, 1
                     break
                 elif chicky == 'speedy':
                     chicky_graphic = 'graphic/speedychic.png'
-                    Hp, Def, Atk, Cd, Mag ,ctype= 75, 0, 10, 2500, 0,5
+                    Hp, Def, Atk, Cd, Mag = 75, 0, 10, 2500, 0
                     break
                 elif chicky == 'tanker':
                     chicky_graphic = 'graphic/tank chic.png'
-                    Hp, Def, Atk, Cd, Mag ,ctype= 200, 20, 10, 10000, 0,6
+                    Hp, Def, Atk, Cd, Mag = 200, 20, 10, 10000, 0
                     break
 
     with open('user_details.txt', 'r') as file2:
@@ -4001,7 +3998,7 @@ def check_default(username):
                     Def += int(d)
                     Cd += int(s)
 
-    stats = str(f'{Hp}/{Def}/{Atk}/{Cd}/{Mag}/{ctype}')
+    stats = str(f'{Hp}/{Def}/{Atk}/{Cd}/{Mag}')
     #equip_str = '/'.join(equip_list)
     #print(str(equip_str))
     #print(chicky)
@@ -5167,11 +5164,8 @@ def equipment(username, lvl, coin, pull, chicky, equip, stats) :
         if buy :
             bought2(username, lvl, coin, pull, chicky, equip, stats)
         elif no :
-<<<<<<< HEAD
-            no_money2(username, lvl, coin, pull, chicky, equip, statsl)
-=======
             no_money2(username, lvl, coin, pull, chicky, equip, stats)
->>>>>>> 2388d07f753b52674cf41f32ae5a52887cea6711
+
 
         pygame.display.flip()
 
