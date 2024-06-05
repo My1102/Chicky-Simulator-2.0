@@ -1,4 +1,4 @@
-my, 1234, 3, 105, 48970, 0, speedy, axe/shield3/shoe3
+my, 1234, 3, 105, 8000, 0, speedy, axe/shield3/shoe3
 jy, 1q2w3e, 5, 246, 1000, 0, normal, no/
 pl, 1234, 5, 208, 1000, 0, normal, no/
 renliang, 1234, 5, 568, 1000, 0, normal, no/
