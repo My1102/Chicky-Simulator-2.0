@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 my, 1234, 3, 105, 219600, 11, normal, no
 jy, 1q2w3e, 5, 246, 1000, 0, normal, no
 pl, 1234, 5, 208, 1000, 0, normal, no
@@ -15,7 +14,6 @@ my4, 123, 4, 10000, 1000, 0, normal, no
 lhs, LHMM8328, 5, 1270, 1000, 0, normal, no
 Angelyn, 1234, 5, 420, 1000, 0, normal, no
 pog, 1234, 3, 10000, 0, 0, normal, no
-=======
 my, 1234, 3, 105, 48970, 0, speedy, axe/shield3/shoe3
 jy, 1q2w3e, 5, 246, 1000, 0, normal, no/
 pl, 1234, 5, 208, 1000, 0, normal, no/
@@ -27,5 +25,4 @@ kaijian, 1234, 5, 454, 1000, 0, normal, no/
 raziq, 1234, 5, 788, 1000, 0, normal, no/
 lhs, LHMM8328, 5, 1270, 1000, 0, normal, no/
 Angelyn, 1234, 5, 420, 1000, 0, normal, no/
-pog, 1234, 3, 10000, 0, 0, normal, no/
->>>>>>> 2388d07f753b52674cf41f32ae5a52887cea6711
+
