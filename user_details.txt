@@ -1,3 +1,19 @@
+my, 1234, 3, 105, 219600, 11, normal, no
+jy, 1q2w3e, 5, 246, 1000, 0, normal, no
+pl, 1234, 5, 208, 1000, 0, normal, no
+renliang, 1234, 5, 568, 1000, 0, normal, no
+wong, 1234, 5, 179, 1000, 0, normal, no
+cyun, 1234, 5, 109, 1000, 0, normal, no
+yide, 1234, 5, 363, 1000, 0, normal, no
+kaijian, 1234, 5, 454, 1000, 0, normal, no
+raziq, 1234, 5, 788, 1000, 0, normal, no
+my2, 123, 2, 10000, 1000, 0, normal, no
+my3, 123, 3, 10000, 1000, 0, normal, no
+my1, 123, 1, 10000, 1000, 0, normal, no
+my4, 123, 4, 10000, 1000, 0, normal, no
+lhs, LHMM8328, 5, 1270, 1000, 0, normal, no
+Angelyn, 1234, 5, 420, 1000, 0, normal, no
+pog, 1234, 3, 10000, 0, 0, normal, no
 my, 1234, 3, 105, 48970, 0, speedy, axe/shield3/shoe3
 jy, 1q2w3e, 5, 246, 1000, 0, normal, no/
 pl, 1234, 5, 208, 1000, 0, normal, no/
@@ -9,5 +25,4 @@ kaijian, 1234, 5, 454, 1000, 0, normal, no/
 raziq, 1234, 5, 788, 1000, 0, normal, no/
 lhs, LHMM8328, 5, 1270, 1000, 0, normal, no/
 Angelyn, 1234, 5, 420, 1000, 0, normal, no/
-pog, 1234, 3, 10000, 0, 0, speedy, no/
 

@@ -1,12 +1,17 @@
-my, normal/kitty/speedy/worrier, axe/shield3/shoe3/hammer, no
-jy, normal/0, no/, no
-pl, normal/0, no/, no
-renliang, normal/0, no/, no
-wong, normal/0, no/, no
-cyun, normal/0, no/, no
-yide, normal/0, no/, no
-kaijian, normal/0, no/, no
-raziq, normal/0, no/, no
-lhs, normal/0, no/, no
-Angelyn, normal/0, no/, no
-pog, normal/0, no/, no
+my, normal/0, sword/hammer/axe/shield3/shoe3/shield4/shield5/shoe5/armor3/armor4/armor5/shoe4/helmet5/helmet4/helmet3, no
+my, normal/tanker, no
+jy, normal/0, no
+pl, normal/0, no
+renliang, normal/0, no
+wong, normal/0, no
+cyun, normal/0, no
+yide, normal/0, no
+kaijian, normal/0, no
+raziq, normal/0, no
+my2, normal/0, no
+my3, normal/0, no
+my1, normal/0, no
+my4, normal/0, no
+lhs, normal/0, no
+Angelyn, normal/0, no
+pog, normal/0, no
