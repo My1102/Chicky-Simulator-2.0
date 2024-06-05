@@ -1,6 +1,0 @@
-normal,100,10,10
-Tanker,200,10,5
-Worrior,75,20,10
-Kitty,150,10,10
-Speedy,75,10,20
-Magnet,100,10,10
