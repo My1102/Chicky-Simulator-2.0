@@ -25,7 +25,7 @@ class Slot(pygame.sprite.Sprite):
 
 class Info():
     def __init__(self, x, y, info):
-        self.info = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(info, True, 'black')
+        self.info = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 45).render(info, True, 'black')
         self.pos_x = x
         self.pos_y = y
         # self.info_rect = self.info.get_rect(center=(self.pos_x, self.pos_y))
