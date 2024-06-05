@@ -306,7 +306,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
     
 
     class chicky():
-        def __init__(self, x, y, Hp, Def,Atk,Cd,Mag,ctype):
+        def __init__(self, x, y, Hp, Def,Atk,Cd,Mag,c):
             
             self.animation_list = []
             self.index = 0
@@ -314,12 +314,12 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             self.action = 0 
             self.alive = True
             self.update_time = pygame.time.get_ticks()
-            self.ctype = ctype
+            self.c = c
 
             # Walk = 0
             alist = []
             for num in range(1, 6):
-                img = pygame.image.load(f'graphic/{ctype}/walk/{num}.png')
+                img = pygame.image.load(f'graphic/{c}/walk/{num}.png')
                 img = pygame.transform.scale(img, (35, 35))
                 alist.append(img)
             self.animation_list.append(alist)
@@ -327,7 +327,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             # Attack = 1
             alist = []
             for num in range(1, 6):
-                img = pygame.image.load(f'graphic/{ctype}/attack/{num}.png')
+                img = pygame.image.load(f'graphic/{c}/attack/{num}.png')
                 img = pygame.transform.scale(img, (35, 35))
                 alist.append(img)
             self.animation_list.append(alist)
@@ -335,7 +335,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             # hurt =2
             alist = []
             for num in range(1, 6):
-                img = pygame.image.load(f'graphic/{ctype}/hurt/{num}.png')
+                img = pygame.image.load(f'graphic/{c}/hurt/{num}.png')
                 img = pygame.transform.scale(img, (35, 35))
                 alist.append(img)
             self.animation_list.append(alist)
@@ -700,8 +700,8 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             self.rect.x = x
             self.rect.y = y
 
-    Hp, Def, Atk, Cd, Mag,ctype = map(int, stats.split('/'))
-    Chicky = chicky(35,35,Hp, Def, Atk, Cd, Mag,ctype)
+    Hp, Def, Atk, Cd, Mag = map(int, stats.split('/'))
+    Chicky = chicky(35,35,Hp, Def, Atk, Cd, Mag,c)
     
     
     
@@ -770,7 +770,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             # if restart_button.draw(screen):
             world_data = []
             world = reset_level(lvl)
-            Chicky = chicky(35,35,Hp, Def, Atk, Cd, Mag,ctype)
+            Chicky = chicky(35,35,Hp, Def, Atk, Cd, Mag,c)
             gameover = 0
             
 
@@ -787,7 +787,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
                 #reset level
                 world_data = []
                 world = reset_level(lvl)
-                Chicky = chicky(35,35,Hp, Def, Atk, Cd, Mag,ctype)
+                Chicky = chicky(35,35,Hp, Def, Atk, Cd, Mag,c)
                 gameover = 0
                 update_level(username, lvl)
 
@@ -795,9 +795,6 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             if event.type == pygame.QUIT:
                 run = False
         pygame.display.update()
-
-
-
 
 
 def level1(lvl, username, coin, pull, c, equip, stats): # This one easier to read
@@ -4329,7 +4326,7 @@ def check_default(username):
     with open('equipment_details.txt', 'r') as file3:
         lines = file3.readlines()
         for line in lines:
-            item_details = line.split(", ")
+            item_details = line.split(",")
             for equipments in equip_list:
                 if item_details[0] == equipments:
                     a, d, s = item_details[4].split('/')
