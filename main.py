@@ -4298,9 +4298,11 @@ def check_default(username):
                 elif chicky == 'kitty':
                     chicky_graphic = 'graphic/miaoji.png'
                     Hp, Def, Atk, Cd, Mag = 150, 0, 10, 5000, 0
+                    Hp, Def, Atk, Cd, Mag = 150, 0, 10, 5000, 0
                     break
                 elif chicky == 'worrier':
                     chicky_graphic = 'graphic/ninjachic.png'
+                    Hp, Def, Atk, Cd, Mag = 75, 0, 20, 5000, 0
                     Hp, Def, Atk, Cd, Mag = 75, 0, 20, 5000, 0
                     break
                 elif chicky == 'magnet':
@@ -4310,9 +4312,11 @@ def check_default(username):
                 elif chicky == 'speedy':
                     chicky_graphic = 'graphic/speedychic.png'
                     Hp, Def, Atk, Cd, Mag = 75, 0, 10, 2500, 0
+                    Hp, Def, Atk, Cd, Mag = 75, 0, 10, 2500, 0
                     break
                 elif chicky == 'tanker':
                     chicky_graphic = 'graphic/tank chic.png'
+                    Hp, Def, Atk, Cd, Mag = 200, 20, 10, 10000, 0
                     Hp, Def, Atk, Cd, Mag = 200, 20, 10, 10000, 0
                     break
 
@@ -4334,6 +4338,7 @@ def check_default(username):
                     Def += int(d)
                     Cd += int(s)
 
+    stats = str(f'{Hp}/{Def}/{Atk}/{Cd}/{Mag}')
     stats = str(f'{Hp}/{Def}/{Atk}/{Cd}/{Mag}')
     #equip_str = '/'.join(equip_list)
     #print(str(equip_str))
