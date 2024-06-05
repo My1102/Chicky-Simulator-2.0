@@ -3701,29 +3701,28 @@ def ranking(username, lvl, coin, pull, chicky, equip, stats):
         pygame.display.update()
 
 
-def chick(username, lvl, coin, pull, c, equip, stats):
-    # let user pick their character - by my
+def mode(username, lvl, coin, pull, c, equip, stats):
+    # let user pick normal/arcade - by puopuo
 
     while True:
         # screen display / setup
         pygame.display.set_caption('Chicky Simulator - Chicky')
         screen.blit(background_image,(0,0))
 
-        title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('What chick you like?', True, 'white')
+        title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('Choose mode', True, 'white')
         title_text_rect = title_text.get_rect(center = (450,150))
         screen.blit(title_text, title_text_rect)
 
-        chick1_button = Button('graphic/kunchic.png', 150, 350, 0.5, "KunKun")
-        chick1_button.draw(screen)
-
-        chick2_button = Button('graphic/geekchic.png', 450, 350, 0.5, "WeeWee")
-        chick2_button.draw(screen)
-
-        chick3_button = Button('graphic/pinkchic.png', 750, 350, 0.5, "Honeey")
-        chick3_button.draw(screen)
-
-        back_button = Button('graphic/button2.png', 450, 580, 0.35, "BACK")
+        
+        #normal
+        play_button1 = Button('graphic/button2.png', 250, 400, 0.3, "Normal")
+        play_button1.draw(screen)
+        play_button2 = Button('graphic/button2.png', 650, 400, 0.3, "arcade")
+        play_button2.draw(screen)
+        #Back page button#
+        back_button = Button('graphic/botton1.png', 70, 70, 0.6, "<<")
         back_button.draw(screen)
+
 
         pos_mouse = pygame.mouse.get_pos()
 
@@ -3734,17 +3733,11 @@ def chick(username, lvl, coin, pull, c, equip, stats):
                 sys.exit()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if chick1_button.check_input(pos_mouse):
-                    c = 'graphic/kunchic.png' # link to later use
+                if play_button1.check_input(pos_mouse):
                     choose_level(lvl, username, coin, pull, c, equip, stats)
-
-                if chick2_button.check_input(pos_mouse):
-                    c = 'graphic/geekchic.png'
-                    choose_level(lvl, username, coin, pull, c, equip, stats)
-
-                if chick3_button.check_input(pos_mouse):
-                    c = 'graphic/pinkchic.png'
-                    choose_level(lvl, username, coin, pull, c, equip, stats)
+                
+                if play_button2.check_input(pos_mouse):
+                    arcade_lobby(lvl, username, coin, pull, c, equip, stats)
 
                 if back_button.check_input(pos_mouse):
                     lobby(username, lvl, coin, pull, c, equip, stats)
@@ -3859,7 +3852,7 @@ def choose_level(lvl, username, coin, pull, chicky, equip, stats):
                         level5(lvl, username, coin, pull, chicky, equip, stats)
 
                 if back_button.check_input(pos_mouse):
-                    chick(username, lvl, coin, pull, chicky, equip, stats)
+                    mode(username, lvl, coin, pull, chicky, equip, stats)
                 
                 if next_button.check_input(pos_mouse):
                     arcade_lobby(lvl,username , coin, pull, chicky, equip, stats)
@@ -3919,7 +3912,8 @@ def lobby(username, lvl, coin, pull, chicky, equip, stats):
                 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button.check_input(pos_mouse):
-                    choose_level(username, lvl, coin, pull, chicky, equip, stats)  
+
+                    mode(username, lvl, coin, pull, chicky, equip, stats)  
 
                 if rank_button.check_input(pos_mouse):
                     ranking(username, lvl, coin, pull, chicky, equip, stats)
@@ -5172,6 +5166,7 @@ def equipment(username, lvl, coin, pull, chicky, equip, stats) :
         elif no :
             no_money2(username, lvl, coin, pull, chicky, equip, stats)
 
+
         pygame.display.flip()
 
     pygame.quit()
@@ -5416,14 +5411,32 @@ def arcade_lobby(username, lvl, coin, pull, chicky, equip, stats):
         title_text_rect = title_text.get_rect(center = (450,150))
         screen.blit(title_text, title_text_rect)
 
-        #MODE Display#
+        #surface
+        store_surface = pygame.Surface((250,250))
+        store_surface.fill('black')
+        store_surface.set_alpha(150)
+        store_surface_rect = store_surface.get_rect(center=(650,350))
+        screen.blit(store_surface, store_surface_rect)
 
         #BUTTONS
-        play_button1 = Button('graphic/button2.png', 250, 500, 0.2, "PLAY")
+        play_button1 = Button('graphic/button2.png', 250, 550, 0.2, "PLAY")
         play_button1.draw(screen)
-        play_button2 = Button('graphic/button2.png', 650, 500, 0.2, "PLAY")
-        play_button2.draw(screen)
         #########
+
+        #coming soon
+        title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render('Coming Soon', True, 'white')
+        title_text_rect = title_text.get_rect(center = (650,550))
+        screen.blit(title_text, title_text_rect)
+        title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 75).render('?', True, 'white')
+        title_text_rect = title_text.get_rect(center = (650,350))
+        screen.blit(title_text, title_text_rect)
+
+
+        #image
+        snake_image = pygame.image.load('graphic/snake.png')
+        screen.blit(snake_image,(120,225))
+
+
 
         #Back page button#
         back_button = Button('graphic/botton1.png', 70, 70, 0.6, "<<")
@@ -5437,11 +5450,9 @@ def arcade_lobby(username, lvl, coin, pull, chicky, equip, stats):
                 if play_button1.check_input(pos_mouse):
                     snake_lobby(username, lvl, coin, pull, chicky, equip, stats)                                   
                         
-                if play_button2.check_input(pos_mouse):
-                    dunno1_lobby(username, lvl, coin, pull, chicky, equip, stats)
 
                 if back_button.check_input(pos_mouse):
-                    choose_level(username, lvl, coin, pull, chicky, equip, stats)           
+                    mode(username, lvl, coin, pull, chicky, equip, stats)           
 
         pygame.display.flip()
 
@@ -5485,22 +5496,22 @@ def snake_lobby(username, lvl, coin, pull, chicky, equip, stats) :
     sys.exit()
 
 
-def dunno1_lobby(username, lvl, coin, pull, chicky, equip, stats) :
+def crush_lobby(username, lvl, coin, pull, chicky, equip, stats) :
     # puo puo did also this
     on = True
     while on :
         screen.blit(background_image,(0,0))
         pos_mouse = pygame.mouse.get_pos()
-        pygame.display.set_caption('Chicky Simulator - Unnamed yet')
+        pygame.display.set_caption('Chicky Simulator - Coming Soon')
         title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('Unnamed', True, 'white')
-        title_text_rect = title_text.get_rect(center = (450,100))
+        title_text_rect = title_text.get_rect(center = (450,200))
         screen.blit(title_text, title_text_rect)
 
         #buttons#
         back_button = Button('graphic/botton1.png', 50, 35, 0.5, "<<")
         back_button.draw(screen)
-        play_button = Button('graphic/button2.png', 450, 600, 0.3, "START")
-        play_button.draw(screen)
+        # play_button = Button('graphic/button2.png', 450, 600, 0.3, "")
+        # play_button.draw(screen)
 
         #tutorial
 
@@ -5511,6 +5522,8 @@ def dunno1_lobby(username, lvl, coin, pull, chicky, equip, stats) :
             if event.type == pygame.MOUSEBUTTONDOWN :
                 if back_button.check_input(pos_mouse):
                     arcade_lobby(username, lvl, coin, pull, chicky, equip, stats)
+                # if play_button.check_input(pos_mouse):
+                #     crush(username, lvl, coin, pull, chicky, equip, stats)
         
         
         pygame.display.flip()
@@ -5577,6 +5590,7 @@ def dunno1_lobby(username, lvl, coin, pull, chicky, equip, stats) :
 
 
 def axe_info(username, lvl, coin, pull, chicky, equip, stats) :
+    #all info made by puopuo
 
     while True :
 
@@ -5862,6 +5876,7 @@ def armor5_info(username, lvl, coin, pull, chicky, equip, stats) :
 
 
 def collection(username, lvl, coin, pull, chicky, equip, stats):
+    # all collection made by puopuo
     on = True
     armor3 = Button("graphic/noob armor.png",150,205,1,'')
     armor4= Button("graphic/noob armor.png",450,205,1,'')
@@ -6781,66 +6796,162 @@ def collection5(username, lvl, coin, pull, chicky, equip, stats):
 
 
 def snake(username, lvl, coin, pull, chicky, equip, stats) :
+    #puo puo did
 
     width, height = 900, 700
     screen = pygame.display.set_mode((width,height))
     pygame.display.set_caption('Chicky Simulator - Arcade Mode - Chick Game')
+
     background_image = pygame.image.load('graphic/map.jpg')
-    coin_image = pygame.image.load('graphic/manycoin.png')
+    coin_image = pygame.image.load('graphic/coin.png')
+    manycoin_image = pygame.image.load('graphic/manycoin.png')
     coin_image = pygame.transform.scale(coin_image, (50, 50))
+    manycoin_image = pygame.transform.scale(manycoin_image, (50, 50))
     pygame.transform.scale(background_image,(700,700))
+
     font = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100)
     clock = pygame.time.Clock()
-    Manager = pygame_gui.UIManager((width,height))
-    pygame.time.set_timer(pygame.USEREVENT+1, 1000)
-    UI_REFRESH_RATE = clock.tick(60)
-    chick_images = [pygame.image.load('graphic/geekchic.png'),
-    pygame.image.load('graphic/monster2.png'),
-    pygame.image.load('graphic/monster1.png'),
-    pygame.image.load('graphic/monster3.png')]
     ticks = pygame.time.get_ticks()
+    pygame.time.set_timer(pygame.USEREVENT+1, 1000)
 
+    chick_images = [pygame.image.load('graphic/geekchic.png'),pygame.image.load('graphic/monster2.png'),pygame.image.load('graphic/monster1.png'),pygame.image.load('graphic/monster3.png')]
+    
 
     on = True
     time = 0
-    coin = 0
+    coins = 0
+    played = 0
     chick_position = [50, 50]
     chick_speed = 15
-    chick_body =[[30,30]]
+    chick_body =[[50,50]]
     direction = 'RIGHT'
     change_to = direction
-    coin_position = [random.randrange(1,width//35)* 15,random.randrange(1,height//35)* 15]
+    coin_position = [random.randrange(1,width-50),random.randrange(1,height-50)]
     coin_spawn = True
     chick_index = 0
-    # [0,0,0]
-    
+
+
     def game_over(username, lvl, coin, pull, chicky, equip, stats) :
         font = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50)
-        # coin_text = font.render(f"hi", True, (255,255,255))
-        # text_rect = coin_text.get_rect(center = (width//2,height//2))
-        # text_rect.midtop = (width/2,height/4)
-        # screen.blit(coin_text, text_rect)
-        # pygame.display.flip()
 
         on = True
+        
 
         while on :
             screen.blit(background_image,(0,0))
-            screen.blit(font.render(f'Your score is : {coin} ',True,'white'),(280,300))
+            screen.blit(font.render(f'Your score is : {coins} ',True,'white'),(280,300))
             screen.blit(font.render('Click again to go back.',True,'white'),(230,350))
             pygame.display.flip()
-            # pygame.time.wait(5000)
+
+
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    lobby(username, lvl, coin, pull, chicky, equip, stats)
+                    snake_lobby(username, lvl, coin, pull, chicky, equip, stats)
+                    if played >= 1:
+                        with open('progress.txt', 'r') as file:
+                            lines = file.readlines()
 
+                        for i, line in enumerate(lines):
+                            user_progress = line.strip().split(", ")
+                            if user_progress[0] == username:
+                                coin_list = user_progress[1].split('/')
+                                if coin_list[0] == 'no':
+                                    del coin_list[0]
+                                    coin_list.append(f'{coins}')
+                                coin_str = '/'.join(coin_list)
+                                user_progress[2] = str(coin_str)
+                                lines[i] = ', '.join(user_progress) + '\n'
+                                break
+                        with open('progress.txt', 'w') as file:
+                            file.writelines(lines)
+                        return
                 if event.type == pygame.QUIT:
                     on = False
                     sys.exit()
 
+
             pygame.display.flip()
     
+
+    def update_progress(username, lvl, coin, pull, chicky, equip, stats) :
+
+        on = True
+
+        while on :
+            
+            if coins >=20 and coins <=39 :
+                with open('user_score.txt', 'r') as file:
+                    lines = file.readlines()
+
+                for i, line in enumerate(lines):
+                    user_progress = line.strip().split(", ")
+                    if user_progress[0] == username:
+                        coin_list = user_progress[1].split('/')
+                        if coin_list[0] == 'no':
+                            del coin_list[0]
+                            coin_list.append(f'{coins}')
+                        coin_str = '/'.join(coin_list)
+                        user_progress[2] = str(coin_str)
+                        lines[i] = ', '.join(user_progress) + '\n'
+                        break
+                with open('user_score.txt', 'w') as file:
+                    file.writelines(lines)
+                return
+            if coins >= 40 and coins <= 59 :
+                with open('user_score.txt', 'r') as file:
+                    lines = file.readlines()
+
+                for i, line in enumerate(lines):
+                    user_progress = line.strip().split(", ")
+                    if user_progress[0] == username:
+                        coin_list = str(user_progress[1].split('/'))
+                        if coin_list[1] == 'no':
+                            del coin_list[1]
+                            coin_list.append('1')
+                        coin_str = '/'.join(coin_list)
+                        user_progress[2] = str(coin_str)
+                        lines[i] = ', '.join(user_progress) + '\n'
+                        break
+                with open('user_score.txt', 'w') as file:
+                    file.writelines(lines)
+                return
+            if coins >= 60 :
+                with open('user_score.txt', 'r') as file:
+                    lines = file.readlines()
+
+                for i, line in enumerate(lines):
+                    user_progress = line.strip().split(", ")
+                    if user_progress[0] == username:
+                        coin_list = str(user_progress[1].split('/'))
+                        if coin_list[2] == 'no':
+                            del coin_list[2]
+                            coin_list.append('1')
+                        coin_str = '/'.join(coin_list)
+                        user_progress[2] = str(coin_str)
+                        lines[i] = ', '.join(user_progress) + '\n'
+                        break
+
+                with open('user_score.txt', 'w') as file:
+                    file.writelines(lines)
+                return  
+
+    
+
+        with open('user_score.txt', 'w') as file:
+            file.writelines(lines)
+        return
+
+
+
     while on :
+        
+        coin_spawn = True
+        screen.blit(background_image,(0,0))
+        screen.blit(manycoin_image,(650,25))
+        screen.blit(coin_image, pygame.Rect(coin_position[0], coin_position[1], 35, 35))
+
+        
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 on = False
@@ -6854,6 +6965,10 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
                     change_to = 'LEFT'
                 if event.key == pygame.K_d:
                     change_to = 'RIGHT'
+
+
+        
+        #make sure no 'u turn' happens
         if change_to == 'UP' and direction != 'DOWN':
             direction = 'UP'
         if change_to == 'DOWN' and direction != 'UP':
@@ -6864,68 +6979,78 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
             direction = 'RIGHT'
 
         if direction == 'UP':
-            chick_position[1] -= 10
+            chick_position[1] -= 20
         if direction == 'DOWN':
-            chick_position[1] += 10
+            chick_position[1] += 20
         if direction == 'LEFT':
-            chick_position[0] -= 10
+            chick_position[0] -= 20
         if direction == 'RIGHT':
-            chick_position[0] += 10
+            chick_position[0] += 20
 
         chick_body.insert(0, list(chick_position))
 
-        if chick_position[0] == coin_position[0] or chick_position[1] == coin_position[1]:
-            coin += 1
+        chick_rect =  pygame.Rect(chick_position[0], chick_position[1], 50, 50)
+        coin_rect = pygame.Rect(coin_position[0], coin_position[1], 50, 50)
+
+        #coin collision
+        if chick_rect.colliderect(coin_rect):
+            
             coin_spawn = False
+            coins += 2
             chick_index =(chick_index + 1) % len(chick_images)
-            # new_chick = (chick_index + 1) % len(chick_images)
-            # chick_index.insert(0,new_chick)
         else:
             chick_body.pop()
-            # chick_index.pop(0)
             
         if not coin_spawn:
-            coin_position = [random.randrange(1, (width//35)) * 15, random.randrange(1, (height//35)) * 15]
+            coin_position = [random.randrange(1,width-50),random.randrange(1,height-50)]
             
-        coin_spawn = True
-
-        screen.blit(background_image,(0,0))
-
+        #check new added image 
         for index , position in enumerate(chick_body):
-            chick_image = pygame.transform.scale(chick_images[chick_index],(50, 50))
+            if index == 0:
+                chick_image = pygame.transform.scale(chick_images[0], (50,50))
+            else :
+                chick_image = pygame.transform.scale(chick_images[(chick_index + index - 1) % len(chick_images)],(50, 50))
             screen.blit(chick_image,pygame.Rect(position[0],position[1],50,50))
             
-        screen.blit(coin_image, pygame.Rect(coin_position[0], coin_position[1], 35, 35))
-    # [chick_index[index]]
         # Game Over conditions
         #left right
         if chick_position[0] < 0 or chick_position[0] > width-35:
             game_over(username, lvl, coin, pull, chicky, equip, stats)
+            
         #up down
         if chick_position[1] < 0 or chick_position[1] > height-35:
             game_over(username, lvl, coin, pull, chicky, equip, stats)
+            
         
         #timer
         time = 60 - (pygame.time.get_ticks() - ticks) // 1000
-        if time <= 0 :
+        if time <= 50 :
+            played += 1
             game_over(username, lvl, coin, pull, chicky, equip, stats)
+            
 
-        #collision
+
+        #collision with body
         for block in chick_body[1:]:
             if chick_position == block:
                 game_over(username, lvl, coin, pull, chicky, equip, stats)
+                
         
+        
+
         timer_text = font.render(f"{time}", True, (255,255,255))
         text_rect = timer_text.get_rect(center = (width//2,50))
         screen.blit(timer_text, text_rect)
 
-        coin_text = font.render(f"{coin}", True, (255,255,255))
+        coin_text = font.render(f"{coins}", True, (255,255,255))
         text_rect = coin_text.get_rect(center = (750,50))
         screen.blit(coin_text, text_rect)
+
+    
 
         pygame.display.update()
 
         clock.tick(chick_speed)
-    
+
 
 log_or_reg()
