@@ -7024,7 +7024,7 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
         
         #timer
         time = 60 - (pygame.time.get_ticks() - ticks) // 1000
-        if time <= 50 :
+        if time <= 0 :
             played += 1
             game_over(username, lvl, coin, pull, chicky, equip, stats)
             

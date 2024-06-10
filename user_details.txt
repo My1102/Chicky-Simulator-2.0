@@ -3,7 +3,7 @@ jy, 1q2w3e, 5, 246, 1000, 0, normal, no/
 pl, 1234, 5, 208, 1000, 0, normal, no/
 renliang, 1234, 5, 568, 1000, 0, normal, no/
 wong, 1234, 5, 179, 1000, 0, normal, no/
-cyun, 1234, 5, 109, 1000, 0, normal, no/
+cyun, 1234, 3, 109, 0, 10, normal, no/
 yide, 1234, 5, 363, 1000, 0, normal, no/
 kaijian, 1234, 5, 454, 1000, 0, normal, no/
 raziq, 1234, 5, 788, 1000, 0, normal, no/
