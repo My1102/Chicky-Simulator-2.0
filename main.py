@@ -3912,7 +3912,6 @@ def lobby(username, lvl, coin, pull, chicky, equip, stats):
                 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button.check_input(pos_mouse):
-
                     mode(username, lvl, coin, pull, chicky, equip, stats)  
 
                 if rank_button.check_input(pos_mouse):
@@ -5164,6 +5163,7 @@ def equipment(username, lvl, coin, pull, chicky, equip, stats) :
         if buy :
             bought2(username, lvl, coin, pull, chicky, equip, stats)
         elif no :
+
             no_money2(username, lvl, coin, pull, chicky, equip, stats)
 
 
