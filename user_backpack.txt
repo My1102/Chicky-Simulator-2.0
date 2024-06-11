@@ -1,5 +1,4 @@
-my, normal/tanker/kitty/magnet, sword/axe/shield3/shoe3/armor3/armor5/helmet3/helmet5, no
-my, normal/tanker, no, no
+my, normal/magnet/speedy/tanker/worrier/kitty, no, no
 jy, normal/0, no, no
 pl, normal/0, no, no
 renliang, normal/0, no, no
@@ -8,10 +7,6 @@ cyun, normal/0, no, no
 yide, normal/0, no, no
 kaijian, normal/0, no, no
 raziq, normal/0, no, no
-my2, normal/0, no, no
-my3, normal/0, no, no
-my1, normal/0, no, no
-my4, normal/0, no, no
 lhs, normal/0, no, no
 Angelyn, normal/0, no, no
 pog, normal/0, no, no
