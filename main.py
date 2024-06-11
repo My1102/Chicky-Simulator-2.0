@@ -158,7 +158,7 @@ def tutorial2(lvl, username, coin, pull, c, equip, stats):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start_button.check_input(pos_mouse):
-                    leveltest(lvl, username, coin, pull, c, equip, stats)
+                    leveltest(lvl, username, coin, pull, c, equip, stats,level=1)
 
                 if back_button.check_input(pos_mouse):
                     choose_level(lvl, username, coin, pull, c, equip, stats)
@@ -245,7 +245,7 @@ def tutorial3(lvl, username, coin, pull, c, equip, stats):
         pygame.display.update()   
 
 
-def leveltest(lvl, username, coin, pull, c, equip, stats):
+def leveltest(lvl, username, coin, pull, c, equip, stats,level):
     width, height = 900, 700
     screen = pygame.display.set_mode((width,height))
     pygame.display.set_caption('Chicky Simulator')
@@ -265,21 +265,20 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
 
     red = (255,0,0)
     green = (0, 255, 0)
-
+    level = level
     tile_size = 35
     gameover = 0
-    lvl = 1
-    maxlevel = 30
+    
+    maxlevel = 20
+
 
     jy_hp = 30
     my_hp =50
     pl_hp =70
 
-    jy_dmg = 20
-    my_dmg = 15
-    pl_dmg = 10
-
-   
+    jy_dmg = 15
+    my_dmg = 10
+    pl_dmg = 5
     
     username_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((300,320), (300,50)), manager = Manager, object_id = '#username')
     password_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((300,450), (300,50)), manager = Manager, object_id = '#password')
@@ -290,14 +289,16 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
     clock = pygame.time.Clock()
     time_use =[]
 
-    def reset_level(lvl):
+
+
+    def reset_level(level):
         
         jy_group.empty()
         yuen_group.empty()
         puolin_group.empty()
 
-        if path.exists(f'level{lvl}_data'):
-            pickle_in = open(f'level{lvl}_data', 'rb')
+        if path.exists(f'level{level}_data'):
+            pickle_in = open(f'level{level}_data', 'rb')
             world_data = pickle.load(pickle_in)
         world = World(world_data)
 
@@ -315,6 +316,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             self.alive = True
             self.update_time = pygame.time.get_ticks()
             self.c = c
+           
 
             # Walk = 0
             alist = []
@@ -365,7 +367,6 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
                 # Perform attack
                 for yuen in pygame.sprite.spritecollide(self, yuen_group, False):
                     yuen.hp -= self.Atk
-                    print(yuen.hp)
                 for jy in pygame.sprite.spritecollide(self, jy_group, False):
                     jy.hp -= self.Atk
                 for puolin in pygame.sprite.spritecollide(self, puolin_group, False):
@@ -445,20 +446,21 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
                 self.image = self.animation_list[self.action][self.index]
                 
 
-                # Collision with blocks
+          
                 for item in world.block_list:
                     if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20, 10, 10):
                         dx, dy = 0, 0
-                # Collision with coins
+                
                 for item in world.coin_list:
                     if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20, 10, 10):
                         world.coin_list.remove(item)
                 for item in world.exit_list:
                     if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20, 10, 10):
                         if not world.coin_list:
-                            pygame.time.set_timer(pygame.USEREVENT, 0)
-                            time_use.append(time)
-                            gameover = 1
+                            if kill_counter.check_win_condition():
+                                pygame.time.set_timer(pygame.USEREVENT, 0)
+                                time_use.append(time)
+                                gameover = 1
 
                 self.rect.x += dx
                 self.rect.y += dy
@@ -477,6 +479,34 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             screen.blit(self.image, self.rect)
             return gameover
         
+    class KillCounter():
+        def __init__(self, target):
+            self.kill = 0
+            self.target = target
+
+        def increment(self):
+            self.kill += 1
+
+        def check_win_condition(self):
+            return self.kill >= self.target
+
+        def draw(self, screen):
+            kill_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render(f'Kills: {self.kill}/{self.target}', True, 'white')
+            screen.blit(kill_text, (720, 450))
+
+    current = level
+    if current == 1 or current == 2 or current == 3 or current == 4 or current == 5:
+        kill_counter = KillCounter(0)
+
+    if current == 6 or current == 7 or current == 8 or current == 9 or current == 10:
+        kill_counter = KillCounter(1)
+
+    if current == 11 or current == 12 or current == 13 or current == 14 or current == 15:
+        kill_counter = KillCounter(2)
+
+    if current == 16 or current == 17 or current == 18 or current == 19 or current == 20:
+        kill_counter = KillCounter(4)
+        
     class HealthBar():
         def __init__(self,x,y,hp,Hp):
             self.x = x
@@ -490,24 +520,20 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             pygame.draw.rect(screen,red,(self.x,self.y,60,200))
             pygame.draw.rect(screen,green,(self.x,self.y,60,200*ratio))
 
-    # class DefBar():
-    #     def __init__(self,x,y,cdef,Def):
-    #         self.x = x
-    #         self.y =y 
-    #         self.cdef = cdef
-    #         self.Def = Def
+   
 
-    #     def draw(self,cdef):
-    #         self.cdef = cdef
-    #         ratio = self.cdef/self.Def
-    #         bar_width = 50
-    #         bar_height = 5
-    #         filled_width = bar_width * ratio
-    #         bar_x = self.rect.x + (self.rect.width // 2) - (bar_width // 2)
-    #         bar_y = self.rect.y - 20
+    # class KillCounter():
+    #     def __init__(self,level,kill,target):
+    #         self.lvl = lvl
+    #         self.kill = kill
+    #         self.target = target
+    #     def draw(self,kill,target):
+    #         self.kill = kill
+    #         self.target = target
+    #         kill_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render(f'{kill}/{target}', True, 'white')
+    #         kill_text_rect = kill_text.get_rect(center = (7600,400))
+    #         screen.blit(kill_text, kill_text_rect)
 
-    #         pygame.draw.rect(screen, (128, 128, 128), (bar_x, bar_y, bar_width, bar_height))
-    #         pygame.draw.rect(screen, (0, 0, 255), (bar_x, bar_y, filled_width, bar_height))
 
     class World():
         def __init__(self,data):
@@ -539,11 +565,11 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
                         self.coin_list.append(item)
                         
                     if tile == 3 :
-                        yuen = Monster1(col_count * tile_size,row_count * tile_size,my_hp,my_dmg,5000)
+                        yuen = Monster1(col_count * tile_size,row_count * tile_size,my_hp,my_dmg,8000)
                         yuen_group.add(yuen)
                         
                     if tile == 4 :
-                        jy = Monster3(col_count * tile_size,row_count * tile_size,jy_hp,jy_dmg,5000)
+                        jy = Monster3(col_count * tile_size,row_count * tile_size,jy_hp,jy_dmg,10000)
                         jy_group.add(jy)
 
                     if tile == 5 :
@@ -569,7 +595,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
 
 
     class Monster1(pygame.sprite.Sprite):
-        def __init__(self, x, y, max_hp, damage, cd):
+        def __init__(self, x, y, max_hp, damage, Cd):
             pygame.sprite.Sprite.__init__(self)
             self.image = pygame.image.load('graphic/monster1.png')
             self.image = pygame.transform.scale(self.image, (tile_size, tile_size))
@@ -581,8 +607,10 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             self.hp = max_hp
             self.max_hp = max_hp
             self.damage = damage
-            self.cd = cd
+            self.cd = Cd
+            self.Cd = Cd
             self.last_attack_time = 0
+            
 
         def update(self,max_hp,damage,cd):
             current_time = pygame.time.get_ticks()
@@ -599,19 +627,37 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
                     self.last_attack_time = current_time
                     
             self.draw_health_bar()
+            self.draw_cd_bar()
             for yuen in yuen_group:
                 if self.hp <= 0:
                     yuen_group.remove(yuen)
+                    kill_counter.increment()
           
 
         def draw_health_bar(self):
             ratio = self.hp / self.max_hp
             pygame.draw.rect(screen, red, (self.rect.x, self.rect.y - 5, 35, 5))
             pygame.draw.rect(screen, green, (self.rect.x, self.rect.y - 5, 35 * ratio, 5))
+
+        def draw_cd_bar(self):
+            # Calculate the current cooldown percentage
+            current_time = pygame.time.get_ticks()
+            elapsed_time = current_time - self.last_attack_time
+            cooldown_percentage = max(0, min(1, elapsed_time / self.Cd))
+
+            # Draw the cooldown bar
+            bar_width = 35
+            bar_height = 5
+            filled_width = bar_width * cooldown_percentage
+            bar_x = self.rect.x + (self.rect.width // 2) - (bar_width // 2)
+            bar_y = self.rect.y - 10
+
+            pygame.draw.rect(screen, (128, 128, 128), (bar_x, bar_y, bar_width, bar_height))
+            pygame.draw.rect(screen, (255, 255, 255), (bar_x, bar_y, filled_width, bar_height))
                 
 
     class Monster2(pygame.sprite.Sprite):
-        def __init__(self,x,y,max_hp,damage,cd):
+        def __init__(self,x,y,max_hp,damage,Cd):
             pygame.sprite.Sprite.__init__(self)
             self.image = pygame.image.load('graphic/monster2.png')
             self.image = pygame.transform.scale(self.image, (tile_size, tile_size))
@@ -621,7 +667,8 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             self.hp = max_hp
             self.max_hp = max_hp
             self.damage = damage
-            self.cd = cd
+            self.cd = Cd
+            self.Cd = Cd
             self.last_attack_time = 0
 
         def update(self,max_hp,damage,cd):
@@ -641,17 +688,35 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
                     self.last_attack_time = current_time
                     
             self.draw_health_bar()
+            self.draw_cd_bar()
             for puolin in puolin_group:
                 if self.hp <= 0:
                     puolin_group.remove(puolin)
+                    kill_counter.increment()
 
         def draw_health_bar(self):
             ratio = self.hp / self.max_hp
             pygame.draw.rect(screen, red, (self.rect.x, self.rect.y - 5, 35, 5))
             pygame.draw.rect(screen, green, (self.rect.x, self.rect.y - 5, 35 * ratio, 5))
 
+        def draw_cd_bar(self):
+            # Calculate the current cooldown percentage
+            current_time = pygame.time.get_ticks()
+            elapsed_time = current_time - self.last_attack_time
+            cooldown_percentage = max(0, min(1, elapsed_time / self.Cd))
+
+            # Draw the cooldown bar
+            bar_width = 35
+            bar_height = 5
+            filled_width = bar_width * cooldown_percentage
+            bar_x = self.rect.x + (self.rect.width // 2) - (bar_width // 2)
+            bar_y = self.rect.y - 10
+
+            pygame.draw.rect(screen, (128, 128, 128), (bar_x, bar_y, bar_width, bar_height))
+            pygame.draw.rect(screen, (255, 255, 255), (bar_x, bar_y, filled_width, bar_height))
+
     class Monster3(pygame.sprite.Sprite):
-        def __init__(self,x,y,max_hp,damage,cd):
+        def __init__(self,x,y,max_hp,damage,Cd):
             pygame.sprite.Sprite.__init__(self)
             self.image = pygame.image.load('graphic/monster3.png')
             self.image = pygame.transform.scale(self.image, (tile_size, tile_size))
@@ -663,7 +728,8 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             self.hp = max_hp
             self.max_hp = max_hp
             self.damage = damage
-            self.cd = cd
+            self.cd = Cd
+            self.Cd = Cd
             self.last_attack_time = 0
             
         def update(self,max_hp,damage,cd):
@@ -681,25 +747,45 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
                     self.last_attack_time = current_time
                     
             self.draw_health_bar()
+            self.draw_cd_bar()
             for jy in jy_group:
                 if self.hp <= 0:
                     jy_group.remove(jy)
+                    kill_counter.increment()
 
         def draw_health_bar(self):
             ratio = self.hp / self.max_hp
             pygame.draw.rect(screen, red, (self.rect.x, self.rect.y - 5, 35, 5))
             pygame.draw.rect(screen, green, (self.rect.x, self.rect.y - 5, 35 * ratio, 5))
 
-    def win(lvl):
+        def draw_cd_bar(self):
+            # Calculate the current cooldown percentage
+            current_time = pygame.time.get_ticks()
+            elapsed_time = current_time - self.last_attack_time
+            cooldown_percentage = max(0, min(1, elapsed_time / self.Cd))
+
+            # Draw the cooldown bar
+            bar_width = 35
+            bar_height = 5
+            filled_width = bar_width * cooldown_percentage
+            bar_x = self.rect.x + (self.rect.width // 2) - (bar_width // 2)
+            bar_y = self.rect.y - 10
+
+            pygame.draw.rect(screen, (128, 128, 128), (bar_x, bar_y, bar_width, bar_height))
+            pygame.draw.rect(screen, (255, 255, 255), (bar_x, bar_y, filled_width, bar_height))
+
+    
+
+    def win(level):
         width, height = 900, 700
         screen = pygame.display.set_mode((width,height))
         pygame.display.set_caption('Chicky Simulator - Congratulations')
         screen.blit(level_image, (0,0))
 
         # renew user_details with latest lvl   #changed later
-        if lvl < 30:
-            lvl += 1
-            update_level(username, lvl)
+        if level < 20:
+            level += 1
+            update_level(username, level)
 
         while True:
 
@@ -739,14 +825,14 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
 
             pygame.display.update()
 
-    def update_level(username, lvl):
+    def update_level(username, level):
         with open('user_details.txt', 'r') as file:
             lines = file.readlines()
 
         for i, line in enumerate(lines):
             user_details = line.strip().split(", ")
             if user_details[0] == username:
-                user_details[2] = str(lvl)
+                user_details[2] = str(level)
                 lines[i] = ', '.join(user_details) + '\n'
                 break
 
@@ -773,11 +859,10 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
     jy_group = pygame.sprite.Group()  
 
     chicky_health_bar = HealthBar(750,200,Chicky.hp,Chicky.Hp)
-  
     
 
-    if path.exists(f'level{lvl}_data'):
-        pickle_in = open(f'level{lvl}_data', 'rb')
+    if path.exists(f'level{level}_data'):
+        pickle_in = open(f'level{level}_data', 'rb')
         world_data = pickle.load(pickle_in)
         print('yes im here')
     world = World(world_data)
@@ -795,6 +880,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
 
         
 
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -803,6 +889,11 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
 
             if event.type == pygame.USEREVENT + 1:
                 time += 1
+
+            
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if quit_button.check_input(pygame.mouse.get_pos()):
+                    choose_level(lvl, username, coin, pull, c, equip, stats)
 
             Manager.process_events(event)
 
@@ -816,18 +907,17 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             
             quit_button = Button('graphic/botton1.png', 800, 100, 1, "Quit")
             quit_button.draw(screen)
-
-    
+            # pos_mouse = pygame.mouse.get_pos()
+                    
+            kill_counter.draw(screen)
 
             for jy in jy_group:
-                jy.update(jy_hp,jy_dmg,5000)
+                jy.update(jy_hp,jy_dmg,10000)
             for yuen in yuen_group:
-                yuen.update(my_hp,my_dmg,5000)
+                yuen.update(my_hp,my_dmg,8000)
             for puolin in puolin_group:
                 puolin.update(pl_hp, pl_dmg,5000)
             
-
-
         jy_group.draw(screen)
         yuen_group.draw(screen)
         puolin_group.draw(screen)
@@ -837,7 +927,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
         if gameover == -1:
             # if restart_button.draw(screen):
             world_data = []
-            world = reset_level(lvl)
+            world = reset_level(level)
             Chicky = chicky(35,35,Hp, Def, Atk, Cd, Mag,c)
             gameover = 0
             
@@ -850,14 +940,14 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
            
             result = win(lvl)
             if result == 'next':
-                if lvl <= maxlevel:
-                    lvl +=1
+                if level <= maxlevel:
+                    level +=1
                     #reset level
                     world_data = []
-                    world = reset_level(lvl)
+                    world = reset_level(level)
                     Chicky = chicky(35,35,Hp, Def, Atk, Cd, Mag,c)
                     gameover = 0
-                    update_level(username, lvl)
+                    update_level(username, level)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -3887,7 +3977,7 @@ def choose_level(lvl, username, coin, pull, chicky, equip, stats):
             lock4_con = True
             lock5.draw(screen)
 
-        else:
+        elif lvl == 5:
             lock2_con = True
             lock3_con = True
             lock4_con = True
@@ -3905,22 +3995,411 @@ def choose_level(lvl, username, coin, pull, chicky, equip, stats):
 
                 if lvl2_button.check_input(pos_mouse):
                     if lock2_con == True:
-                        tutorial3(lvl, username, coin, pull, chicky, equip, stats)
+                        leveltest(lvl, username, coin, pull, chicky, equip, stats,level=2)
+                       
 
                 if lvl3_button.check_input(pos_mouse):
                     if lock3_con == True:
-                        tutorial4(lvl, username, coin, pull, chicky, equip, stats)
+                        leveltest(lvl, username, coin, pull, chicky, equip, stats,level=3)
 
                 if lvl4_button.check_input(pos_mouse):
                     if lock4_con == True:
-                        level4(lvl, username, coin, pull, chicky, equip, stats)
+                        leveltest(lvl, username, coin, pull, chicky, equip, stats,level=4)
 
                 if lvl5_button.check_input(pos_mouse):
                     if lock5_con == True:
-                        level5(lvl, username, coin, pull, chicky, equip, stats)
+                        leveltest(lvl, username, coin, pull, chicky, equip, stats,level=5)
 
                 if back_button.check_input(pos_mouse):
                     mode(username, lvl, coin, pull, chicky, equip, stats)
+                
+                if next_button.check_input(pos_mouse):
+                    choose_level2(lvl,username , coin, pull, chicky, equip, stats)
+            
+            Manager.process_events(event)
+
+        Manager.update(UI_REFRESH_RATE)
+        pygame.display.update()
+
+def choose_level2(lvl, username, coin, pull, chicky, equip, stats):
+  
+    while True:
+        
+        # screen display / setup
+        pygame.display.set_caption('Chicky Simulator - Level')
+        screen.blit(background_image,(0,0))
+
+        title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('LEVEL', True, 'white')
+        title_text_rect = title_text.get_rect(center = (450,150))
+        screen.blit(title_text, title_text_rect)
+
+        lvl6_button = Button('graphic/botton1.png', 150, 350, 1.2, "6")
+        lvl6_button.draw(screen)
+
+        lvl7_button = Button('graphic/botton1.png', 300, 350, 1.2, "7")
+        lvl7_button.draw(screen)
+
+        lvl8_button = Button('graphic/botton1.png', 450, 350, 1.2, "8")
+        lvl8_button.draw(screen)
+
+        lvl9_button = Button('graphic/botton1.png', 600, 350, 1.2, "9")
+        lvl9_button.draw(screen)
+
+        lvl10_button = Button('graphic/botton1.png', 750, 350, 1.2, "10")
+        lvl10_button.draw(screen)
+
+        back_button = Button('graphic/button2.png', 250, 580, 0.35, "BACK")
+        back_button.draw(screen)
+
+        next_button = Button('graphic/button2.png', 650, 580, 0.35, "NEXT")
+        next_button.draw(screen)
+        
+        pos_mouse = pygame.mouse.get_pos()
+
+        lock6 = Lock('graphic/lock.png', 150, 350, 0.25)
+        lock7 = Lock('graphic/lock.png', 300, 350, 0.25)
+        lock8 = Lock('graphic/lock.png', 450, 350, 0.25)
+        lock9 = Lock('graphic/lock.png', 600, 350, 0.25)
+        lock10 = Lock('graphic/lock.png', 750, 350, 0.25)
+
+        lock6_con = False
+        lock7_con = False
+        lock8_con = False
+        lock9_con = False
+        lock10_con = False
+
+        # check if user unlock the level or not
+        for lvl in range(1,6):
+        
+            lock6.draw(screen)
+            lock7.draw(screen)
+            lock8.draw(screen)
+            lock9.draw(screen)
+            lock10.draw(screen)
+
+        if lvl == 6:
+            lock6_con = True
+            lock7.draw(screen)
+            lock8.draw(screen)
+            lock9.draw(screen)
+            lock10.draw(screen)
+
+        elif lvl == 7:
+            lock6_con = True
+            lock7_con = True
+            lock8.draw(screen)
+            lock9.draw(screen)
+            lock10.draw(screen)
+
+        elif lvl == 8:
+            lock6_con = True
+            lock7_con = True
+            lock8_con = True
+            lock9.draw(screen)
+            lock10.draw(screen)
+
+        elif lvl == 9:
+            lock6_con = True
+            lock7_con = True
+            lock8_con = True
+            lock9_con = True
+            lock10.draw(screen)
+
+        elif lvl == 10:
+            lock6_con = True
+            lock7_con = True
+            lock8_con = True
+            lock9_con = True
+            lock10_con = True
+
+        # get user event(selection)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if lvl6_button.check_input(pos_mouse):
+                    if lock6_con == True:
+                        leveltest(lvl, username, coin, pull, chicky, equip, stats,level=6)
+
+                if lvl7_button.check_input(pos_mouse):
+                    if lock7_con == True:
+                        leveltest(lvl, username, coin, pull, chicky, equip, stats,level=7)
+                       
+
+                if lvl8_button.check_input(pos_mouse):
+                    if lock8_con == True:
+                        leveltest(lvl, username, coin, pull, chicky, equip, stats,level=8)
+
+                if lvl9_button.check_input(pos_mouse):
+                    if lock9_con == True:
+                        leveltest(lvl, username, coin, pull, chicky, equip, stats,level=9)
+
+                if lvl10_button.check_input(pos_mouse):
+                    if lock10_con == True:
+                        leveltest(lvl, username, coin, pull, chicky, equip, stats,level=10)
+
+                if back_button.check_input(pos_mouse):
+                    choose_level(lvl,username , coin, pull, chicky, equip, stats)
+                
+                if next_button.check_input(pos_mouse):
+                    choose_level3(lvl,username , coin, pull, chicky, equip, stats)
+            
+            Manager.process_events(event)
+
+        Manager.update(UI_REFRESH_RATE)
+        pygame.display.update()
+
+def choose_level3(lvl, username, coin, pull, chicky, equip, stats):
+  
+    while True:
+        
+        # screen display / setup
+        pygame.display.set_caption('Chicky Simulator - Level')
+        screen.blit(background_image,(0,0))
+
+        title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('LEVEL', True, 'white')
+        title_text_rect = title_text.get_rect(center = (450,150))
+        screen.blit(title_text, title_text_rect)
+
+        lvl11_button = Button('graphic/botton1.png', 150, 350, 1.2, "11")
+        lvl11_button.draw(screen)
+
+        lvl12_button = Button('graphic/botton1.png', 300, 350, 1.2, "12")
+        lvl12_button.draw(screen)
+
+        lvl13_button = Button('graphic/botton1.png', 450, 350, 1.2, "13")
+        lvl13_button.draw(screen)
+
+        lvl14_button = Button('graphic/botton1.png', 600, 350, 1.2, "14")
+        lvl14_button.draw(screen)
+
+        lvl15_button = Button('graphic/botton1.png', 750, 350, 1.2, "15")
+        lvl15_button.draw(screen)
+
+        back_button = Button('graphic/button2.png', 250, 580, 0.35, "BACK")
+        back_button.draw(screen)
+
+        next_button = Button('graphic/button2.png', 650, 580, 0.35, "NEXT")
+        next_button.draw(screen)
+        
+        pos_mouse = pygame.mouse.get_pos()
+
+        lock11 = Lock('graphic/lock.png', 150, 350, 0.25)
+        lock12 = Lock('graphic/lock.png', 300, 350, 0.25)
+        lock13 = Lock('graphic/lock.png', 450, 350, 0.25)
+        lock14 = Lock('graphic/lock.png', 600, 350, 0.25)
+        lock15 = Lock('graphic/lock.png', 750, 350, 0.25)
+
+        lock11_con = False
+        lock12_con = False
+        lock13_con = False
+        lock14_con = False
+        lock15_con = False
+
+        # check if user unlock the level or not
+        for lvl in range(1,11):
+            lock11.draw(screen)
+            lock12.draw(screen)
+            lock13.draw(screen)
+            lock14.draw(screen)
+            lock15.draw(screen)
+
+        if lvl == 11:
+            lock11_con = True
+            lock12.draw(screen)
+            lock13.draw(screen)
+            lock14.draw(screen)
+            lock15.draw(screen)
+
+        elif lvl == 12:
+            lock11_con = True
+            lock12_con = True
+            lock13.draw(screen)
+            lock14.draw(screen)
+            lock15.draw(screen)
+
+        elif lvl == 13:
+            lock11_con = True
+            lock12_con = True
+            lock13_con = True
+            lock14.draw(screen)
+            lock15.draw(screen)
+
+        elif lvl == 14:
+            lock11_con = True
+            lock12_con = True
+            lock13_con = True
+            lock14_con = True
+            lock15.draw(screen)
+
+        elif lvl == 15:
+            lock11_con = True
+            lock12_con = True
+            lock13_con = True
+            lock14_con = True
+            lock15_con = True
+
+        # get user event(selection)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if lvl11_button.check_input(pos_mouse):
+                    if lock11_con == True:
+                        leveltest(lvl, username, coin, pull, chicky, equip, stats,level=11)
+
+                if lvl12_button.check_input(pos_mouse):
+                    if lock12_con == True:
+                        leveltest(lvl, username, coin, pull, chicky, equip, stats,level=12)
+                       
+
+                if lvl13_button.check_input(pos_mouse):
+                    if lock13_con == True:
+                        leveltest(lvl, username, coin, pull, chicky, equip, stats,level=13)
+
+                if lvl14_button.check_input(pos_mouse):
+                    if lock14_con == True:
+                        leveltest(lvl, username, coin, pull, chicky, equip, stats,level=14)
+
+                if lvl15_button.check_input(pos_mouse):
+                    if lock15_con == True:
+                        leveltest(lvl, username, coin, pull, chicky, equip, stats,level=15)
+                        
+                if back_button.check_input(pos_mouse):
+                    choose_level2(lvl,username , coin, pull, chicky, equip, stats)
+                
+                if next_button.check_input(pos_mouse):
+                    choose_level4(lvl,username , coin, pull, chicky, equip, stats)
+            
+            Manager.process_events(event)
+
+        Manager.update(UI_REFRESH_RATE)
+        pygame.display.update()
+
+def choose_level4(lvl, username, coin, pull, chicky, equip, stats):
+  
+    while True:
+        
+        # screen display / setup
+        pygame.display.set_caption('Chicky Simulator - Level')
+        screen.blit(background_image,(0,0))
+
+        title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('LEVEL', True, 'white')
+        title_text_rect = title_text.get_rect(center = (450,150))
+        screen.blit(title_text, title_text_rect)
+
+        lvl16_button = Button('graphic/botton1.png', 150, 350, 1.2, "16")
+        lvl16_button.draw(screen)
+
+        lvl17_button = Button('graphic/botton1.png', 300, 350, 1.2, "17")
+        lvl17_button.draw(screen)
+
+        lvl18_button = Button('graphic/botton1.png', 450, 350, 1.2, "18")
+        lvl18_button.draw(screen)
+
+        lvl19_button = Button('graphic/botton1.png', 600, 350, 1.2, "19")
+        lvl19_button.draw(screen)
+
+        lvl20_button = Button('graphic/botton1.png', 750, 350, 1.2, "20")
+        lvl20_button.draw(screen)
+
+        back_button = Button('graphic/button2.png', 250, 580, 0.35, "BACK")
+        back_button.draw(screen)
+
+        next_button = Button('graphic/button2.png', 650, 580, 0.35, "NEXT")
+        next_button.draw(screen)
+        
+        pos_mouse = pygame.mouse.get_pos()
+
+        lock16 = Lock('graphic/lock.png', 150, 350, 0.25)
+        lock17 = Lock('graphic/lock.png', 300, 350, 0.25)
+        lock18 = Lock('graphic/lock.png', 450, 350, 0.25)
+        lock19 = Lock('graphic/lock.png', 600, 350, 0.25)
+        lock20 = Lock('graphic/lock.png', 750, 350, 0.25)
+
+        lock16_con = False
+        lock17_con = False
+        lock18_con = False
+        lock19_con = False
+        lock20_con = False
+
+        # check if user unlock the level or not
+        for lvl in range(1,16):
+            lock16.draw(screen)
+            lock17.draw(screen)
+            lock18.draw(screen)
+            lock19.draw(screen)
+            lock20.draw(screen)
+
+        if lvl == 16:
+            lock16_con = True
+            lock17.draw(screen)
+            lock18.draw(screen)
+            lock19.draw(screen)
+            lock20.draw(screen)
+
+        elif lvl == 17:
+            lock16_con = True
+            lock17_con = True
+            lock18.draw(screen)
+            lock19.draw(screen)
+            lock20.draw(screen)
+
+        elif lvl == 18:
+            lock16_con = True
+            lock17_con = True
+            lock18_con = True
+            lock19.draw(screen)
+            lock20.draw(screen)
+
+        elif lvl == 19:
+            lock16_con = True
+            lock17_con = True
+            lock18_con = True
+            lock19_con = True
+            lock20.draw(screen)
+
+        elif lvl == 20:
+            lock16_con = True
+            lock17_con = True
+            lock18_con = True
+            lock19_con = True
+            lock20_con = True
+
+        # get user event(selection)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if lvl16_button.check_input(pos_mouse):
+                    if lock16_con == True:
+                        leveltest(lvl, username, coin, pull, chicky, equip, stats,level=16)
+
+                if lvl17_button.check_input(pos_mouse):
+                    if lock17_con == True:
+                        leveltest(lvl, username, coin, pull, chicky, equip, stats,level=17)
+                       
+
+                if lvl18_button.check_input(pos_mouse):
+                    if lock18_con == True:
+                        leveltest(lvl, username, coin, pull, chicky, equip, stats,level=18)
+
+                if lvl19_button.check_input(pos_mouse):
+                    if lock19_con == True:
+                        leveltest(lvl, username, coin, pull, chicky, equip, stats,level=19)
+
+                if lvl20_button.check_input(pos_mouse):
+                    if lock20_con == True:
+                        leveltest(lvl, username, coin, pull, chicky, equip, stats,level=20)
+                        
+                if back_button.check_input(pos_mouse):
+                    choose_level3(lvl,username , coin, pull, chicky, equip, stats)
                 
                 if next_button.check_input(pos_mouse):
                     arcade_lobby(lvl,username , coin, pull, chicky, equip, stats)
@@ -3929,7 +4408,6 @@ def choose_level(lvl, username, coin, pull, chicky, equip, stats):
 
         Manager.update(UI_REFRESH_RATE)
         pygame.display.update()
-
 
 def lobby(username, lvl, coin, pull, chicky, equip, stats):
 
