@@ -320,7 +320,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             alist = []
             for num in range(1, 6):
                 img = pygame.image.load(f'graphic/{c}/walk/{num}.png')
-                img = pygame.transform.scale(img, (35, 35))
+                img = pygame.transform.scale(img, (50, 50))
                 alist.append(img)
             self.animation_list.append(alist)
     
@@ -328,7 +328,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             alist = []
             for num in range(1, 6):
                 img = pygame.image.load(f'graphic/{c}/attack/{num}.png')
-                img = pygame.transform.scale(img, (35, 35))
+                img = pygame.transform.scale(img, (50, 50))
                 alist.append(img)
             self.animation_list.append(alist)
 
@@ -336,7 +336,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             alist = []
             for num in range(1, 6):
                 img = pygame.image.load(f'graphic/{c}/hurt/{num}.png')
-                img = pygame.transform.scale(img, (35, 35))
+                img = pygame.transform.scale(img, (50, 50))
                 alist.append(img)
             self.animation_list.append(alist)
 
@@ -690,15 +690,78 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             pygame.draw.rect(screen, red, (self.rect.x, self.rect.y - 5, 35, 5))
             pygame.draw.rect(screen, green, (self.rect.x, self.rect.y - 5, 35 * ratio, 5))
 
+    def win(lvl):
+        width, height = 900, 700
+        screen = pygame.display.set_mode((width,height))
+        pygame.display.set_caption('Chicky Simulator - Congratulations')
+        screen.blit(level_image, (0,0))
 
-    class Exit(pygame.sprite.Sprite):
-        def __init__(self, x, y):
-            pygame.sprite.Sprite.__init__(self)
-            img = pygame.image.load('graphic/bananacat.png')
-            self.image = pygame.transform.scale(img, (tile_size, int(tile_size * 1.5)))
-            self.rect = self.image.get_rect()
-            self.rect.x = x
-            self.rect.y = y
+        # renew user_details with latest lvl   #changed later
+        if lvl < 30:
+            lvl += 1
+            update_level(username, lvl)
+
+        while True:
+
+            w, h = 600, 400
+            win_image = pygame.image.load('graphic/win.PNG')
+            win_image = pygame.transform.scale(win_image,(w,h))
+            win_image_rect = win_image.get_rect(center = (width/2, height/2))
+            screen.blit(win_image, win_image_rect)
+
+            level_button = Button('graphic/button2.png', 330, 460, 0.25, "LEVEL")
+            level_button.draw(screen)
+
+            next_button = Button('graphic/button2.png', 570, 460, 0.25, "NEXT")
+            next_button.draw(screen)
+
+            pos_mouse = pygame.mouse.get_pos()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if level_button.check_input(pos_mouse):
+                        choose_level(lvl, username, coin, pull, c, equip, stats)
+
+                    elif next_button.check_input(pos_mouse): #changed later
+                        return 'next'
+                    #     if levl == 2:
+                    #         tutorial3(lvl, username, coin, pull, c, equip, stats)
+                    #     elif levl == 3:
+                    #         tutorial4(lvl, username, coin, pull, c, equip, stats)
+                    #     elif levl == 4:
+                    #         level4(lvl, username, coin, pull, c, equip, stats)
+                    #     elif levl == 5:
+                    #         level5(lvl, username, coin, pull, c, equip, stats)
+
+            pygame.display.update()
+
+    def update_level(username, lvl):
+        with open('user_details.txt', 'r') as file:
+            lines = file.readlines()
+
+        for i, line in enumerate(lines):
+            user_details = line.strip().split(", ")
+            if user_details[0] == username:
+                user_details[2] = str(lvl)
+                lines[i] = ', '.join(user_details) + '\n'
+                break
+
+        with open('user_details.txt', 'w') as file:
+            file.writelines(lines)
+        return
+
+    # class Exit(pygame.sprite.Sprite):
+    #     def __init__(self, x, y):
+    #         pygame.sprite.Sprite.__init__(self)
+    #         img = pygame.image.load('graphic/bananacat.png')
+    #         self.image = pygame.transform.scale(img, (tile_size, int(tile_size * 1.5)))
+    #         self.rect = self.image.get_rect()
+    #         self.rect.x = x
+    #         self.rect.y = y
 
     Hp, Def, Atk, Cd, Mag = map(int, stats.split('/'))
     Chicky = chicky(35,35,Hp, Def, Atk, Cd, Mag,c)
@@ -751,6 +814,11 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
 
         if gameover == 0:
             
+            quit_button = Button('graphic/botton1.png', 800, 100, 1, "Quit")
+            quit_button.draw(screen)
+
+    
+
             for jy in jy_group:
                 jy.update(jy_hp,jy_dmg,5000)
             for yuen in yuen_group:
@@ -779,17 +847,17 @@ def leveltest(lvl, username, coin, pull, c, equip, stats):
             pygame.time.set_timer(pygame.USEREVENT, 0)
             # save in list 
             time_use.append(time)
-            lvl += 1
-            #reset game and go to next level
-            
-            if lvl <= maxlevel:
-                
-                #reset level
-                world_data = []
-                world = reset_level(lvl)
-                Chicky = chicky(35,35,Hp, Def, Atk, Cd, Mag,c)
-                gameover = 0
-                update_level(username, lvl)
+           
+            result = win(lvl)
+            if result == 'next':
+                if lvl <= maxlevel:
+                    lvl +=1
+                    #reset level
+                    world_data = []
+                    world = reset_level(lvl)
+                    Chicky = chicky(35,35,Hp, Def, Atk, Cd, Mag,c)
+                    gameover = 0
+                    update_level(username, lvl)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
