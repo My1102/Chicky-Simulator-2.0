@@ -2226,8 +2226,8 @@ def update_equipment(username, equip):
                 break
             else:
                 equip_list.append(f'{equip}')
-            weapon_str = '/'.join(equip_list)
-            user_backpack[2] = str(weapon_str)
+            equip_str = '/'.join(equip_list)
+            user_backpack[2] = str(equip_str)
             lines[i] = ', '.join(user_backpack) + '\n'
             break
 
@@ -2237,19 +2237,83 @@ def update_equipment(username, equip):
 
 
 def update_equip(username, equip):
+    weapon = ['axe','hammer','sword']
+    shield = ['shield3','shield4','shield5']
+    helmet = ['helmet3','helmet4','helmet5']
+    armor = ['armor3','armor4','armor5']
+    shoe = ['shoe3','shoe4','shoe5']
+
     with open('user_details.txt', 'r') as file:
         lines = file.readlines()
 
     for i, line in enumerate(lines):
         user_details = line.strip().split(", ")
         if user_details[0] == username:
-            user_details[7] = str(equip)
-            lines[i] = ', '.join(user_details) + '\n'
-            break
+            equip_list = user_details[7].strip().split('/')
+            if equip in weapon:
+                equip_list[0] = str(f'{equip}')
+                break
+            elif equip in shield:
+                equip_list[1] = str(f'{equip}')
+                break
+            elif equip in helmet:
+                equip_list[2] = str(f'{equip}')
+                break
+            elif equip in armor:
+                equip_list[3] = str(f'{equip}')
+                break
+            elif equip in shoe:
+                equip_list[4] = str(f'{equip}')
+                break
+
+    equip_str = '/'.join(equip_list)
+    user_details[7] = str(equip_str)
+    lines[i] = ', '.join(user_details) + '\n'
 
     with open('user_details.txt', 'w') as file:
         file.writelines(lines)
-    return
+
+    return str(equip_str)
+
+
+def update_unequip(username, equip):
+    weapon = ['axe','hammer','sword']
+    shield = ['shield3','shield4','shield5']
+    helmet = ['helmet3','helmet4','helmet5']
+    armor = ['armor3','armor4','armor5']
+    shoe = ['shoe3','shoe4','shoe5']
+
+    with open('user_details.txt', 'r') as file:
+        lines = file.readlines()
+
+    for i, line in enumerate(lines):
+        user_details = line.strip().split(", ")
+        if user_details[0] == username:
+            equip_list = user_details[7].strip().split('/')
+            if equip in weapon:
+                equip_list[0] = 'no'
+                break
+            elif equip in shield:
+                equip_list[1] = 'no'
+                break
+            elif equip in helmet:
+                equip_list[2] = 'no'
+                break
+            elif equip in armor:
+                equip_list[3] = 'no'
+                break
+            elif equip in shoe:
+                equip_list[4] = 'no'
+                break
+
+    equip_str = '/'.join(equip_list)
+    user_details[7] = str(equip_str)
+    lines[i] = ', '.join(user_details) + '\n'
+
+    with open('user_details.txt', 'w') as file:
+        file.writelines(lines)
+
+    return str(equip_str)
 
 
 def update_equipchick(username, chicky):
@@ -2924,31 +2988,25 @@ def equip_chick(username, lvl, coin, pull, chicky, equip, stats):
             Manager.update(UI_REFRESH_RATE)
 
         pygame.display.update()
-    
+
 
 def backpack(username, lvl, coin, pull, chicky, equip, stats):
-
-    FPS = 60
+    pygame.init()
+    screen = pygame.display.set_mode((900, 700))
+    clock = pygame.time.Clock()
+    FPS = 120
     selected_item = None
     offset_x, offset_y = None, None
+
     backpack_rows = 5
     backpack_cols = 3
     slot_size = 100
     backpack_slots = []
-
     for row in range(backpack_rows):
         for col in range(backpack_cols):
             x = 495 + col * (slot_size + 25)
             y = 140 + row * (slot_size + 10)
             backpack_slots.append(Slot(x, y, slot_size, slot_size))
-
-    #equip_slots = {
-        #"sword": Slot(105, 430, slot_size, slot_size),
-        #"shield": Slot(255, 430, slot_size, slot_size),
-        #"helmet": Slot(30, 550, slot_size, slot_size),
-        #"armor": Slot(180, 550, slot_size, slot_size),
-        #"shoes": Slot(330, 550, slot_size, slot_size)
-    #}
 
     equip_slots = [Slot(105, 430, slot_size, slot_size),
                    Slot(255, 430, slot_size, slot_size),
@@ -2977,93 +3035,40 @@ def backpack(username, lvl, coin, pull, chicky, equip, stats):
 
     items = []
     equips = []
+    #all_equip =[]
     with open('equipment_details.txt', 'r') as file2:
         lines = file2.readlines()
         for line in lines:
             item_details = line.split(",")
             for i in items_list:
                 if i in item_details[0]:
+                    item_name = (f'{item_details[0]}')
                     item_graphic = (f'{item_details[1]}')
                     item_info = (f'{item_details[2]}\n{item_details[3]}')
-                    item = Item(item_graphic, item_info, 0.65)
                     item_type = (f'{item_details[5]}')
+                    item_stat = (f'{item_details[4]}')
+                    item = Item(item_graphic, item_type, item_info, item_stat, item_name, 0.65)
                     items.append(item)
-            hoho = ','.join(str(items))
-            print(str(hoho))
 
             for i in equips_list:
                 if i in item_details[0]:
+                    equip1_name = (f'{item_details[0]}')
                     equip1_graphic = (f'{item_details[1]}')
                     equip1_info = (f'{item_details[2]}\n{item_details[3]}')
-                    equip1 = Item(equip1_graphic, equip1_info, 0.65)
                     equip1_type = (f'{item_details[5]}')
+                    equip1_stat = (f'{item_details[4]}')
+                    equip1 = Item(equip1_graphic, equip1_type, equip1_info, equip1_stat, equip1_name, 0.65)
                     equips.append(equip1)
 
-    weapon = ['axe','hammer','sword']
-    shield = ['shield1','shield2','shield3']
-    helmet = ['helmet1','helmet2','helmet3']
-    armor = ['armor1','armor2','armor3']
-    shoe = ['shoe1','shoe2','shoe3']
-    equip_stats = [0,0,0,0,0]
-    for equipments in equips_list:
-        if equipments in weapon:
-            equip_stats[0] = 1
-        if equipments in shield:
-            equip_stats[1] = 1
-        if equipments in helmet:
-            equip_stats[2] = 1
-        if equipments in armor:
-            equip_stats[3] = 1
-        if equipments in shoe:
-            equip_stats[4] = 1
-    #equip_str = str(f'{equip_stats[0]},{equip_stats[1]},{equip_stats[2]},{equip_stats[3]},{equip_stats[4]}')
-    #print(equip_str)
-
-    #w_str = ','.join(w)
-    #print(str(w_str))
-    #shield_str = ','.join(str(shield))
-    #print(str(shield_str))
-    #h_str = ','.join(str(helmet))
-    #print(str(h_str))
-    #a_str = ','.join(str(armor))
-    #print(str(a_str))
-    #s_str = ','.join(str(shoe))
-    #print(str(s_str))
-
-    #with open('equipment_details.txt', 'r') as file3:
-        #lines = file3.readlines()
-        #for line in lines:
-            #item_details = line.split(", ")
-            #for item in weapon:
-                #if item in item_details[0]:
-                    #item_graphic = (f'{item_details[1]}')
-                    #item_info = (f'{item_details[2]}\n{item_details[3]}')
-                    #item = Item(item_graphic, item_info, 0.65)
-                    #weapon.append(item)
-            #for item in shield:
-                #if item in item_details[0]:
-                    #item_graphic = (f'{item_details[1]}')
-                    #item_info = (f'{item_details[2]}\n{item_details[3]}')
-                    #item = Item(item_graphic, item_info, 0.65)
-                    #shield.append(item)
-            #for item in helmet:
-                #if item in item_details[0]:
-                    #item_graphic = (f'{item_details[1]}')
-                    #item_info = (f'{item_details[2]}\n{item_details[3]}')
-                    #item = Item(item_graphic, item_info, 0.65)
-                    #helmet.append(item)
-            #for item in armor:
-                #if item in item_details[0]:
-                    #item_graphic = (f'{item_details[1]}')
-                    #item_info = (f'{item_details[2]}\n{item_details[3]}')
-                    #item = Item(item_graphic, item_info, 0.65)
-                    #armor.append(item)
-            #for item in shoe:
-                #if item in item_details[0]:
-                    #item_graphic = (f'{item_details[1]}')
-                    #item_info = (f'{item_details[2]}\n{item_details[3]}')
-                    #item = Item(item_graphic, item_info, 0.65)
-                    #shoe.append(item)
+            #for i in equipments_list:
+                #if i in item_details[0]:
+                    #aequip_name = (f'{item_details[0]}')
+                    #aequip_graphic = (f'{item_details[1]}')
+                    #aequip_info = (f'{item_details[2]}\n{item_details[3]}')
+                    #aequip_type = (f'{item_details[5]}')
+                    #aequip_stat = (f'{item_details[4]}')
+                    #aequip = Item(aequip_graphic, aequip_type, aequip_info, aequip_stat, aequip_name, 0.65)
+                    #all_equip.append(aequip)
 
     for i, item in enumerate(items):
         if i <= len(backpack_slots):
@@ -3073,8 +3078,62 @@ def backpack(username, lvl, coin, pull, chicky, equip, stats):
         if n <= len(equip_slots):
             equip_slots[n].item = equip1
 
-    while True:
+    def get_temp_stats(stats, selected_item, is_adding):
+        Hp, Def, Atk, Spd, Mag = stats.split('/')
+        a = int(Atk)
+        d = int(Def)
+        s = int(Spd)
 
+        #for item in equips:
+            #for stat, value in item.stats.items():
+                #if stat == 'Atk':
+                    #a += value
+                #elif stat == 'Def':
+                    #d += value
+                #elif stat == 'Spd':
+                    #s += value
+
+        with open('equipment_details.txt', 'r') as file:
+            lines = file.readlines()
+            for line in lines:
+                item_details = line.split(",")
+                if item_details[0] == selected_item:
+                    atk, de, spd = item_details[4].split('/')
+                    atk1 = int(atk)
+                    de1 = int(de)
+                    spd1 = int(spd)
+                    if is_adding == 1:
+                        a += atk1
+                        d += de1
+                        s += spd1
+                        break
+                    else:
+                        a -= atk1
+                        d -= de1
+                        s -= spd1
+                        break
+                    
+
+        #for stat, value in selected_item.stats.items():
+            #if stat == 'Atk':
+                #if is_adding == 1:
+                    #a += value
+                #else:
+                    #a -= value
+            #elif stat == 'Def':
+                #if is_adding == 1:
+                    #d += value
+                #else:
+                    #d -= value
+            #elif stat == 'Spd':
+                #if is_adding == 1:
+                    #s += value
+                #else:
+                    #s -= value
+
+        return (f'{Hp}/{d}/{a}/{s}/{Mag}')
+
+    while True:
         pygame.display.set_caption('Chicky Simulator - Backpack')
         screen.blit(ranking_image,(0,0))
 
@@ -3110,7 +3169,7 @@ def backpack(username, lvl, coin, pull, chicky, equip, stats):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            
+
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 for slot in backpack_slots:
                     if slot.rect.collidepoint(pos_mouse) and slot.item:
@@ -3120,8 +3179,7 @@ def backpack(username, lvl, coin, pull, chicky, equip, stats):
                         selected_item.rect.x = pos_mouse[0] + offset_x
                         selected_item.rect.y = pos_mouse[1] + offset_y
                         slot.item = None
-                        if slot.item == None:
-                            items.remove(selected_item)
+                        temp_stats = get_temp_stats(stats, selected_item.name, 1)
                         break
 
                 for slot in equip_slots:
@@ -3132,55 +3190,8 @@ def backpack(username, lvl, coin, pull, chicky, equip, stats):
                         selected_item.rect.x = pos_mouse[0] + offset_x
                         selected_item.rect.y = pos_mouse[1] + offset_y
                         slot.item = None
-                        #if selected_item in w:
-                            #print('True')
-                        #else:
-                            #print('False')
-                        if slot.item == None:
-                            if selected_item == weapon:
-                                equip_stats[0] = 0
-                                equips.remove(selected_item)
-                            elif selected_item in shield:
-                                equip_stats[1] = 0
-                                equips.remove(selected_item)
-                            elif selected_item in helmet:
-                                equip_stats[2] = 0
-                                equips.remove(selected_item)
-                            elif selected_item in armor:
-                                equip_stats[3] = 0
-                                equips.remove(selected_item)
-                            elif selected_item in shoe:
-                                equip_stats[4] = 0
-                                equips.remove(selected_item)
-                        equip_str = str(f'{equip_stats[0]},{equip_stats[1]},{equip_stats[2]},{equip_stats[3]},{equip_stats[4]}')
-                        print(equip_str)
+                        temp_stats = get_temp_stats(stats, selected_item.name, 0)
                         break
-
-                #for slot in list(equip_slots.values()):
-                    #if slot.rect.collidepoint(pos_mouse) and slot.item:
-                        #selected_item = slot.item
-                        #offset_x = slot.rect.x - pos_mouse[0]
-                        #offset_y = slot.rect.y - pos_mouse[1]
-                        #selected_item.rect.x = pos_mouse[0] + offset_x
-                        #selected_item.rect.y = pos_mouse[1] + offset_y
-                        #slot.item = None
-                        #break
-                        #if slot.item == None:
-                            #with open('user_details.txt', 'r') as file1:
-                                #lines = file1.readlines()
-                                #for line in lines:
-                                    #user_default = line.strip().split(", ")
-                                    #if user_default[0] == username:
-                                        #equip_list = user_default[7].split('/')
-                                        #with open('equipment_details.txt', 'r') as file2:
-                                            #lines = file2.readlines()
-                                            #for line in lines:
-                                                #item_details = line.split(", ")
-                                                #if item_details[0] in equip_list:
-                                                    #a, d, s = item_details[4].split('/')
-                                                    #Atk -= a
-                                                    #Def -= d
-                                                    #Spd -= s
 
                 if back_button.check_input(pos_mouse):
                     lobby(username, lvl, coin, pull, chicky, equip, stats)
@@ -3193,84 +3204,74 @@ def backpack(username, lvl, coin, pull, chicky, equip, stats):
             elif event.type == pygame.MOUSEBUTTONUP:
                 if selected_item != None:
                     for slot in backpack_slots:
-                        if (slot.rect.collidepoint(pos_mouse)) and (slot.item is None):
+                        if (slot.rect.collidepoint(pos_mouse)) and (slot.item == None):
                             slot.item = selected_item
-                            selected_item = None
-                            offset_x, offset_y = None, None
-                            if selected_item == None:
-                                items.append(slot.item)
-                            break
+                            if selected_item in items:
+                                selected_item = None
+                                offset_x, offset_y = None, None
+                                temp_stats = stats
+                                backpack(username, lvl, coin, pull, chicky, equip, temp_stats)
+                                break
+                            elif selected_item in equips:
+                                equips.remove(selected_item)
+                                items.append(selected_item)
+                                eequipp = str(f'{selected_item.name}')
+                                selected_item = None
+                                offset_x, offset_y = None, None
+                                e = update_unequip(username, eequipp)
+                                backpack(username, lvl, coin, pull, chicky, e, temp_stats)
+                                break
 
                     for slot in equip_slots:
-                        if (slot.rect.collidepoint(pos_mouse)) and (slot.item is None):
-                            slot.item = selected_item
-                            selected_item = None
-                            offset_x, offset_y = None, None
-                            if selected_item == None:
-                                if selected_item in weapon:
-                                    if equip_stats[0] == 0:
-                                        equip_stats[0] = 1
-                                        equips.append(slot.item)
-                                    else:
-                                        slot.item = None
-
-                                elif selected_item in shield:
-                                    if equip_stats[1] == 0:
-                                        equip_stats[1] = 1
-                                        equips.append(slot.item)
-                                    else:
-                                        slot.item = None
-
-                                elif selected_item in helmet:
-                                    if equip_stats[2] == 0:
-                                        equip_stats[2] = 1
-                                        equips.append(slot.item)
-                                    else:
-                                        slot.item = None
-
-                                elif selected_item in armor:
-                                    if equip_stats[3] == 0:
-                                        equip_stats[3] = 1
-                                        equips.append(slot.item)
-                                    else:
-                                        slot.item = None
-
-                                elif selected_item in shoe:
-                                    if equip_stats[4] == 0:
-                                        equip_stats[4] = 1
-                                        equips.append(slot.item)
-                                    else:
-                                        slot.item = None
-                            break
+                        if (slot.rect.collidepoint(pos_mouse)):
+                            if slot.item == None:
+                                same_type_item = next((equip for equip in equips if equip.type == selected_item.type), None)
+                                if same_type_item:
+                                    # Revert to original state
+                                    for slot in backpack_slots:
+                                        if slot.item == None:
+                                            slot.item = selected_item
+                                            selected_item = None
+                                            offset_x, offset_y = None, None
+                                            temp_stats = stats
+                                            backpack(username, lvl, coin, pull, chicky, equip, temp_stats)
+                                            break
+                                else:
+                                    items.remove(selected_item)
+                                    equips.append(selected_item)
+                                    eequipp = str(f'{selected_item.name}')
+                                    slot.item = selected_item
+                                    selected_item = None
+                                    offset_x, offset_y = None, None
+                                    e = update_equip(username, eequipp)
+                                    backpack(username, lvl, coin, pull, chicky, e, temp_stats)
+                                    break
+                            else:
+                                for slot in backpack_slots:
+                                    if slot.item == None:
+                                        slot.item = selected_item
+                                        selected_item = None
+                                        offset_x, offset_y = None, None
+                                        temp_stats = stats
+                                        backpack(username, lvl, coin, pull, chicky, equip, temp_stats)
+                                break
 
                     if selected_item:
                         for slot in backpack_slots:
                             if slot.item is None:
+                                equips.remove(selected_item)
+                                items.append(selected_item)
+                                eequipp = str(f'{selected_item.name}')
                                 slot.item = selected_item
                                 selected_item = None
                                 offset_x, offset_y = None, None
-                                if selected_item == None:
-                                    items.append(slot.item)
-                                break
+                                e = update_unequip(username, eequipp)
+                                backpack(username, lvl, coin, pull, chicky, e, temp_stats)
 
-                #if selected_item:
-                    #for slot in backpack_slots + list(equip_slots.values()):
-                        #if (slot.rect.collidepoint(pos_mouse)) and (slot.item is None):
-                            #slot.item = selected_item
-                            #selected_item = None
-                            #offset_x, offset_y = None, None
-                            #break
-                    #if selected_item:
-                        #for slot in backpack_slots:
-                            #if slot.item is None:
-                                #slot.item = selected_item
-                                #selected_item = None
-                                #offset_x, offset_y = None, None
-                                #break
-
+        # Draw slots
         for slot in backpack_slots:
             slot.draw(screen)
-
+        
         for slot in equip_slots:
             slot.draw(screen)
 
@@ -3283,12 +3284,13 @@ def backpack(username, lvl, coin, pull, chicky, equip, stats):
             Hp,Def,Atk,Spd,Mag = stats.split('/')
             default = Info(50, 150, (f'Hp={Hp}\nDef={Def}\nAtk={Atk}\nSpd={Spd}'))
             default.draw_info(screen)
-            new_default = Info(250, 150, (f'Hp={Hp}\nDef={Def}\nAtk={Atk}\nSpd={Spd}'))
+            nHp,nDef,nAtk,nSpd,nMag = temp_stats.split('/')
+            new_default = Info(250, 150, (f'Hp={nHp}\nDef={nDef}\nAtk={nAtk}\nSpd={nSpd}'))
             new_default.draw_info(screen)
             info = Info(50, 335, selected_item.info)
             info.draw_info(screen)
+            #backpack(username, lvl, coin, pull, chicky, equip, temp_stats)
 
-        pygame.display.flip()
         clock.tick(FPS)
 
         pygame.display.update()
@@ -4013,7 +4015,7 @@ def ranking(username, lvl, coin, pull, chicky, equip, stats):
         with open('user_details.txt', 'r') as file:
             data = [tuple(line.strip().split(',')) for line in file]
             sorted_data = sorted(data, key=lambda x:int(x[3])) 
-            for rank, (Username, Password, Level, Time, Coin, Pull, Chicky, Equip, Stats) in enumerate(sorted_data[0:9], start=1):
+            for rank, (Username, Password, Level, Time, Coin, Pull, Chicky, Equip) in enumerate(sorted_data[0:9], start=1):
                 first = Ranking(130+(rank*50), str(rank), Username, Time)
                 first.show(screen)
 
@@ -4339,7 +4341,7 @@ def check_default(username):
                     Cd += int(s)
 
     stats = str(f'{Hp}/{Def}/{Atk}/{Cd}/{Mag}')
-    stats = str(f'{Hp}/{Def}/{Atk}/{Cd}/{Mag}')
+    #stats = str(f'{Hp}/{Def}/{Atk}/{Cd}/{Mag}')
     #equip_str = '/'.join(equip_list)
     #print(str(equip_str))
     #print(chicky)
@@ -4452,7 +4454,7 @@ def save_userinput(username, password):
 
         else:
             file1 = open('user_details.txt', 'a')
-            file1.write(f'{username}, {password}, 1, 10000, 0, 0, normal, no/' + '\n')
+            file1.write(f'{username}, {password}, 1, 10000, 0, 0, normal, no/no/no/no/no' + '\n')
             # username, password, level, time, coin, pull, chicky, equip
             file1.close()
 
@@ -4468,7 +4470,7 @@ def save_userinput(username, password):
             coin = 0
             pull = 0
             chicky = 'normal'
-            equip = 'no/'
+            equip = 'no/no/no/no/no'
             stats = check_default(username)
             return lvl, coin, pull, chicky, equip, stats
         

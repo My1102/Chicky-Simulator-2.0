@@ -1,113 +1,293 @@
 import pygame
 import sys
-from backpack import Item, Slot, Info
 
-pygame.init()
-
-# Screen dimensions
-WIDTH, HEIGHT = 900, 700
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption('Inventory System')
-
-# Colors
-WHITE = (255, 255, 255)
-
-# Frame rate
-clock = pygame.time.Clock()
+# Constants
 FPS = 60
+BACKPACK_ROWS = 5
+BACKPACK_COLS = 3
+SLOT_SIZE = 100
+BACKPACK_X_OFFSET = 495
+BACKPACK_Y_OFFSET = 140
+SLOT_X_GAP = 25
+SLOT_Y_GAP = 10
+EQUIP_SLOT_COORDS = [(105, 430), (255, 430), (30, 550), (180, 550), (330, 550)]
+FONT_PATH = "ThaleahFat/ThaleahFat.ttf"
+WHITE = 'white'
 
-INVENTORY_ROWS = 5
-INVENTORY_COLS = 3
-SLOT_SIZE = 64
-inventory_slots = []
+# Classes
+class Slot:
+    def __init__(self, x, y, width, height):
+        self.rect = pygame.Rect(x, y, width, height)
+        self.item = None
+    
+    def draw(self, screen):
+        if self.item:
+            screen.blit(self.item.image, self.rect.topleft)
+        pygame.draw.rect(screen, (255, 255, 255), self.rect, 2)
 
-# Create inventory slots
-for row in range(INVENTORY_ROWS):
-    for col in range(INVENTORY_COLS):
-        x = 20 + col * (SLOT_SIZE + 10)
-        y = 20 + row * (SLOT_SIZE + 10)
-        inventory_slots.append(Slot(x, y, SLOT_SIZE, SLOT_SIZE))
+class Item:
+    def __init__(self, graphic, item_type, info, scale):
+        self.image = pygame.image.load(graphic)
+        self.image = pygame.transform.scale(self.image, (int(self.image.get_width() * scale), int(self.image.get_height() * scale)))
+        self.rect = self.image.get_rect()
+        self.type = item_type
+        self.info = info
+        self.stats = self.parse_stats(info)
 
-# Create equip slots
-equip_slots = {
-    "sword": Slot(500, 20, SLOT_SIZE, SLOT_SIZE),
-    "shield": Slot(500, 100, SLOT_SIZE, SLOT_SIZE),
-    "helmet": Slot(600, 20, SLOT_SIZE, SLOT_SIZE),
-    "armor": Slot(600, 100, SLOT_SIZE, SLOT_SIZE),
-    "shoes": Slot(550, 180, SLOT_SIZE, SLOT_SIZE)
-}
+    def parse_stats(self, info):
+        stats = {}
+        lines = info.split('\n')
+        for line in lines:
+            if '=' in line:
+                key, value = line.split('=')
+                stats[key.strip()] = int(value.strip())
+        return stats
 
-def display_info(surface, text, x, y):
-    font = pygame.font.Font(None, 36)
-    info_text = font.render(text, True, WHITE)
-    surface.blit(info_text, (x, y))
+class Button:
+    def __init__(self, image_path, x, y, scale, text):
+        self.image = pygame.image.load(image_path)
+        self.image = pygame.transform.scale(self.image, (int(self.image.get_width() * scale), int(self.image.get_height() * scale)))
+        self.rect = self.image.get_rect(topleft=(x, y))
+        self.text = text
+    
+    def draw(self, screen):
+        screen.blit(self.image, self.rect.topleft)
+        font = pygame.font.Font(FONT_PATH, 36)
+        text_surface = font.render(self.text, True, WHITE)
+        text_rect = text_surface.get_rect(center=self.rect.center)
+        screen.blit(text_surface, text_rect)
 
-items = [
-    Item('Sword', 'graphic/sword.png', 'A sharp blade.', 0.4),
-    Item('Shield', 'graphic/shield.png', 'A sturdy shield.', 0.4),
-    Item('Helmet', 'graphic/helmet.png', 'A good helmet.', 0.4),
-    Item('Armor', 'graphic/armor.png', 'A good armor.', 0.4),
-    Item('Shoes', 'graphic/noob leg.png', 'A good shoes.', 0.4)
-    # Add more items here
-]
+    def check_input(self, pos_mouse):
+        return self.rect.collidepoint(pos_mouse)
 
-# Assign sample items to inventory slots
-for i, item in enumerate(items):
-    inventory_slots[i].item = item
+class Info:
+    def __init__(self, x, y, text):
+        self.x = x
+        self.y = y
+        self.text = text
+    
+    def draw_info(self, screen):
+        font = pygame.font.Font(FONT_PATH, 24)
+        lines = self.text.split('\n')
+        for i, line in enumerate(lines):
+            text_surface = font.render(line, True, WHITE)
+            screen.blit(text_surface, (self.x, self.y + i * 30))
 
-def main():
+class Lock:
+    def __init__(self, image_path, x, y, scale):
+        self.image = pygame.image.load(image_path)
+        self.image = pygame.transform.scale(self.image, (int(self.image.get_width() * scale), int(self.image.get_height() * scale)))
+        self.rect = self.image.get_rect(center=(x, y))
+    
+    def draw(self, screen):
+        screen.blit(self.image, self.rect.topleft)
+
+# Utility Functions
+def load_user_backpack(username):
+    with open('user_backpack.txt', 'r') as file:
+        lines = file.readlines()
+        for line in lines:
+            user_backpack = line.strip().split(", ")
+            if user_backpack[0] == username:
+                return user_backpack[2].split('/')
+    return []
+
+def load_item_details(items_list):
+    items = []
+    with open('equipment_details.txt', 'r') as file:
+        lines = file.readlines()
+        for line in lines:
+            item_details = line.strip().split(",")
+            for item_name in items_list:
+                if item_name == item_details[0]:
+                    item_graphic = item_details[1]
+                    item_info = f'{item_details[2]}\n{item_details[3]}'
+                    item_type = item_details[5]
+                    item = Item(item_graphic, item_type, item_info, 0.65)
+                    items.append(item)
+    return items
+
+def create_slots(rows, cols, x_offset, y_offset, slot_size, x_gap, y_gap):
+    slots = []
+    for row in range(rows):
+        for col in range(cols):
+            x = x_offset + col * (slot_size + x_gap)
+            y = y_offset + row * (slot_size + y_gap)
+            slots.append(Slot(x, y, slot_size, slot_size))
+    return slots
+
+def draw_ui(screen, coin, stats, backpack_slots, equip_slots, selected_item, temp_stats):
+    screen.fill((0, 0, 0))  # Clear screen with black
+    pygame.display.set_caption('Chicky Simulator - Backpack')
+
+    # Static Elements
+    backpack_text = pygame.font.Font(FONT_PATH, 100).render('Backpack', True, WHITE)
+    backpack_text_rect = backpack_text.get_rect(center=(450, 80))
+    screen.blit(backpack_text, backpack_text_rect)
+
+    coin_logo = Lock('graphic/manycoin.png', 700, 80, 0.3)
+    coin_logo.draw(screen)
+
+    coin_text = pygame.font.Font(FONT_PATH, 50).render(f'{coin}', True, WHITE)
+    coin_text_rect = coin_text.get_rect(center=(780, 80))
+    screen.blit(coin_text, coin_text_rect)
+
+    backpack_surface = pygame.Surface((420, 550))
+    backpack_surface.fill('white')
+    backpack_surface.set_alpha(150)
+    backpack_surface_rect = backpack_surface.get_rect(center=(670, 410))
+    screen.blit(backpack_surface, backpack_surface_rect)
+
+    equip_surface = pygame.Surface((420, 550))
+    equip_surface.fill('white')
+    equip_surface.set_alpha(150)
+    equip_surface_rect = equip_surface.get_rect(center=(230, 410))
+    screen.blit(equip_surface, equip_surface_rect)
+
+    back_button = Button('graphic/botton1.png', 100, 80, 0.6, "<<")
+    back_button.draw(screen)
+
+    # Draw slots
+    for slot in backpack_slots:
+        slot.draw(screen)
+    
+    for slot in equip_slots:
+        slot.draw(screen)
+
+    # Draw selected item
+    if selected_item:
+        screen.blit(selected_item.image, selected_item.rect.topleft)
+        info = Info(50, 335, selected_item.info)
+        info.draw_info(screen)
+
+    # Draw stats
+    Hp, Def, Atk, Spd, Mag = stats.split('/')
+    default_info = Info(50, 150, f'Hp={Hp}\nDef={Def}\nAtk={Atk}\nSpd={Spd}')
+    default_info.draw_info(screen)
+
+    # Draw temporary stats
+    temp_Hp, temp_Def, temp_Atk, temp_Spd, temp_Mag = temp_stats.split('/')
+    temp_info = Info(300, 150, f'Hp={temp_Hp}\nDef={temp_Def}\nAtk={temp_Atk}\nSpd={temp_Spd}')
+    temp_info.draw_info(screen)
+    
+    pygame.display.flip()
+
+def update_stats(base_stats, equips):
+    Hp, Def, Atk, Spd, Mag = [int(stat) for stat in base_stats.split('/')]
+    for item in equips:
+        for stat, value in item.stats.items():
+            if stat == 'Hp':
+                Hp += value
+            elif stat == 'Def':
+                Def += value
+            elif stat == 'Atk':
+                Atk += value
+            elif stat == 'Spd':
+                Spd += value
+            elif stat == 'Mag':
+                Mag += value
+    return f"{Hp}/{Def}/{Atk}/{Spd}/{Mag}"
+
+def get_temp_stats(base_stats, current_equips, selected_item, is_adding):
+    current_stats = update_stats(base_stats, current_equips)
+    Hp, Def, Atk, Spd, Mag = [int(stat) for stat in current_stats.split('/')]
+    for stat, value in selected_item.stats.items():
+        if stat == 'Hp':
+            Hp += value if is_adding else -value
+        elif stat == 'Def':
+            Def += value if is_adding else -value
+        elif stat == 'Atk':
+            Atk += value if is_adding else -value
+        elif stat == 'Spd':
+            Spd += value if is_adding else -value
+        elif stat == 'Mag':
+            Mag += value if is_adding else -value
+    return f"{Hp}/{Def}/{Atk}/{Spd}/{Mag}"
+
+def backpack(username, lvl, coin, pull, chicky, equip, stats):
+    pygame.init()
+    screen = pygame.display.set_mode((900, 700))
+    clock = pygame.time.Clock()
+
     selected_item = None
-    draging_item = None
-    running = True
-    while running:
+    offset_x, offset_y = None, None
+
+    backpack_slots = create_slots(BACKPACK_ROWS, BACKPACK_COLS, BACKPACK_X_OFFSET, BACKPACK_Y_OFFSET, SLOT_SIZE, SLOT_X_GAP, SLOT_Y_GAP)
+    equip_slots = [Slot(x, y, SLOT_SIZE, SLOT_SIZE) for x, y in EQUIP_SLOT_COORDS]
+
+    equipments_list = load_user_backpack(username)
+    items = load_item_details(equipments_list)
+
+    equips = []
+    temp_stats = stats
+
+    # Fill backpack slots with items
+    for item, slot in zip(items, backpack_slots):
+        slot.item = item
+
+    while True:
+        pos_mouse = pygame.mouse.get_pos()
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                pygame.quit()
+                sys.exit()
+            
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                pos = pygame.mouse.get_pos()
-                for slot in inventory_slots + list(equip_slots.values()):
-                    for num, item in enumerate(items):
-                        if slot.rect.collidepoint(pos) and slot.item:
-                            selected_item = slot.item
-                            draging_item = num
-                            slot.item = None
-                            break
-                    
-            elif event.type == pygame.MOUSEBUTTONUP:
-                if selected_item:
-                    pos = pygame.mouse.get_pos()
-                    for slot in inventory_slots + list(equip_slots.values()):
-                        if slot.rect.collidepoint(pos) and slot.item is None:
-                            slot.item = selected_item
-                            selected_item = None
-                            draging_item = None
-                            break
-                    if selected_item:
-                        for slot in inventory_slots:
-                            if slot.item is None:
+                for slot in backpack_slots + equip_slots:
+                    if slot.item and slot.rect.collidepoint(pos_mouse):
+                        selected_item = slot.item
+                        offset_x = slot.rect.x - pos_mouse[0]
+                        offset_y = slot.rect.y - pos_mouse[1]
+                        slot.item = None
+                        if slot in equip_slots:
+                            equips.remove(selected_item)
+                        temp_stats = get_temp_stats(stats, equips, selected_item, False)
+                        break
+
+                #if back_button.check_input(pos_mouse):
+                    # Call the lobby function here
+                    #pass
+
+            elif event.type == pygame.MOUSEMOTION and selected_item:
+                selected_item.rect.x = pos_mouse[0] + offset_x
+                selected_item.rect.y = pos_mouse[1] + offset_y
+                temp_stats = get_temp_stats(stats, equips, selected_item, True)
+
+            elif event.type == pygame.MOUSEBUTTONUP and selected_item:
+                for slot in backpack_slots + equip_slots:
+                    if slot.rect.collidepoint(pos_mouse) and not slot.item:
+                        if slot in equip_slots:
+                            # Check if same type of item is already equipped
+                            same_type_item = next((equip for equip in equips if equip.type == selected_item.type), None)
+                            if same_type_item:
+                                # Revert to original state
+                                for b_slot in backpack_slots:
+                                    if b_slot.item is None:
+                                        b_slot.item = selected_item
+                                        selected_item = None
+                                        temp_stats = stats
+                                        break
+                            else:
                                 slot.item = selected_item
-                                selected_item = None
-                                break
+                                equips.append(selected_item)
+                                temp_stats = update_stats(stats, equips)
+                        else:
+                            slot.item = selected_item
+                        selected_item = None
+                        offset_x, offset_y = None, None
+                        break
 
-        screen.fill('black')  # Clear the screen
-
-        # Draw inventory slots and items
-        for slot in inventory_slots:
-            slot.draw(screen)
-        
-        # Draw equip slots and items
-        for slot in equip_slots.values():
-            slot.draw(screen)
-
-        # Display item info
-        if selected_item:
-            display_info(screen, selected_item.info, 10, HEIGHT - 50)
-
-        pygame.display.flip()
+        draw_ui(screen, coin, stats, backpack_slots, equip_slots, selected_item, temp_stats)
         clock.tick(FPS)
 
-    pygame.quit()
-    sys.exit()
-
 if __name__ == "__main__":
-    main()
+    # Sample data for testing
+    username = "my"
+    lvl = 1
+    coin = 100
+    pull = 0
+    chicky = 0
+    equip = "axe/shield3/helmet3"
+    stats = "100/50/30/20/10"
+    backpack(username, lvl, coin, pull, chicky, equip, stats)
