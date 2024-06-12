@@ -46,9 +46,9 @@ clock = pygame.time.Clock()
 Manager = pygame_gui.UIManager((width,height))
 UI_REFRESH_RATE = clock.tick(60)/1000
 font = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50)
-pygame.mixer.music.load("graphic/bgmusic.mp3")
-pygame.mixer.music.set_volume(0.3)
-pygame.mixer.music.play(-1)
+# pygame.mixer.music.load("graphic/bgmusic.mp3")
+# pygame.mixer.music.set_volume(0.3)
+# pygame.mixer.music.play(-1)
 
 # let user enter their username and password (using pygame_gui manager) - by my
 # learn from tutorial
@@ -107,7 +107,7 @@ def tutorial1(lvl, username, coin, pull, c, equip, stats):
         tuto1_rect = tuto1.get_rect(center = (width/2, height/2))
         screen.blit(tuto1, tuto1_rect)
 
-        next_button = Button('graphic/botton1.png', 630, 470, 0.6, ">>")
+        next_button = Button('graphic/botton1.png', 650, 490, 0.5, ">>")
         next_button.draw(screen)
 
         back_button = Button('graphic/botton1.png', 100, 100, 0.6, "<<")
@@ -5903,9 +5903,9 @@ def store(username, lvl, coin, pull, chicky, equip, stats):
     axe= Button("graphic/axe.png",150,205,1,'')
     hammer = Button("graphic/hammer.png",450,205,1,'')
     sword = Button("graphic/sword.png",750,205,1,'')
-    shield3 = Button("graphic/shield.png",150,460,1,'')
-    shield4= Button("graphic/shield.png",450,460,1,'')
-    shield5= Button("graphic/shield.png",750,460,1,'')
+    shield3 = Button("graphic/shield5.png",150,460,1,'')
+    shield4= Button("graphic/shield3.png",450,460,1,'')
+    shield5= Button("graphic/shield4.png",750,460,1,'')
 
     font = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50)
 
@@ -6389,12 +6389,12 @@ def equipment(username, lvl, coin, pull, chicky, equip, stats) :
     on = True
     buy = False
     no = False
-    armor3 = Button("graphic/noob armor.png",150,205,1,'')
-    armor4= Button("graphic/noob armor.png",450,205,1,'')
-    armor5= Button("graphic/noob armor.png",750,205,1,'')
-    shoe3 = Button("graphic/leg.png",150,460,1,'')
-    shoe4= Button("graphic/leg.png",450,460,1,'')
-    shoe5= Button("graphic/noob leg.png",750,460,1,'')
+    armor3 = Button("graphic/armor5.png",150,205,1,'')
+    armor4= Button("graphic/armor3.png",450,205,1,'')
+    armor5= Button("graphic/armor4.png",750,205,1,'')
+    shoe3 = Button("graphic/shoe3.png",150,460,1,'')
+    shoe4= Button("graphic/shoe4.png",450,460,1,'')
+    shoe5= Button("graphic/shoe5.png",750,460,1,'')
                             
     while on:
         pygame.display.set_caption('Chicky Simulator - Store')
@@ -6755,9 +6755,9 @@ def equipment2(username, lvl, coin, pull, chicky, equip, stats) :
     on = True
     buy = False
     no = False
-    helmet3= Button("graphic/noob helmet.png",150,205,1,'')
-    helmet4 = Button("graphic/noob helmet.png",450,205,1,'')
-    helmet5 = Button("graphic/noob helmet.png",750,205,1,'')
+    helmet3= Button("graphic/helmet3.png",150,205,1,'')
+    helmet4 = Button("graphic/helmet4.png",450,205,1,'')
+    helmet5 = Button("graphic/helmet5.png",750,205,1,'')
                             
     while on:
         pygame.display.set_caption('Chicky Simulator - Store')
@@ -7462,9 +7462,9 @@ def armor5_info(username, lvl, coin, pull, chicky, equip, stats) :
 def collection(username, lvl, coin, pull, chicky, equip, stats):
     # all collection made by puopuo
     on = True
-    armor3 = Button("graphic/noob armor.png",150,205,1,'')
-    armor4= Button("graphic/noob armor.png",450,205,1,'')
-    armor5= Button("graphic/noob armor.png",750,205,1,'')
+    armor3 = Button("graphic/armor5.png",150,205,1,'')
+    armor4= Button("graphic/armor3.png",450,205,1,'')
+    armor5= Button("graphic/armor4.png",750,205,1,'')
                             
     while on:
         pygame.display.set_caption('Chicky Simulator - Collection')
@@ -7653,9 +7653,9 @@ def collection(username, lvl, coin, pull, chicky, equip, stats):
 def collection2(username, lvl, coin, pull, chicky, equip, stats):
     #puopuo
     on = True
-    helmet3= Button("graphic/noob helmet.png",150,205,1,'')
-    helmet4 = Button("graphic/noob helmet.png",450,205,1,'')
-    helmet5 = Button("graphic/noob helmet.png",750,205,1,'')
+    helmet3= Button("graphic/helmet3.png",150,205,1,'')
+    helmet4 = Button("graphic/helmet4.png",450,205,1,'')
+    helmet5 = Button("graphic/helmet5.png",750,205,1,'')
                             
     while on:
         pygame.display.set_caption('Chicky Simulator - Collection')
@@ -7845,9 +7845,9 @@ def collection2(username, lvl, coin, pull, chicky, equip, stats):
 def collection3(username, lvl, coin, pull, chicky, equip, stats):
     #puopuo
     on = True
-    shoe3 = Button("graphic/leg.png",150,205,1,'')
-    shoe4= Button("graphic/leg.png",450,205,1,'')
-    shoe5= Button("graphic/noob leg.png",750,205,1,'')
+    shoe3 = Button("graphic/shoe3.png",150,205,1,'')
+    shoe4= Button("graphic/shoe4.png",450,205,1,'')
+    shoe5= Button("graphic/shoe5.png",750,205,1,'')
                             
     while on:
         pygame.display.set_caption('Chicky Simulator - Collection')
@@ -8035,9 +8035,9 @@ def collection3(username, lvl, coin, pull, chicky, equip, stats):
 def collection4(username, lvl, coin, pull, chicky, equip, stats):
     #puopuo
     on = True
-    shield3 = Button("graphic/shield.png",150,205,1,'')
-    shield4= Button("graphic/shield.png",450,205,1,'')
-    shield5= Button("graphic/shield.png",750,205,1,'')
+    shield3 = Button("graphic/shield5.png",150,205,1,'')
+    shield4= Button("graphic/shield3.png",450,205,1,'')
+    shield5= Button("graphic/shield4.png",750,205,1,'')
                             
     while on:
         pygame.display.set_caption('Chicky Simulator - Collection')
@@ -8085,7 +8085,7 @@ def collection4(username, lvl, coin, pull, chicky, equip, stats):
         info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Wooden Shield', True, (0,0,0))
         text_rect = info_text.get_rect(center =(150,305))
         screen.blit(info_text, text_rect)
-        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render('3-Star shield\nMade by Leather\nBeginner Friendly\nAbsorb few damage\nBest in level 1-9\n\n        DEF+5', True, (0,0,0))
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render('3-Star shield\nMade by Wood\nBeginner Friendly\nAbsorb few damage\nBest in level 1-9\n\n        DEF+5', True, (0,0,0))
         text_rect = info_text.get_rect(center =(150,450))
         screen.blit(info_text, text_rect)
         ######armor4#####        
