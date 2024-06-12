@@ -1,4 +1,4 @@
-my, 1234, 3, 105, 480880, 47, normal, no/no/no/no/no
+my, 1234, 3, 105, 472880, 47, normal, no/no/no/no/no
 jy, 1q2w3e, 5, 246, 1000, 0, normal, no/no/no/no/no
 pl, 1234, 5, 208, 1000, 0, normal, no/no/no/no/no
 renliang, 1234, 5, 568, 1000, 0, normal, no/no/no/no/no
