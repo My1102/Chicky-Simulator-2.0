@@ -6547,7 +6547,6 @@ def equipment(username, lvl, coin, pull, chicky, equip, stats) :
         if buy :
             bought2(username, lvl, coin, pull, chicky, equip, stats)
         elif no :
-
             no_money2(username, lvl, coin, pull, chicky, equip, stats)
 
 
