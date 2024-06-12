@@ -1,4 +1,4 @@
-my, 1234, 2, 105, 472880, 47, normal, no/no/no/no/no
+my, 1234, 6, 105, 476465, 1, tanker, sword/no/no/no/no
 jy, 1q2w3e, 5, 246, 1000, 0, normal, no/no/no/no/no
 pl, 1234, 5, 208, 1000, 0, normal, no/no/no/no/no
 renliang, 1234, 5, 568, 1000, 0, normal, no/no/no/no/no
