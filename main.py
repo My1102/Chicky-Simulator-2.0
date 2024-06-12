@@ -272,7 +272,6 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
     
     maxlevel = 20
 
-
     jy_hp = 30
     my_hp =50
     pl_hp =70
@@ -280,16 +279,12 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
     jy_dmg = 15
     my_dmg = 10
     pl_dmg = 5
-    
-    username_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((300,320), (300,50)), manager = Manager, object_id = '#username')
-    password_input = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((300,450), (300,50)), manager = Manager, object_id = '#password')
 
     time = 0
     fps = 60
     pygame.time.set_timer(pygame.USEREVENT+1, 1000)
     clock = pygame.time.Clock()
     time_use =[]
-
 
 
     def reset_level(level):
@@ -515,7 +510,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
 
     # if current == 11 or current == 12 or current == 13 or current == 14 or current == 15:
     #     kill_counter = KillCounter(2)
-
+    
     # if current == 16 or current == 17 or current == 18 or current == 19 or current == 20:
 
     kill_counter = KillCounter()
@@ -534,7 +529,6 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
             pygame.draw.rect(screen,green,(self.x,self.y,60,200*ratio))
 
    
-
     # class KillCounter():
     #     def __init__(self,level,kill,target):
     #         self.lvl = lvl
@@ -727,6 +721,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
 
             pygame.draw.rect(screen, (128, 128, 128), (bar_x, bar_y, bar_width, bar_height))
             pygame.draw.rect(screen, (255, 255, 255), (bar_x, bar_y, filled_width, bar_height))
+
 
     class Monster3(pygame.sprite.Sprite):
         def __init__(self,x,y,max_hp,damage,Cd):
@@ -2240,7 +2235,7 @@ def win5(lvl, username, coin, pull, c, equip, stats):
         pygame.display.update()
 
 
-def win(lvl, username, levl, coin, pull, c, equip, stats):
+def win4(lvl, username, levl, coin, pull, c, equip, stats):
     # winning condition for lvl 1, 2, 3, 4
 
     # screen display / setup
