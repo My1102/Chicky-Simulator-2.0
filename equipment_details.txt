@@ -1,15 +1,15 @@
 axe,graphic/axe.png,Axe,Attack +10,10/0/0,w
 hammer,graphic/hammer.png,Hammer,Attack +20,20/0/0,w
 sword,graphic/sword.png,Sword,Attack +30,30/0/0,w
-shield3,graphic/shield.png,Wood Shield,Defence +5,0/5/0,shi
-shield4,graphic/shield.png,Iron Shield,Defence +7,0/7/0,shi
-shield5,graphic/shield.png,Diamond Shield,Defence +10,0/10/0,shi
-helmet3,graphic/noob helmet.png,Leather Helmet,Defence +5,0/5/0,h
-helmet4,graphic/helmet.png,Iron Helmet,Defence +7,0/7/0,h
-helmet5,graphic/helmet3.png,Diamond Helmet,Defence +10,0/10/0,h
-armor3,graphic/noob armor.png,Leather Armor,Defence +5,0/5/0,a
-armor4,graphic/armor.png,Iron Armor,Defence +7,0/7/0,a
-armor5,graphic/armor.png,Diamond Armor,Defence +10,0/10/0,a
-shoe3,graphic/noob leg.png,Leather Shoes,Speed +2,0/0/2,sho
-shoe4,graphic/leg.png,Iron Shoes,Speed +4,0/0/4,sho
-shoe5,graphic/leg.png,Diamond Shoes,Speed +6,0/0/6,sho
+shield3,graphic/shield5.png,Wood Shield,Defence +5,0/5/0,shi
+shield4,graphic/shield3.png,Iron Shield,Defence +7,0/7/0,shi
+shield5,graphic/shield4.png,Diamond Shield,Defence +10,0/10/0,shi
+helmet3,graphic/helmet3.png,Leather Helmet,Defence +5,0/5/0,h
+helmet4,graphic/helmet4.png,Iron Helmet,Defence +7,0/7/0,h
+helmet5,graphic/helmet5.png,Diamond Helmet,Defence +10,0/10/0,h
+armor3,graphic/armor5.png,Leather Armor,Defence +5,0/5/0,a
+armor4,graphic/armor3.png,Iron Armor,Defence +7,0/7/0,a
+armor5,graphic/armor4.png,Diamond Armor,Defence +10,0/10/0,a
+shoe3,graphic/shoe3.png,Leather Shoes,Speed +2,0/0/2,sho
+shoe4,graphic/shoe4.png,Iron Shoes,Speed +4,0/0/4,sho
+shoe5,graphic/shoe5.png,Diamond Shoes,Speed +6,0/0/6,sho
