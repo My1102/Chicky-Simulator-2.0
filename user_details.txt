@@ -1,5 +1,5 @@
 my, 1234, 3, 105, 48970, 0, speedy, axe/shield3/shoe3
-pog, 1234, 3, 246, 1000, 0, tanker, no/
+pog, 1234, 7, 246, 1000, 0, magnet, no/
 pl, 1234, 5, 208, 1000, 0, normal, no/
 renliang, 1234, 5, 568, 1000, 0, normal, no/
 wong, 1234, 5, 179, 1000, 0, normal, no/
