@@ -46,9 +46,9 @@ clock = pygame.time.Clock()
 Manager = pygame_gui.UIManager((width,height))
 UI_REFRESH_RATE = clock.tick(60)/1000
 font = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50)
-pygame.mixer.music.load("graphic/bgmusic.mp3")
-pygame.mixer.music.set_volume(0.3)
-pygame.mixer.music.play(-1)
+#pygame.mixer.music.load("graphic/bgmusic.mp3")
+#pygame.mixer.music.set_volume(0.3)
+#pygame.mixer.music.play(-1)
 
 # let user enter their username and password (using pygame_gui manager) - by my
 # learn from tutorial
@@ -786,16 +786,25 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
             pygame.draw.rect(screen, (255, 255, 255), (bar_x, bar_y, filled_width, bar_height))
 
             
-    def win(level):
+    def win(lvl, username, coin, pull, c, equip, stats):
         width, height = 900, 700
         screen = pygame.display.set_mode((width,height))
         pygame.display.set_caption('Chicky Simulator - Congratulations')
         screen.blit(level_image, (0,0))
 
         # renew user_details with latest lvl   #changed later
-        if level < 20:
-            level += 1
-            update_level(username, level)
+        if lvl < 20:
+            lvl += 1
+            update_level(username, lvl)
+
+        if c == 'magnet':
+            extra = random.randint(2,21)
+            coins_get = 200 + extra
+            coin += coins_get
+            update_coin(username, coin)
+        else:
+            coin += 200
+            update_coin(username, coin)
 
         while True:
 
@@ -824,14 +833,6 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
 
                     elif next_button.check_input(pos_mouse): #changed later
                         return 'next'
-                    #     if levl == 2:
-                    #         tutorial3(lvl, username, coin, pull, c, equip, stats)
-                    #     elif levl == 3:
-                    #         tutorial4(lvl, username, coin, pull, c, equip, stats)
-                    #     elif levl == 4:
-                    #         level4(lvl, username, coin, pull, c, equip, stats)
-                    #     elif levl == 5:
-                    #         level5(lvl, username, coin, pull, c, equip, stats)
 
             pygame.display.update()
 
@@ -904,7 +905,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
             
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if quit_button.check_input(pygame.mouse.get_pos()):
-                    update_level(username, level)
+                    #update_level(username, level)
                     choose_level(lvl, username, coin, pull, c, equip, stats)
 
             Manager.process_events(event)
@@ -951,7 +952,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
             time_use.append(time)
            
             time = 0 
-            result = win(level)
+            result = win(lvl, username, coin, pull, c, equip, stats)
             if result == 'next':
                 if level <= maxlevel:
                     level +=1
@@ -960,7 +961,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
                     world = reset_level(level)
                     Chicky = chicky(35,35,Hp, Def, Atk, Cd, Mag,c)
                     gameover = 0
-                    update_level(username, level)
+                    #update_level(username, level)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -2504,79 +2505,95 @@ def update_equipchick(username, chicky):
 
 
 def update_achieve(username, achieve_type, claim):
+    print(str(claim))
     claim_con = claim.split('/')
+    update = False
     with open('user_achievement.txt', 'r') as file:
         lines = file.readlines()
-        if achieve_type == 'level':
-            for i, line in enumerate(lines):
-                user_achieve = line.strip().split(", ")
-                if user_achieve[0] == username:
-                    collect_list = user_achieve[1].split('/')
-                    if claim_con[0] == '1':
-                        collect_list[0] = '1'
-                    if claim_con[1] == '1':
-                        collect_list[1] = '1'
-                    if claim_con[2] == '1':
-                        collect_list[2] = '1'
-                    if claim_con[3] == '1':
-                        collect_list[3] = '1'
-                    if claim_con[4] == '1':
-                        collect_list[4] = '1'
-                    if claim_con[5] == '1':
-                        collect_list[5] = '1'
+        
+    if achieve_type == 'level':
+        for i, line in enumerate(lines):
+            user_achieve = line.strip().split(", ")
+            if user_achieve[0] == username:
+                level_list = user_achieve[1].split('/')
+                if claim_con[0] == '1':
+                    print("True")
+                    level_list[0] = '1'
+                if claim_con[1] == '1':
+                    level_list[1] = '1'
+                if claim_con[2] == '1':
+                    level_list[2] = '1'
+                if claim_con[3] == '1':
+                    level_list[3] = '1'
+                if claim_con[4] == '1':
+                    level_list[4] = '1'
+                if claim_con[5] == '1':
+                    level_list[5] = '1'
 
-            new_str = '/'.join(collect_list)
-            user_achieve[1] = str(new_str)
-            lines[i] = ', '.join(user_achieve) + '\n'
-
-        elif achieve_type == 'collect':
-            for i, line in enumerate(lines):
-                user_achieve = line.strip().split(", ")
-                if user_achieve[0] == username:
-                    collect_list = user_achieve[3].split('/')
-                    if claim_con[0] == '1':
-                        collect_list[0] = '1'
-                    if claim_con[1] == '1':
-                        collect_list[1] = '1'
-                    if claim_con[2] == '1':
-                        collect_list[2] = '1'
-                    if claim_con[3] == '1':
-                        collect_list[3] = '1'
-                    if claim_con[4] == '1':
-                        collect_list[4] = '1'
-                    if claim_con[5] == '1':
-                        collect_list[5] = '1'
-
-            new_str = '/'.join(collect_list)
-            user_achieve[3] = str(new_str)
-            lines[i] = ', '.join(user_achieve) + '\n'
-
-        elif achieve_type == 'arcade':
-            for i, line in enumerate(lines):
-                user_achieve = line.strip().split(", ")
-                if user_achieve[0] == username:
-                    collect_list = user_achieve[2].split('/')
-                    if claim_con[0] == '1':
-                        collect_list[0] = '1'
-                    if claim_con[1] == '1':
-                        collect_list[1] = '1'
-                    if claim_con[2] == '1':
-                        collect_list[2] = '1'
-                    if claim_con[3] == '1':
-                        collect_list[3] = '1'
-                    if claim_con[4] == '1':
-                        collect_list[4] = '1'
-                    if claim_con[5] == '1':
-                        collect_list[5] = '1'
-
-            new_str = '/'.join(collect_list)
-            user_achieve[2] = str(new_str)
-            lines[i] = ', '.join(user_achieve) + '\n'
-
+        new_str = '/'.join(level_list)
+        print(str(new_str))
+        user_achieve[1] = str(new_str)
+        lines[i] = ', '.join(user_achieve) + '\n'
         with open('user_achievement.txt', 'w') as file:
             file.writelines(lines)
+            update = True
 
-        return 
+    elif achieve_type == 'collect':
+        for i, line in enumerate(lines):
+            user_achieve = line.strip().split(", ")
+            if user_achieve[0] == username:
+                collect_list = user_achieve[3].split('/')
+                if claim_con[0] == '1':
+                    collect_list[0] = '1'
+                if claim_con[1] == '1':
+                    collect_list[1] = '1'
+                if claim_con[2] == '1':
+                    collect_list[2] = '1'
+                if claim_con[3] == '1':
+                    collect_list[3] = '1'
+                if claim_con[4] == '1':
+                    collect_list[4] = '1'
+                if claim_con[5] == '1':
+                    collect_list[5] = '1'
+
+        new_str = '/'.join(collect_list)
+        print(str(new_str))
+        user_achieve[3] = str(new_str)
+        lines[i] = ', '.join(user_achieve) + '\n'
+        with open('user_achievement.txt', 'w') as file:
+            file.writelines(lines)
+            update = True
+
+    elif achieve_type == 'arcade':
+        for i, line in enumerate(lines):
+            user_achieve = line.strip().split(", ")
+            if user_achieve[0] == username:
+                collect_list = user_achieve[2].split('/')
+                if claim_con[0] == '1':
+                    collect_list[0] = '1'
+                if claim_con[1] == '1':
+                    collect_list[1] = '1'
+                if claim_con[2] == '1':
+                    collect_list[2] = '1'
+                if claim_con[3] == '1':
+                    collect_list[3] = '1'
+                if claim_con[4] == '1':
+                    collect_list[4] = '1'
+                if claim_con[5] == '1':
+                    collect_list[5] = '1'
+
+        new_str = '/'.join(collect_list)
+        user_achieve[2] = str(new_str)
+        lines[i] = ', '.join(user_achieve) + '\n'
+        with open('user_achievement.txt', 'w') as file:
+            file.writelines(lines)
+            update = True
+
+        #with open('user_achievement.txt', 'w') as file:
+            #file.writelines(lines)
+        
+        if update == True:
+            return 
 
 
 def check_coinget(username, coin, coinget):
@@ -3178,6 +3195,7 @@ def level_achieve(username, lvl, coin, pull, chicky, equip, stats):
             user_achieve = line.strip().split(", ")
             if user_achieve[0] == username:
                 claim_con = user_achieve[1].split('/')
+                print(str(f'{claim_con[0]}/{claim_con[1]}/{claim_con[2]}/{claim_con[3]}/{claim_con[4]}/{claim_con[5]}'))
     
     while True:
         pygame.display.set_caption('Chicky Simulator - Achievement')
@@ -3331,9 +3349,10 @@ def level_achieve(username, lvl, coin, pull, chicky, equip, stats):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if claim_button1.check_input(pos_mouse):
-                    if (lvl3_con == 1) and (claim_con[0] == '0'):
+                    if (lvl3_con == 1) and (claim_con[0] == 0):
                         claim_con[0] = 1
                         claim = str(f'{claim_con[0]}/{claim_con[1]}/{claim_con[2]}/{claim_con[3]}/{claim_con[4]}/{claim_con[5]}')
+                        print(claim)
                         ncoin = int(coin) + 30
                         update_coin(username, ncoin)
                         update_achieve(username, 'level', str(claim))
@@ -4021,8 +4040,9 @@ def backpack(username, lvl, coin, pull, chicky, equip, stats):
                     if selected_item:
                         for slot in backpack_slots:
                             if slot.item is None:
-                                equips.remove(selected_item)
-                                items.append(selected_item)
+                                if selected_item in equips:
+                                    equips.remove(selected_item)
+                                    items.append(selected_item)
                                 eequipp = str(f'{selected_item.name}')
                                 slot.item = selected_item
                                 selected_item = None
@@ -4837,10 +4857,10 @@ def mode(username, lvl, coin, pull, chicky, equip, stats):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button1.check_input(pos_mouse):
-                    choose_level( lvl,username, coin, pull, chicky, equip, stats)
+                    choose_level(lvl, username, coin, pull, chicky, equip, stats)
                 
                 if play_button2.check_input(pos_mouse):
-                    arcade_lobby(username,lvl,  coin, pull, chicky, equip, stats)
+                    arcade_lobby(username, lvl,  coin, pull, chicky, equip, stats)
 
                 if back_button.check_input(pos_mouse):
                     lobby(username, lvl, coin, pull, chicky, equip, stats)
@@ -4898,25 +4918,25 @@ def choose_level(lvl, username, coin, pull, chicky, equip, stats):
         lock5_con = False
 
         # check if user unlock the level or not
-        if lvl == 1:
+        if int(lvl) == 1:
             lock2.draw(screen)
             lock3.draw(screen)
             lock4.draw(screen)
             lock5.draw(screen)
 
-        elif lvl == 2:
+        elif int(lvl) == 2:
             lock2_con = True
             lock3.draw(screen)
             lock4.draw(screen)
             lock5.draw(screen)
 
-        elif lvl == 3:
+        elif int(lvl) == 3:
             lock2_con = True
             lock3_con = True
             lock4.draw(screen)
             lock5.draw(screen)
 
-        elif lvl == 4:
+        elif int(lvl) == 4:
             lock2_con = True
             lock3_con = True
             lock4_con = True
@@ -5015,42 +5035,42 @@ def choose_level2(lvl, username, coin, pull, chicky, equip, stats):
         lock10_con = False
 
         # check if user unlock the level or not
-        if lvl == 1 or lvl == 2 or lvl == 3 or lvl == 4 or lvl == 5 :
+        if int(lvl) < 6 :
             lock6.draw(screen)
             lock7.draw(screen)
             lock8.draw(screen)
             lock9.draw(screen)
             lock10.draw(screen)
 
-        elif lvl == 6:
+        if int(lvl) == 6:
             lock6_con = True
             lock7.draw(screen)
             lock8.draw(screen)
             lock9.draw(screen)
             lock10.draw(screen)
 
-        elif lvl == 7:
+        elif int(lvl) == 7:
             lock6_con = True
             lock7_con = True
             lock8.draw(screen)
             lock9.draw(screen)
             lock10.draw(screen)
 
-        elif lvl == 8:
+        elif int(lvl) == 8:
             lock6_con = True
             lock7_con = True
             lock8_con = True
             lock9.draw(screen)
             lock10.draw(screen)
 
-        elif lvl == 9:
+        elif int(lvl) == 9:
             lock6_con = True
             lock7_con = True
             lock8_con = True
             lock9_con = True
             lock10.draw(screen)
 
-        elif lvl == 10:
+        else:
             lock6_con = True
             lock7_con = True
             lock8_con = True
@@ -5145,42 +5165,42 @@ def choose_level3(lvl, username, coin, pull, chicky, equip, stats):
         lock15_con = False
 
         # check if user unlock the level or not
-        if lvl == 1 or lvl == 2 or lvl == 3 or lvl == 4 or lvl == 5 or lvl == 6 or lvl == 7 or lvl == 8 or lvl == 9 or lvl == 10:
+        if int(lvl) < 11:
             lock11.draw(screen)
             lock12.draw(screen)
             lock13.draw(screen)
             lock14.draw(screen)
             lock15.draw(screen)
 
-        elif lvl == 11:
+        elif int(lvl) == 11:
             lock11_con = True
             lock12.draw(screen)
             lock13.draw(screen)
             lock14.draw(screen)
             lock15.draw(screen)
 
-        elif lvl == 12:
+        elif int(lvl) == 12:
             lock11_con = True
             lock12_con = True
             lock13.draw(screen)
             lock14.draw(screen)
             lock15.draw(screen)
 
-        elif lvl == 13:
+        elif int(lvl) == 13:
             lock11_con = True
             lock12_con = True
             lock13_con = True
             lock14.draw(screen)
             lock15.draw(screen)
 
-        elif lvl == 14:
+        elif int(lvl) == 14:
             lock11_con = True
             lock12_con = True
             lock13_con = True
             lock14_con = True
             lock15.draw(screen)
 
-        elif lvl == 15:
+        else:
             lock11_con = True
             lock12_con = True
             lock13_con = True
@@ -5275,42 +5295,42 @@ def choose_level4(lvl, username, coin, pull, chicky, equip, stats):
         lock20_con = False
 
         # check if user unlock the level or not
-        if lvl == 1 or lvl == 2 or lvl == 3 or lvl == 4 or lvl == 5 or lvl == 6 or lvl == 7 or lvl == 8 or lvl == 9 or lvl == 10 or lvl == 11 or lvl == 12 or lvl == 13 or lvl == 14 or lvl == 15:
+        if int(lvl) < 16 :
             lock16.draw(screen)
             lock17.draw(screen)
             lock18.draw(screen)
             lock19.draw(screen)
             lock20.draw(screen)
 
-        elif lvl == 16:
+        elif int(lvl) == 16:
             lock16_con = True
             lock17.draw(screen)
             lock18.draw(screen)
             lock19.draw(screen)
             lock20.draw(screen)
 
-        elif lvl == 17:
+        elif int(lvl) == 17:
             lock16_con = True
             lock17_con = True
             lock18.draw(screen)
             lock19.draw(screen)
             lock20.draw(screen)
 
-        elif lvl == 18:
+        elif int(lvl) == 18:
             lock16_con = True
             lock17_con = True
             lock18_con = True
             lock19.draw(screen)
             lock20.draw(screen)
 
-        elif lvl == 19:
+        elif int(lvl) == 19:
             lock16_con = True
             lock17_con = True
             lock18_con = True
             lock19_con = True
             lock20.draw(screen)
 
-        elif lvl == 20:
+        else:
             lock16_con = True
             lock17_con = True
             lock18_con = True
@@ -5349,7 +5369,7 @@ def choose_level4(lvl, username, coin, pull, chicky, equip, stats):
                     choose_level3(lvl,username , coin, pull, chicky, equip, stats)
                 
                 if next_button.check_input(pos_mouse):
-                    arcade_lobby(lvl,username , coin, pull, chicky, equip, stats)
+                    arcade_lobby(username, lvl, coin, pull, chicky, equip, stats)
             
             Manager.process_events(event)
 
