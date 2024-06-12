@@ -716,7 +716,6 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
             pygame.draw.rect(screen, (128, 128, 128), (bar_x, bar_y, bar_width, bar_height))
             pygame.draw.rect(screen, (255, 255, 255), (bar_x, bar_y, filled_width, bar_height))
 
-
     class Monster3(pygame.sprite.Sprite):
         def __init__(self,x,y,max_hp,damage,Cd):
             pygame.sprite.Sprite.__init__(self)
@@ -776,7 +775,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
             pygame.draw.rect(screen, (128, 128, 128), (bar_x, bar_y, bar_width, bar_height))
             pygame.draw.rect(screen, (255, 255, 255), (bar_x, bar_y, filled_width, bar_height))
 
-    
+            
     def win(level):
         width, height = 900, 700
         screen = pygame.display.set_mode((width,height))
@@ -826,7 +825,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
 
             pygame.display.update()
 
-
+            
     def update_level(username, level):
         with open('user_details.txt', 'r') as file:
             lines = file.readlines()
@@ -4938,12 +4937,11 @@ def choose_level(lvl, username, coin, pull, chicky, equip, stats):
                 
                 if next_button.check_input(pos_mouse):
                     choose_level2(lvl,username , coin, pull, chicky, equip, stats)
-            
+                    
             Manager.process_events(event)
 
         Manager.update(UI_REFRESH_RATE)
         pygame.display.update()
-
 
 def choose_level2(lvl, username, coin, pull, chicky, equip, stats):
   
@@ -5074,7 +5072,6 @@ def choose_level2(lvl, username, coin, pull, chicky, equip, stats):
         Manager.update(UI_REFRESH_RATE)
         pygame.display.update()
 
-
 def choose_level3(lvl, username, coin, pull, chicky, equip, stats):
   
     while True:
@@ -5204,7 +5201,6 @@ def choose_level3(lvl, username, coin, pull, chicky, equip, stats):
         Manager.update(UI_REFRESH_RATE)
         pygame.display.update()
 
-
 def choose_level4(lvl, username, coin, pull, chicky, equip, stats):
   
     while True:
@@ -5333,7 +5329,6 @@ def choose_level4(lvl, username, coin, pull, chicky, equip, stats):
 
         Manager.update(UI_REFRESH_RATE)
         pygame.display.update()
-
 
 def lobby(username, lvl, coin, pull, chicky, equip, stats):
 
