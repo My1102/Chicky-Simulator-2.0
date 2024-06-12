@@ -306,7 +306,6 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
         return world
     
     
-
     class chicky():
         def __init__(self, x, y, Hp, Def,Atk,Cd,Mag,c):
             
@@ -479,6 +478,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
                 self.draw_defense_bar(screen)
             screen.blit(self.image, self.rect)
             return gameover
+        
         
     class KillCounter():
         def __init__(self):
@@ -787,8 +787,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
             pygame.draw.rect(screen, (128, 128, 128), (bar_x, bar_y, bar_width, bar_height))
             pygame.draw.rect(screen, (255, 255, 255), (bar_x, bar_y, filled_width, bar_height))
 
-    
-
+            
     def win(level):
         width, height = 900, 700
         screen = pygame.display.set_mode((width,height))
@@ -838,6 +837,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
 
             pygame.display.update()
 
+            
     def update_level(username, level):
         with open('user_details.txt', 'r') as file:
             lines = file.readlines()
@@ -2526,7 +2526,6 @@ def update_achieve(username, achieve_type, claim):
                         collect_list[4] = '1'
                     if claim_con[5] == '1':
                         collect_list[5] = '1'
-                    break
 
             new_str = '/'.join(collect_list)
             user_achieve[1] = str(new_str)
@@ -2549,7 +2548,6 @@ def update_achieve(username, achieve_type, claim):
                         collect_list[4] = '1'
                     if claim_con[5] == '1':
                         collect_list[5] = '1'
-                    break
 
             new_str = '/'.join(collect_list)
             user_achieve[3] = str(new_str)
@@ -2572,7 +2570,6 @@ def update_achieve(username, achieve_type, claim):
                         collect_list[4] = '1'
                     if claim_con[5] == '1':
                         collect_list[5] = '1'
-                    break
 
             new_str = '/'.join(collect_list)
             user_achieve[2] = str(new_str)
@@ -2906,6 +2903,45 @@ def collect_achieve(username, lvl, coin, pull, chicky, equip, stats):
 
 
 def arcade_achieve(username, lvl, coin, pull, chicky, equip, stats):
+
+    with open('user_achievement.txt', 'r') as file:
+        lines = file.readlines()
+        for line in lines:
+            user_achieve = line.strip().split(", ")
+            if user_achieve[0] == username:
+                score_list = user_achieve[4].split('/')
+                play_times = user_achieve[5]
+                if score_list[0] == '1':
+                    score20_con = 1
+                else :
+                    score20_con = 0
+                if score_list[1] == '1':
+                    score40_con = 1
+                else :
+                    score40_con = 0
+                if score_list[2] == '1':
+                    score60_con = 1
+                else :
+                    score60_con = 0
+                if int(play_times) >= 10:
+                    play10_con = 1
+                else :
+                    play10_con = 0
+                if int(play_times) >= 15:
+                    play15_con = 1
+                else :
+                    play15_con = 0
+                if int(play_times) >= 20:
+                    play20_con = 1
+                else :
+                    play20_con = 0
+
+    with open('user_achievement.txt', 'r') as file2:
+        lines = file2.readlines()
+        for line in lines:
+            user_achieve = line.strip().split(", ")
+            if user_achieve[0] == username:
+                claim_con = user_achieve[2].split('/')
     
     while True:
         pygame.display.set_caption('Chicky Simulator - Achievement')
@@ -2951,18 +2987,83 @@ def arcade_achieve(username, lvl, coin, pull, chicky, equip, stats):
         a6_text_rect = a6_text.get_rect(center = (750,460))
         screen.blit(a6_text, a6_text_rect)
 
-        claim_button1 = Button('graphic/button2.png', 150, 350, 0.25, "Claim")
-        claim_button1.draw(screen)
-        claim_button2 = Button('graphic/button2.png', 450, 350, 0.25, "Claim")
-        claim_button2.draw(screen)
-        claim_button3 = Button('graphic/button2.png', 750, 350, 0.25, "Claim")
-        claim_button3.draw(screen)
-        claim_button4 = Button('graphic/button2.png', 150, 600, 0.25, "Claim")
-        claim_button4.draw(screen)
-        claim_button5 = Button('graphic/button2.png', 450, 600, 0.25, "Claim")
-        claim_button5.draw(screen)
-        claim_button6 = Button('graphic/button2.png', 750, 600, 0.25, "Claim")
-        claim_button6.draw(screen)
+        if score20_con == 1:
+            if claim_con[0] == '0':
+                claim_button1 = Button('graphic/button2.png', 150, 350, 0.25, "Claim")
+                claim_button1.draw(screen)
+            else:
+                claim_button1 = Button('graphic/button2.png', 150, 350, 0.25, "Claimed")
+                claim_button1.draw(screen)
+        else:
+            claim_button1 = Button('graphic/button2.png', 150, 350, 0.25, "Claim")
+            claim_button1.draw(screen)
+            lock1 = Lock('graphic/lock.png', 150, 350, 0.25)
+            lock1.draw(screen)
+        
+        if score40_con == 1:
+            if claim_con[0] == '0':
+                claim_button2 = Button('graphic/button2.png', 450, 350, 0.25, "Claim")
+                claim_button2.draw(screen)
+            else:
+                claim_button2 = Button('graphic/button2.png', 450, 350, 0.25, "Claimed")
+                claim_button2.draw(screen)
+        else:
+            claim_button2 = Button('graphic/button2.png', 450, 350, 0.25, "Claim")
+            claim_button2.draw(screen)
+            lock1 = Lock('graphic/lock.png', 450, 350, 0.25)
+            lock1.draw(screen)
+
+        if score60_con == 1:
+            if claim_con[0] == '0':
+                claim_button3 = Button('graphic/button2.png', 750, 350, 0.25, "Claim")
+                claim_button3.draw(screen)
+            else:
+                claim_button3 = Button('graphic/button2.png', 750, 350, 0.25, "Claimed")
+                claim_button3.draw(screen)
+        else:
+            claim_button3 = Button('graphic/button2.png', 750, 350, 0.25, "Claim")
+            claim_button3.draw(screen)
+            lock1 = Lock('graphic/lock.png', 750, 350, 0.25)
+            lock1.draw(screen)
+
+        if play10_con == 1:
+            if claim_con[3] == '0':
+                claim_button4 = Button('graphic/button2.png', 150, 600, 0.25, "Claim")
+                claim_button4.draw(screen)
+            else:
+                claim_button4 = Button('graphic/button2.png', 150, 600, 0.25, "Claimed")
+                claim_button4.draw(screen)
+        else:
+            claim_button4 = Button('graphic/button2.png', 150, 600, 0.25, "Claim")
+            claim_button4.draw(screen)
+            lock4 = Lock('graphic/lock.png', 150, 600, 0.25)
+            lock4.draw(screen)
+
+        if play15_con == 1:
+            if claim_con[4] == '0':
+                claim_button5 = Button('graphic/button2.png', 450, 600, 0.25, "Claim")
+                claim_button5.draw(screen)
+            else:
+                claim_button5 = Button('graphic/button2.png', 450, 600, 0.25, "Claimed")
+                claim_button5.draw(screen)
+        else:
+            claim_button5 = Button('graphic/button2.png', 450, 600, 0.25, "Claim")
+            claim_button5.draw(screen)
+            lock5 = Lock('graphic/lock.png', 450, 600, 0.25)
+            lock5.draw(screen)
+
+        if play20_con == 1:
+            if claim_con[5] == '0':
+                claim_button6 = Button('graphic/button2.png', 750, 600, 0.25, "Claim")
+                claim_button6.draw(screen)
+            else:
+                claim_button6 = Button('graphic/button2.png', 750, 600, 0.25, "Claimed")
+                claim_button6.draw(screen)
+        else:
+            claim_button6 = Button('graphic/button2.png', 750, 600, 0.25, "Claim")
+            claim_button6.draw(screen)
+            lock6 = Lock('graphic/lock.png', 750, 600, 0.25)
+            lock6.draw(screen)
 
         back_button = Button('graphic/botton1.png', 100, 100, 0.6, "<<")
         back_button.draw(screen)
@@ -2975,6 +3076,60 @@ def arcade_achieve(username, lvl, coin, pull, chicky, equip, stats):
                 sys.exit()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
+                if claim_button1.check_input(pos_mouse):
+                    if (score20_con == 1) and (claim_con[0] == '0'):
+                        claim_con[0] = 1
+                        claim = str(f'{claim_con[0]}/{claim_con[1]}/{claim_con[2]}/{claim_con[3]}/{claim_con[4]}/{claim_con[5]}')
+                        ncoin = int(coin) + 30
+                        update_coin(username, ncoin)
+                        update_achieve(username, 'arcade', str(claim))
+                        arcade_achieve(username, lvl, ncoin, pull, chicky, equip, stats)
+
+                if claim_button2.check_input(pos_mouse):
+                    if (score40_con == 1) and (claim_con[1] == '0'):
+                        claim_con[1] = 1
+                        claim = str(f'{claim_con[0]}/{claim_con[1]}/{claim_con[2]}/{claim_con[3]}/{claim_con[4]}/{claim_con[5]}')
+                        ncoin = int(coin) + 50
+                        update_coin(username, ncoin)
+                        update_achieve(username, 'arcade', str(claim))
+                        arcade_achieve(username, lvl, ncoin, pull, chicky, equip, stats)
+
+                if claim_button3.check_input(pos_mouse):
+                    if (score60_con == 1) and (claim_con[2] == '0'):
+                        claim_con[2] = 1
+                        claim = str(f'{claim_con[0]}/{claim_con[1]}/{claim_con[2]}/{claim_con[3]}/{claim_con[4]}/{claim_con[5]}')
+                        ncoin = int(coin) + 100
+                        update_coin(username, ncoin)
+                        update_achieve(username, 'arcade', str(claim))
+                        arcade_achieve(username, lvl, ncoin, pull, chicky, equip, stats)
+
+                if claim_button4.check_input(pos_mouse):
+                    if (play10_con == 1) and (claim_con[3] == '0'):
+                        claim_con[3] = 1
+                        claim = str(f'{claim_con[0]}/{claim_con[1]}/{claim_con[2]}/{claim_con[3]}/{claim_con[4]}/{claim_con[5]}')
+                        ncoin = int(coin) + 30
+                        update_coin(username, ncoin)
+                        update_achieve(username, 'arcade', str(claim))
+                        arcade_achieve(username, lvl, ncoin, pull, chicky, equip, stats)
+
+                if claim_button5.check_input(pos_mouse):
+                    if (play15_con == 1) and (claim_con[4] == '0'):
+                        claim_con[4] = 1
+                        claim = str(f'{claim_con[0]}/{claim_con[1]}/{claim_con[2]}/{claim_con[3]}/{claim_con[4]}/{claim_con[5]}')
+                        ncoin = int(coin) + 50
+                        update_coin(username, ncoin)
+                        update_achieve(username, 'arcade', str(claim))
+                        arcade_achieve(username, lvl, ncoin, pull, chicky, equip, stats)
+
+                if claim_button6.check_input(pos_mouse):
+                    if (play20_con == 1) and (claim_con[5] == '0'):
+                        claim_con[5] = 1
+                        claim = str(f'{claim_con[0]}/{claim_con[1]}/{claim_con[2]}/{claim_con[3]}/{claim_con[4]}/{claim_con[5]}')
+                        ncoin = int(coin) + 100
+                        update_coin(username, ncoin)
+                        update_achieve(username, 'arcade', str(claim))
+                        arcade_achieve(username, lvl, ncoin, pull, chicky, equip, stats)
+
                 if back_button.check_input(pos_mouse):
                     achievement(username, lvl, coin, pull, chicky, equip, stats)
 
@@ -4795,7 +4950,7 @@ def choose_level(lvl, username, coin, pull, chicky, equip, stats):
                 
                 if next_button.check_input(pos_mouse):
                     choose_level2(lvl,username , coin, pull, chicky, equip, stats)
-            
+                    
             Manager.process_events(event)
 
         Manager.update(UI_REFRESH_RATE)
@@ -8630,7 +8785,6 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
     chick_images = [pygame.image.load('graphic/geekchic.png'),pygame.image.load('graphic/monster2.png'),pygame.image.load('graphic/monster1.png'),pygame.image.load('graphic/monster3.png')]
     
     #variables
-
     on = True
     time = 0
     coins = 0
@@ -8644,13 +8798,15 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
     coin_spawn = True
     chick_index = 0
 
-
-    def game_over(username, lvl, coin, pull, chicky, equip, stats) :
+    def game_over(username, lvl, coin, pull, chicky, equip, stats, play, coins) :
         font = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50)
 
         on = True
-        coins_get = []
-        played_time = []
+        #coins_get = []
+        #played_time = []
+
+        update_progress(username, coins)
+        update_played(username, play)
 
         while on :
             screen.blit(background_image,(0,0))
@@ -8658,12 +8814,8 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
             screen.blit(font.render('Click again to go back.',True,'white'),(230,350))
             pygame.display.flip()
 
-
-            played_time.append(played)
-            coins_get.append(coins)
-
-            update_progress(username,coins_get[0])
-            update_played(username,played_time[0])
+            #played_time.append(play)
+            #coins_get.append(coins)
 
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -8674,44 +8826,50 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
 
 
             pygame.display.flip()
-    
-
 
     def update_progress(username, coins):
         
-        with open('user_snake.txt', 'r') as file:
+        with open('user_achievement.txt', 'r') as file:
             lines = file.readlines()
 
         for i, line in enumerate(lines):
-            user_details = line.strip().split(", ")
-            if user_details[0] == username:
-                if int(user_details[1]) < int(coins):
-                    user_details[1] = str(coins)
-                    lines[i] = ', '.join(user_details) + '\n'
-                    break
-                else :
-                    break
-
-        with open('user_snake.txt', 'w') as file:
-            file.writelines(lines)
-        return
-
-    def update_played(username, played):
-        
-        with open('user_snake.txt', 'r') as file:
-            lines = file.readlines()
-
-        for i, line in enumerate(lines):
-            user_details = line.strip().split(", ")
-            if user_details[0] == username:
-                user_details[2] = str(played)
-                lines[i] = ', '.join(user_details) + '\n'
+            user_snake = line.strip().split(", ")
+            if user_snake[0] == username:
+                user_score = user_snake[4].split('/')
+                if int(coins) >= 60:
+                    user_score[2] = '1'
+                if int(coins) >= 40:
+                    user_score[1] = '1'
+                if int(coins) >= 20:
+                    user_score[0] = '1'
+                score_str = '/'.join(user_score)
+                user_snake[4] = str(score_str)
+                lines[i] = ', '.join(user_snake) + '\n'
                 break
 
-        with open('user_snake.txt', 'w') as file:
+        with open('user_achievement.txt', 'w') as file:
             file.writelines(lines)
         return
 
+    def update_played(username, play):
+        
+        with open('user_achievement.txt', 'r') as file:
+            lines = file.readlines()
+
+        for i, line in enumerate(lines):
+            user_snake = line.strip().split(", ")
+            if play == '1':
+                if user_snake[0] == username:
+                    played = int(user_snake[5]) + 1
+                    user_snake[5] = str(played)
+                lines[i] = ', '.join(user_snake) + '\n'
+                break
+            else:
+                break
+
+        with open('user_achievement.txt', 'w') as file:
+            file.writelines(lines)
+        return
 
     while on :
         
@@ -8719,8 +8877,6 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
         screen.blit(background_image,(0,0))
         screen.blit(manycoin_image,(650,25))
         screen.blit(coin_image, pygame.Rect(coin_position[0], coin_position[1], 35, 35))
-
-        
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -8735,8 +8891,6 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
                     change_to = 'LEFT'
                 if event.key == pygame.K_d:
                     change_to = 'RIGHT'
-
-
         
         #make sure no 'u turn' happens
         if change_to == 'UP' and direction != 'DOWN':
@@ -8766,7 +8920,6 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
 
         #coin collision
         if chick_rect.colliderect(coin_rect):
-            
             coin_spawn = False
             coins += 2
             chick_index =(chick_index + 1) % len(chick_images)
@@ -8784,35 +8937,30 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
                 chick_image = pygame.transform.scale(chick_images[(chick_index + index - 1) % len(chick_images)],(50, 50))
             screen.blit(chick_image,pygame.Rect(position[0],position[1],50,50))
             
+        ccoinn = coins
         # Game Over conditions
         #left right
         if chick_position[0] < 0 or chick_position[0] > width-35:
-            game_over(username, lvl, coin, pull, chicky, equip, stats)
-            
+            play = 0
+            game_over(username, lvl, coin, pull, chicky, equip, stats, play, ccoinn)
             
         #up down
-        if chick_position[1] < 0 or chick_position[1] > height-35:   
-            game_over(username, lvl, coin, pull, chicky, equip, stats)
+        if chick_position[1] < 0 or chick_position[1] > height-35: 
+            play = 0  
+            game_over(username, lvl, coin, pull, chicky, equip, stats, play, ccoinn)
             
-            
-        
         #timer
         time = 60 - (pygame.time.get_ticks() - ticks) // 1000
         if time <= 0 :
-            played += 1
-            game_over(username, lvl, coin, pull, chicky, equip, stats)
+            play = '1'
+            game_over(username, lvl, coin, pull, chicky, equip, stats, play, ccoinn)
             
-            
-
-
         #collision with body
         for block in chick_body[1:]:
             if chick_position == block:
-                game_over(username, lvl, coin, pull, chicky, equip, stats)
-                
-                
-        
-        
+                play = 0
+                game_over(username, lvl, coin, pull, chicky, equip, stats, play, ccoinn)
+                     
         #text display
         timer_text = font.render(f"{time}", True, (255,255,255))
         text_rect = timer_text.get_rect(center = (width//2,50))
@@ -8822,7 +8970,6 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
         text_rect = coin_text.get_rect(center = (750,50))
         screen.blit(coin_text, text_rect)
 
-    
 
         pygame.display.update()
 
