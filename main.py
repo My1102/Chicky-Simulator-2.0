@@ -476,7 +476,19 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
         
         
     class KillCounter():
-        def __init__(self, target):
+        def __init__(self):
+            current = level
+            if current == 1 or current == 2 or current == 3 or current == 4 or current == 5:
+                target = 0
+
+            if current == 6 or current == 7 or current == 8 or current == 9 or current == 10:
+                target = 1
+
+            if current == 11 or current == 12 or current == 13 or current == 14 or current == 15:
+                target = 2
+
+            if current == 16 or current == 17 or current == 18 or current == 19 or current == 20:
+                target = 3
             self.kill = 0
             self.target = target
 
@@ -490,19 +502,18 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
             kill_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render(f'Kills: {self.kill}/{self.target}', True, 'white')
             screen.blit(kill_text, (720, 450))
 
-    current = level
-    if current == 1 or current == 2 or current == 3 or current == 4 or current == 5:
-        kill_counter = KillCounter(0)
+    # if current == 1 or current == 2 or current == 3 or current == 4 or current == 5:
+    #     kill_counter = KillCounter(0)
 
-    if current == 6 or current == 7 or current == 8 or current == 9 or current == 10:
-        kill_counter = KillCounter(1)
+    # if current == 6 or current == 7 or current == 8 or current == 9 or current == 10:
+    #     kill_counter = KillCounter(1)
 
-    if current == 11 or current == 12 or current == 13 or current == 14 or current == 15:
-        kill_counter = KillCounter(2)
+    # if current == 11 or current == 12 or current == 13 or current == 14 or current == 15:
+    #     kill_counter = KillCounter(2)
+    
+    # if current == 16 or current == 17 or current == 18 or current == 19 or current == 20:
 
-    if current == 16 or current == 17 or current == 18 or current == 19 or current == 20:
-        kill_counter = KillCounter(4)
-
+    kill_counter = KillCounter()
         
     class HealthBar():
         def __init__(self,x,y,hp,Hp):
@@ -890,6 +901,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
             
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if quit_button.check_input(pygame.mouse.get_pos()):
+                    update_level(username, level)
                     choose_level(lvl, username, coin, pull, c, equip, stats)
 
             Manager.process_events(event)
@@ -936,7 +948,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
             time_use.append(time)
            
             time = 0 
-            result = win(lvl)
+            result = win(level)
             if result == 'next':
                 if level <= maxlevel:
                     level +=1
@@ -4895,7 +4907,7 @@ def choose_level(lvl, username, coin, pull, chicky, equip, stats):
             lock4_con = True
             lock5.draw(screen)
 
-        elif lvl == 5:
+        else:
             lock2_con = True
             lock3_con = True
             lock4_con = True
