@@ -173,44 +173,6 @@ def tutorial2(lvl, username, coin, pull, c, equip, stats):
         pygame.display.update()   
 
 
-def tutorial4(lvl, username, coin, pull, c, equip, stats):
-    #screen display / program setup
-    screen = pygame.display.set_mode((width,height))
-    pygame.display.set_caption('Chicky Simulator - Tutorial')
-    screen.blit(level_image, (0,0))
-    
-    while True:
-
-        w, h = 600, 400
-        tuto4 = pygame.image.load('graphic/tuto4.PNG')
-        tuto4 = pygame.transform.scale(tuto4,(w,h))
-        tuto4_rect = tuto4.get_rect(center = (width/2, height/2))
-        screen.blit(tuto4, tuto4_rect)
-
-        start_button = Button('graphic/button2.png', 620, 475, 0.2, "START")
-        start_button.draw(screen)
-
-        back_button = Button('graphic/botton1.png', 100, 100, 0.6, "<<")
-        back_button.draw(screen)
-
-        pos_mouse = pygame.mouse.get_pos()
-
-        #checking for user events
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if start_button.check_input(pos_mouse):
-                    level3(lvl, username, coin, pull, c, equip, stats)
-
-                if back_button.check_input(pos_mouse):
-                    choose_level(lvl, username, coin, pull, c, equip, stats)
-
-        pygame.display.update()   
-
-
 def tutorial3(lvl, username, coin, pull, c, equip, stats):
     #screen display / program setup
     screen = pygame.display.set_mode((width,height))
@@ -249,10 +211,10 @@ def tutorial3(lvl, username, coin, pull, c, equip, stats):
         pygame.display.update()   
 
 
-def leveltest(lvl, username, coin, pull, c, equip, stats,level):
+def leveltest(lvl, username, coin, pull, c, equip, stats, level):
     width, height = 900, 700
     screen = pygame.display.set_mode((width,height))
-    pygame.display.set_caption('Chicky Simulator')
+    pygame.display.set_caption(f'Chicky Simulator - Level {level}')
     background_image = pygame.image.load('graphic/map.jpg')
     pygame.transform.scale(background_image,(700,700))
     ranking_image = pygame.image.load('graphic/garden.png')
@@ -288,27 +250,29 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
     pygame.time.set_timer(pygame.USEREVENT+1, 1000)
     clock = pygame.time.Clock()
     time_use =[]
+
     pygame.mixer.music.load("graphic/bgmusic2.mp3")
     pygame.mixer.music.set_volume(0.1)
     pygame.mixer.music.play(-1)
 
 
-    def reset_level(level):
+    def reset_level(lvl, level):
         
         jy_group.empty()
         yuen_group.empty()
         puolin_group.empty()
+        world_data = []
 
         if path.exists(f'level{level}_data'):
             pickle_in = open(f'level{level}_data', 'rb')
             world_data = pickle.load(pickle_in)
         world = World(world_data)
 
-        return world
+        return coin, lvl, world
     
     
     class chicky():
-        def __init__(self, x, y, Hp, Def,Atk,Cd,Mag,c):
+        def __init__(self, x, y, Hp, Def, Atk, Cd, Mag, c):
             
             self.animation_list = []
             self.index = 0
@@ -392,6 +356,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
             pygame.draw.rect(screen, (128, 128, 128), (bar_x, bar_y, bar_width, bar_height))
             pygame.draw.rect(screen, (255, 255, 255), (bar_x, bar_y, filled_width, bar_height))
             
+
         def draw_defense_bar(self, screen):
             # Calculate the current defense percentage
             defense_percentage = max(0, min(1, self.cdef / self.Def))
@@ -408,7 +373,6 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
                 
 
         def update(self, gameover):
-            current_time = pygame.time.get_ticks()
             if gameover == 0:
                 dx, dy = 0, 0
                 walk_cooldown = 5
@@ -459,8 +423,11 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
                     if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20, 10, 10):
                         if not world.coin_list:
                             if kill_counter.check_win_condition():
+                                print('yes')
                                 pygame.time.set_timer(pygame.USEREVENT, 0)
                                 time_use.append(time)
+                                if level == 20:
+                                    update_time(username, time_use[0])
                                 gameover = 1
 
                 self.rect.x += dx
@@ -484,6 +451,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
     class KillCounter():
         def __init__(self):
             current = level
+            print(current)
             if current == 1 or current == 2 or current == 3 or current == 4 or current == 5:
                 target = 0
 
@@ -508,19 +476,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
             kill_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render(f'Kills: {self.kill}/{self.target}', True, 'white')
             screen.blit(kill_text, (720, 450))
 
-    # if current == 1 or current == 2 or current == 3 or current == 4 or current == 5:
-    #     kill_counter = KillCounter(0)
 
-    # if current == 6 or current == 7 or current == 8 or current == 9 or current == 10:
-    #     kill_counter = KillCounter(1)
-
-    # if current == 11 or current == 12 or current == 13 or current == 14 or current == 15:
-    #     kill_counter = KillCounter(2)
-    
-    # if current == 16 or current == 17 or current == 18 or current == 19 or current == 20:
-
-    kill_counter = KillCounter()
-        
     class HealthBar():
         def __init__(self,x,y,hp,Hp):
             self.x = x
@@ -533,19 +489,6 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
             ratio = self.hp/self.Hp
             pygame.draw.rect(screen,red,(self.x,self.y,60,200))
             pygame.draw.rect(screen,green,(self.x,self.y,60,200*ratio))
-
-   
-    # class KillCounter():
-    #     def __init__(self,level,kill,target):
-    #         self.lvl = lvl
-    #         self.kill = kill
-    #         self.target = target
-    #     def draw(self,kill,target):
-    #         self.kill = kill
-    #         self.target = target
-    #         kill_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render(f'{kill}/{target}', True, 'white')
-    #         kill_text_rect = kill_text.get_rect(center = (7600,400))
-    #         screen.blit(kill_text, kill_text_rect)
 
 
     class World():
@@ -645,8 +588,8 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
                 if self.hp <= 0:
                     yuen_group.remove(yuen)
                     kill_counter.increment()
+                   
           
-
         def draw_health_bar(self):
             ratio = self.hp / self.max_hp
             pygame.draw.rect(screen, red, (self.rect.x, self.rect.y - 5, 35, 5))
@@ -789,16 +732,27 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
             pygame.draw.rect(screen, (255, 255, 255), (bar_x, bar_y, filled_width, bar_height))
 
             
-    def win(level):
+    def win(lvl, username, coin, pull, c, equip, stats):
         width, height = 900, 700
         screen = pygame.display.set_mode((width,height))
         pygame.display.set_caption('Chicky Simulator - Congratulations')
         screen.blit(level_image, (0,0))
 
         # renew user_details with latest lvl   #changed later
-        if level < 20:
-            level += 1
-            update_level(username, level)
+        if lvl < 20:
+            levl = lvl + 1
+            update_level(username, levl)
+        else:
+            levl = lvl
+
+        if c == 'magnet':
+            extra = random.randint(100,131)
+            coins_get = 500 + extra
+            ncoin =  coin + coins_get
+            update_coin(username, coin)
+        else:
+            ncoin = coin + 500
+            update_coin(username, coin)
 
         while True:
 
@@ -823,22 +777,63 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if level_button.check_input(pos_mouse):
-                        choose_level(lvl, username, coin, pull, c, equip, stats)
+                        choose_level(levl, username, ncoin, pull, c, equip, stats)
 
-                    elif next_button.check_input(pos_mouse): #changed later
-                        return 'next'
-                    #     if levl == 2:
-                    #         tutorial3(lvl, username, coin, pull, c, equip, stats)
-                    #     elif levl == 3:
-                    #         tutorial4(lvl, username, coin, pull, c, equip, stats)
-                    #     elif levl == 4:
-                    #         level4(lvl, username, coin, pull, c, equip, stats)
-                    #     elif levl == 5:
-                    #         level5(lvl, username, coin, pull, c, equip, stats)
+                    elif next_button.check_input(pos_mouse):
+                        return ncoin, levl, 'next'
 
             pygame.display.update()
 
+
+    def win5(lvl, username, coin, pull, c, equip, stats):
+    # winning condition for lvl 5
+
+    # screen display / setup
+        width, height = 900, 700
+        screen = pygame.display.set_mode((width,height))
+        pygame.display.set_caption('Chicky Simulator - Congratulations')
+        screen.blit(level_image, (0,0))
+
+        if c == 'magnet':
+            extra = random.randint(300,331)
+            coins_get = 1000 + extra
+            ncoin = coin + coins_get
+            update_coin(username, ncoin)
+        else:
+            ncoin = coin + 1000
+            update_coin(username, ncoin)
+
+        while True:
+
+            w, h = 600, 400
+            win_image = pygame.image.load('graphic/win.PNG')
+            win_image = pygame.transform.scale(win_image,(w,h))
+            win_image_rect = win_image.get_rect(center = (width/2, height/2))
+            screen.blit(win_image, win_image_rect)
+
+            level_button = Button('graphic/button2.png', 330, 460, 0.25, "LEVEL")
+            level_button.draw(screen)
+
+            rank_button = Button('graphic/button2.png', 570, 460, 0.25, "RANKING")
+            rank_button.draw(screen)
+
+            pos_mouse = pygame.mouse.get_pos()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if level_button.check_input(pos_mouse):
+                        choose_level(lvl, username, ncoin, pull, c, equip, stats)
+
+                    if rank_button.check_input(pos_mouse):
+                        ranking(username, lvl, ncoin, pull, c, equip, stats)
+
+            pygame.display.update()
             
+
     def update_level(username, level):
         with open('user_details.txt', 'r') as file:
             lines = file.readlines()
@@ -854,26 +849,17 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
             file.writelines(lines)
         return
 
-    # class Exit(pygame.sprite.Sprite):
-    #     def __init__(self, x, y):
-    #         pygame.sprite.Sprite.__init__(self)
-    #         img = pygame.image.load('graphic/bananacat.png')
-    #         self.image = pygame.transform.scale(img, (tile_size, int(tile_size * 1.5)))
-    #         self.rect = self.image.get_rect()
-    #         self.rect.x = x
-    #         self.rect.y = y
-
-    Hp, Def, Atk, Cd, Mag = map(int, stats.split('/'))
+    Hp, Def, Atk, Cd, Mag = map(float, stats.split('/'))
+    Cd *= 1000
     Chicky = chicky(35,35,Hp, Def, Atk, Cd, Mag,c)
-    
-    
     
     yuen_group = pygame.sprite.Group()
     puolin_group = pygame.sprite.Group()
     jy_group = pygame.sprite.Group()  
 
     chicky_health_bar = HealthBar(750,200,Chicky.hp,Chicky.Hp)
-    
+    kill_counter = KillCounter()
+    run = True
 
     if path.exists(f'level{level}_data'):
         pickle_in = open(f'level{level}_data', 'rb')
@@ -881,22 +867,60 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
         print('yes im here')
     world = World(world_data)
 
-    
-
-    run = True
     while run:
-        
-        
-
         
         clock.tick(fps)
         screen.blit(background_image,(0,0))
         
+        # lvl, world = reset_level(lvl, level)
         world.draw()
         gameover = Chicky.update(gameover)
+        kill_counter.draw(screen)
 
+        timer_text = font.render(f"{time}", True, (255,255,255))
+        text_rect = timer_text.get_rect(center = (width//2,50))
+        screen.blit(timer_text, text_rect)
+        chicky_health_bar.draw(Chicky.hp)
         
+        jy_group.draw(screen)
+        yuen_group.draw(screen)
+        puolin_group.draw(screen)
 
+        if gameover == 0:
+            quit_button = Button('graphic/botton1.png', 800, 100, 1, "Quit")
+            quit_button.draw(screen)    
+            kill_counter.draw(screen)
+            chicky_health_bar = HealthBar(750,200,Chicky.hp,Chicky.Hp)
+            chicky_health_bar.draw(Chicky.hp)
+
+            for jy in jy_group:
+                jy.update(jy_hp,jy_dmg,10000)
+            for yuen in yuen_group:
+                yuen.update(my_hp,my_dmg,8000)
+            for puolin in puolin_group:
+                puolin.update(pl_hp, pl_dmg,5000)
+
+        if gameover == -1:
+            coin, lvl, world = reset_level(lvl, level)
+            Chicky = chicky(35, 35, Hp, Def, Atk, Cd, Mag, c)
+            gameover = 0
+            
+        if gameover == 1:
+            # set timer stop 
+            pygame.time.set_timer(pygame.USEREVENT+1, 1000)
+            # save in list 
+            time_use.append(time)
+            time = 0 
+
+            if level == 20:
+                win5(lvl, username, coin, pull, c, equip, stats)
+            else:
+                coin, lvl, result = win(lvl, username, coin, pull, c, equip, stats)
+
+            if result == 'next':
+                if level <= maxlevel:
+                    level += 1
+                    leveltest(lvl, username, coin, pull, c, equip, stats, level)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -907,1394 +931,15 @@ def leveltest(lvl, username, coin, pull, c, equip, stats,level):
             if event.type == pygame.USEREVENT + 1:
                 time += 1
 
-            
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if quit_button.check_input(pygame.mouse.get_pos()):
-                    pygame.mixer.music.load("graphic/bgmusic1.mp3")
-                    pygame.mixer.music.set_volume(0.1)
-                    pygame.mixer.music.play(-1)
-                    update_level(username, level)
                     choose_level(lvl, username, coin, pull, c, equip, stats)
 
             Manager.process_events(event)
 
-        timer_text = font.render(f"{time}", True, (255,255,255))
-        text_rect = timer_text.get_rect(center = (width//2,50))
-        screen.blit(timer_text, text_rect)
-        chicky_health_bar.draw(Chicky.hp)
-        
-
-        if gameover == 0:
-            
-            quit_button = Button('graphic/botton1.png', 800, 100, 1, "Quit")
-            quit_button.draw(screen)
-            # pos_mouse = pygame.mouse.get_pos()
-                    
-            kill_counter.draw(screen)
-
-            for jy in jy_group:
-                jy.update(jy_hp,jy_dmg,10000)
-            for yuen in yuen_group:
-                yuen.update(my_hp,my_dmg,8000)
-            for puolin in puolin_group:
-                puolin.update(pl_hp, pl_dmg,5000)
-            
-        jy_group.draw(screen)
-        yuen_group.draw(screen)
-        puolin_group.draw(screen)
-            # coin_group.draw(screen)
-            # exit_group.draw(screen)
-
-        if gameover == -1:
-            # if restart_button.draw(screen):
-            world_data = []
-            world = reset_level(level)
-            Chicky = chicky(35,35,Hp, Def, Atk, Cd, Mag,c)
-            gameover = 0
-            
-
-        if gameover == 1:
-            # set timer stop 
-            pygame.time.set_timer(pygame.USEREVENT+1, 1000)
-            # save in list 
-            time_use.append(time)
-           
-            time = 0 
-            result = win(level)
-            if result == 'next':
-                if level <= maxlevel:
-                    level +=1
-                    #reset level
-                    world_data = []
-                    world = reset_level(level)
-                    Chicky = chicky(35,35,Hp, Def, Atk, Cd, Mag,c)
-                    gameover = 0
-                    update_level(username, level)
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-        pygame.display.update()
-
-
-def level1(lvl, username, coin, pull, c, equip, stats): # This one easier to read
-    # by 'Puo Puo'(Puo Lin) & Jia Ying
-    import pygame as pg # change pygame to pg 
-
-    # screen display / program setup
-    width, height = 500, 500
-    screen = pg.display.set_mode((width,height))
-    font = pg.font.Font("ThaleahFat/ThaleahFat.ttf", 100)
-    pg.display.set_caption('Chicky Simulator - Level 1')
-    board2 = pg.image.load('graphic/10x10map.jpg')
-    tile_size=50
-
-    # timer part refers tutorial https://www.pygame.org/docs/ref/time.html#pygame.time.set_timer told by handsome Mr.Willie)
-    time = 0
-    pg.time.set_timer(pg.USEREVENT+1, 1000)
-    clock = pg.time.Clock()
-    time_use =[]
-    
-    while True:
-        
-        class chicky():
-            def __init__(self,x,y):
-                chic = pygame.image.load(c)
-                self.image = pg.transform.scale(chic,(50,50))
-                self.rect = self.image.get_rect(center=(25,25))
-                self.rect.x = x
-                self.rect.y = y
-
-            def update(self):
-                dx = 0 # Willie : teacher teacher what is this
-                dy = 0 # Jy : Change in position of player, we nid this to do collision ltr
-
-                key = pg.key.get_pressed()
-                if key[pg.K_w]:
-                    dy -= 3
-                    if self.rect.y<0 :
-                        self.rect.y=0
-                if key[pg.K_a]:
-                    dx -= 3
-                    if self.rect.x<0 :
-                        self.rect.x=0
-                if key[pg.K_s]:
-                    dy += 3
-                    if self.rect.y>450 :
-                        self.rect.y=450
-                if key[pg.K_d]:
-                    dx += 3
-                    if self.rect.x>450 :
-                        self.rect.x=450
-                
-                # collision with blocks
-                for item in level.block_list:
-                    if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20 , 10, 10):
-                        dx = 0
-                        dy = 0
-                # collision with coins
-                for item in level.coin_list:
-                    if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20 , 10, 10):
-                        level.coin_list.remove(item)
-                        if level.coin_list == [] :
-                            # set timer stop 
-                            pg.time.set_timer(pg.USEREVENT, 0)
-                            # save in list 
-                            time_use.append(time)
-                            levl = 2 #added later  #for navigation in win - by my
-                            win(lvl, username, levl, coin, pull, c, equip, stats)
-                            
-                # collision with monsters(This one jy use sprite collide becoz they are moving objects)
-                if pg.sprite.spritecollide(self,yuen_group,False):
-                    self.rect.x = 0
-                    self.rect.y = 0
-                if pg.sprite.spritecollide(self,jy_group,False):
-                    self.rect.x = 0
-                    self.rect.y = 0
-                if pg.sprite.spritecollide(self,puolin_group,False):
-                    self.rect.x = 0
-                    self.rect.y = 0
-                
-                self.rect.x += dx
-                self.rect.y += dy
-
-                screen.blit(self.image,self.rect)
-
-        # define fixed information(NPC/Blocks/Coin) - by jy
-        class lvel():
-            def __init__(self,data):
-                self.block_list = [ ] 
-                self.coin_list = [ ] 
-                
-                block = pg.image.load('graphic/block.png')
-                coin = pg.image.load('graphic/coin.png')
-
-                row_count = 0
-                for row in data:
-                    col_count = 0
-                    for tile in row:
-                        if tile == 1 :
-                            block = pg. transform. scale(block, (tile_size, tile_size))
-                            block_rect = block.get_rect()
-                            block_rect.x = col_count * tile_size
-                            block_rect.y = row_count * tile_size
-                            item = (block, block_rect) 
-                            self.block_list.append(item) 
-                        if tile == 2 :
-                            coin = pg. transform. scale(coin, (tile_size, tile_size))
-                            coin_rect = block.get_rect()
-                            coin_rect.x = col_count * tile_size
-                            coin_rect.y = row_count * tile_size
-                            item = (coin, coin_rect)
-                            self.coin_list.append(item)
-                            
-                        if tile == 3 :
-                            yuen = Monster1(col_count * tile_size,row_count * tile_size)
-                            yuen_group.add(yuen)
-                            
-                        if tile == 4 :
-                            jy = Monster3(col_count * tile_size,row_count * tile_size)
-                            jy_group.add(jy)
-
-                        if tile == 5 :
-                            puolin = Monster2(col_count * tile_size,row_count * tile_size)
-                            puolin_group.add(puolin)
-                        col_count += 1
-                    row_count += 1
-
-            def draw(self):
-                for item in self.block_list:
-                    screen.blit(item[0],item[1]) 
-                for item in self.coin_list:
-                    screen.blit(item[0],item[1])
-
-        # http://www.codingwithruss.com/pygame/sprite-class-and-sprite-groups-explained/ 
-        # jy learned how to create sprite groups from this 
-        class Monster1(pg.sprite.Sprite):
-            def __init__(self,x,y):
-                pg.sprite.Sprite.__init__(self)
-                self.image = pg.image.load('graphic/monster1.png') 
-                self.image = pg.transform.scale(self.image, (tile_size, tile_size))
-                self.rect = self.image.get_rect()
-                self.rect.x = x
-                self.rect.y = y
-                self.move_direction = 1
-                self.move_counter = 0
-                
-            def update(self):
-                self.rect.x += self.move_direction
-                self.move_counter += 1
-                if self.move_counter > 100 :
-                    self.move_direction *= -1
-                    self.move_counter *= -1
-            # Willie : how u display this on screen u don't even write a funtion for display 
-            # jy : sprite got build in draw funtion hehe
-                    
-        class Monster2(pg.sprite.Sprite):
-            def __init__(self,x,y):
-                pg.sprite.Sprite.__init__(self)
-                self.image = pg.image.load('graphic/monster2.png') 
-                self.image = pg.transform.scale(self.image, (tile_size, tile_size))
-                self.rect = self.image.get_rect()
-                self.rect.x = x
-                self.rect.y = y
-                
-        class Monster3(pg.sprite.Sprite):
-            def __init__(self,x,y):
-                pg.sprite.Sprite.__init__(self)
-                self.image = pg.image.load('graphic/monster3.png') 
-                self.image = pg.transform.scale(self.image, (tile_size, tile_size))
-                self.rect = self.image.get_rect()
-                self.rect.x = x
-                self.rect.y = y
-                self.move_direction = 1
-                self.move_counter = 0
-                
-            def update(self):
-                self.rect.y += self.move_direction
-                self.move_counter += 1
-                if self.move_counter > 100 :
-                    self.move_direction *= -1
-                    self.move_counter *= -1
-
-        
-        lvl1_data=[
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,1,1,0,1,1,1,0,0],
-        [0,1,1,2,1,1,2,1,1,0],
-        [0,1,2,0,1,0,0,2,1,0],
-        [0,1,1,0,0,0,2,1,1,0],
-        [0,0,1,1,0,0,1,1,0,0],
-        [0,0,0,1,0,1,1,0,0,0],
-        [0,0,0,0,2,1,0,0,0,0],
-        [0,0,0,5,1,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0]
-        ]
-
-        # user spawning point
-        Chicky = chicky(0,0)
-        # group created for collision use
-        yuen_group = pg.sprite.Group()
-        puolin_group = pg.sprite.Group()
-        jy_group = pg.sprite.Group()  
-
-        level = lvel(lvl1_data)
-
-        # start program in loop
-        on = True
-        while on == True :
-
-            screen.blit(board2,(0,0))
-
-            level.draw() 
-
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    on = False
-                    pygame.quit()
-                    sys.exit()
-
-                if event.type == pg.USEREVENT + 1:
-                    time += 1
-
-                Manager.process_events(event)
-                    
-            timer_text = font.render(f"{time}", True, (255,255,255))
-            text_rect = timer_text.get_rect(center = (width//2,50))
-            screen.blit(timer_text, text_rect)
-
-            yuen_group.update()
-            yuen_group.draw(screen)
-
-            jy_group.update()
-            jy_group.draw(screen)
-
-            puolin_group.draw(screen)
-            Chicky.update()
-            
-            clock.tick(60)
-            pg.display.update()        
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
-            Manager.process_events(event)
-        pygame.display.update()
-
-
-def level2(lvl, username, coin, pull, c, equip, stats):
-    # by 'Puo Puo'(Puo Lin) & Jia Ying
-    import pygame as pg #change pygame to pg 
-
-    #screen display / program setup
-
-    width, height = 500, 500
-    screen = pg.display.set_mode((width,height))
-    font = pg.font.Font("ThaleahFat/ThaleahFat.ttf", 100)
-    pg.display.set_caption('Chicky Simulator - Level 2')
-    board2 = pg.image.load('graphic/10x10map.jpg')
-    tile_size=50
-
-    time = 0
-    pg.time.set_timer(pg.USEREVENT+1, 1000)
-    clock = pg.time.Clock()
-    time_use =[]
-    
-    while True:
-
-        class chicky():
-            def __init__(self,x,y):
-                chic = pygame.image.load(c)
-                self.image = pg.transform.scale(chic,(50,50))
-                self.rect = self.image.get_rect(center=(25,25))
-                self.rect.x = x
-                self.rect.y = y
-
-            def update(self):
-                dx = 0
-                dy = 0
-
-                key = pg.key.get_pressed()
-                if key[pg.K_w]:
-                    dy -= 3
-                    if self.rect.y<0 :
-                        self.rect.y=0
-                if key[pg.K_a]:
-                    dx -= 3
-                    if self.rect.x<0 :
-                        self.rect.x=0
-                if key[pg.K_s]:
-                    dy += 3
-                    if self.rect.y>450 :
-                        self.rect.y=450
-                if key[pg.K_d]:
-                    dx += 3
-                    if self.rect.x>450 :
-                        self.rect.x=450
-                
-                #collision with blocks
-                for item in level.block_list:
-                    if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20 , 10, 10):
-                        dx = 0
-                        dy = 0
-                #collision with coins
-                for item in level.coin_list:
-                    if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20 , 10, 10):
-                        level.coin_list.remove(item)
-                        if level.coin_list == [] :
-                            # make time stop
-                            pg.time.set_timer(pg.USEREVENT, 0)
-                            # save time
-                            time_use.append(time)
-                            levl = 3
-                            win(lvl, username, levl, coin, pull, c, equip, stats)
-                            
-                #collision with monsters
-                if pg.sprite.spritecollide(self,yuen_group,False):
-                    self.rect.x = 0
-                    self.rect.y = 0
-                if pg.sprite.spritecollide(self,jy_group,False):
-                    self.rect.x = 0
-                    self.rect.y = 0
-                if pg.sprite.spritecollide(self,puolin_group,False):
-                    self.rect.x = 0
-                    self.rect.y = 0
-                
-                self.rect.x += dx
-                self.rect.y += dy
-
-                screen.blit(self.image,self.rect)
-        
-        #define fixed information(NPC/Blocks/Coin)
-        class lvel():
-            def __init__(self,data):
-                self.block_list = [ ] 
-                self.coin_list = [ ] 
-
-
-                block = pg.image.load('graphic/block.png')
-                coin = pg.image.load('graphic/coin.png')
-
-                row_count = 0
-                for row in data:
-                    col_count = 0
-                    for tile in row:
-                        if tile == 1 :
-                            block = pg. transform. scale(block, (tile_size, tile_size))
-                            block_rect = block.get_rect()
-                            block_rect.x = col_count * tile_size
-                            block_rect.y = row_count * tile_size
-                            item = (block, block_rect) 
-                            self.block_list.append(item) 
-                        if tile == 2 :
-                            coin = pg. transform. scale(coin, (tile_size, tile_size))
-                            coin_rect = block.get_rect()
-                            coin_rect.x = col_count * tile_size
-                            coin_rect.y = row_count * tile_size
-                            item = (coin, coin_rect)
-                            self.coin_list.append(item)
-                            
-                        if tile == 3 :
-                            yuen = Monster1(col_count * tile_size,row_count * tile_size)
-                            yuen_group.add(yuen)
-                            
-                        if tile == 4 :
-                            jy = Monster3(col_count * tile_size,row_count * tile_size)
-                            jy_group.add(jy)
-
-                        if tile == 5 :
-                            puolin = Monster2(col_count * tile_size,row_count * tile_size)
-                            puolin_group.add(puolin)
-                        col_count += 1
-                    row_count += 1
-
-            def draw(self):
-                for item in self.block_list:
-                    screen.blit(item[0],item[1]) 
-                for item in self.coin_list:
-                    screen.blit(item[0],item[1])
-
-        class Monster1(pg.sprite.Sprite):
-            def __init__(self,x,y):
-                pg.sprite.Sprite.__init__(self)
-                self.image = pg.image.load('graphic/monster1.png')
-                self.image = pg.transform.scale(self.image, (tile_size, tile_size))
-                self.rect = self.image.get_rect()
-                self.rect.x = x
-                self.rect.y = y
-                self.move_direction = 1
-                self.move_counter = 0
-                
-            def update(self):
-                self.rect.x += self.move_direction
-                self.move_counter += 1
-                if self.move_counter > 100 :
-                    self.move_direction *= -1
-                    self.move_counter *= -1
-
-
-        class Monster2(pg.sprite.Sprite):
-            def __init__(self,x,y):
-                pg.sprite.Sprite.__init__(self)
-                self.image = pg.image.load('graphic/monster2.png')
-                self.image = pg.transform.scale(self.image, (tile_size, tile_size))
-                self.rect = self.image.get_rect()
-                self.rect.x = x
-                self.rect.y = y
-                
-        class Monster3(pg.sprite.Sprite):
-            def __init__(self,x,y):
-                pg.sprite.Sprite.__init__(self)
-                self.image = pg.image.load('graphic/monster3.png')
-                self.image = pg.transform.scale(self.image, (tile_size, tile_size))
-                self.rect = self.image.get_rect()
-                self.rect.x = x
-                self.rect.y = y
-                self.move_direction = 1
-                self.move_counter = 0
-                
-            def update(self):
-                self.rect.y += self.move_direction
-                self.move_counter += 1
-                if self.move_counter > 100 :
-                    self.move_direction *= -1
-                    self.move_counter *= -1
-
-        lvl2_data=[
-        [0,0,0,0,0,0,3,0,0,0],
-        [0,0,3,0,0,0,0,3,0,0],
-        [0,0,0,0,0,0,3,0,0,0],
-        [0,0,0,3,0,0,0,0,3,0],
-        [3,0,0,0,3,0,0,0,0,3],
-        [0,0,3,0,0,0,0,3,0,0],
-        [0,0,0,0,0,3,0,0,0,2],
-        [0,3,0,0,0,0,0,3,0,2],
-        [0,0,0,0,0,0,0,0,0,2],
-        [0,0,0,0,3,0,0,2,2,2]
-        ] 
-        #spawn point
-        Chicky = chicky(0,0)
-        #group for collision
-        yuen_group = pg.sprite.Group()
-        puolin_group = pg.sprite.Group()
-        jy_group = pg.sprite.Group()  
-
-        level = lvel(lvl2_data)
-        #run loop
-        on = True
-        while on == True :
-
-            screen.blit(board2,(0,0))
-
-            level.draw() 
-
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    on = False
-                    pygame.quit()
-                    sys.exit()
-                if event.type == pg.USEREVENT + 1:
-                    time += 1
-
-                Manager.process_events(event)
-
-            timer_text = font.render(f"{time}", True, (255,255,255))
-            text_rect = timer_text.get_rect(center = (width//2,50))
-            screen.blit(timer_text, text_rect)
-
-            yuen_group.update()
-            yuen_group.draw(screen)
-
-            jy_group.update()
-            jy_group.draw(screen)
-
-            puolin_group.draw(screen)
-            Chicky.update()
-            
-            clock.tick(60)
-            pg.display.update()
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
-            Manager.process_events(event)
-        pygame.display.update()
-
-
-def level3(lvl, username, coin, pull, c, equip, stats):
-    # by 'Puo Puo'(Puo Lin) & Jia Ying
-    import pygame as pg #change pg
-
-    #screen display /setup
-    width, height = 500, 500
-    screen = pg.display.set_mode((width,height))
-    font = pg.font.Font("ThaleahFat/ThaleahFat.ttf", 100)
-    pg.display.set_caption('Chicky Simulator - Level 3')
-    board2 = pg.image.load('graphic/10x10map.jpg')
-    tile_size=50
-
-    time = 0
-    pg.time.set_timer(pg.USEREVENT+1, 1000)
-    clock = pg.time.Clock()
-    time_use =[]
-    
-    while True:
-
-        class chicky():
-            def __init__(self,x,y):
-                chic = pygame.image.load(c)
-                self.image = pg.transform.scale(chic,(50,50))
-                self.rect = self.image.get_rect(center=(25,25))
-                self.rect.x = x
-                self.rect.y = y
-
-            def update(self):
-                dx = 0
-                dy = 0
-
-                key = pg.key.get_pressed()
-                if key[pg.K_w]:
-                    dy -= 3
-                    if self.rect.y<0 :
-                        self.rect.y=0
-                if key[pg.K_a]:
-                    dx -= 3
-                    if self.rect.x<0 :
-                        self.rect.x=0
-                if key[pg.K_s]:
-                    dy += 3
-                    if self.rect.y>450 :
-                        self.rect.y=450
-                if key[pg.K_d]:
-                    dx += 3
-                    if self.rect.x>450 :
-                        self.rect.x=450
-                
-                #collision with blocks
-                for item in level.block_list:
-                    if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20 , 10, 10):
-                        dx = 0
-                        dy = 0
-                #collision with coins
-                for item in level.coin_list:
-                    if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20 , 10, 10):
-                        level.coin_list.remove(item)
-                        if level.coin_list == [] :
-                            # make time stop
-                            pg.time.set_timer(pg.USEREVENT, 0)
-                            # save in list 
-                            time_use.append(time)
-                            levl = 4
-                            win(lvl, username, levl, coin, pull, c, equip, stats)
-                            
-                #collision with monsters
-                if pg.sprite.spritecollide(self,yuen_group,False):
-                    self.rect.x = 0
-                    self.rect.y = 0
-                if pg.sprite.spritecollide(self,jy_group,False):
-                    self.rect.x = 0
-                    self.rect.y = 0
-                if pg.sprite.spritecollide(self,puolin_group,False):
-                    self.rect.x = 0
-                    self.rect.y = 0
-                
-                self.rect.x += dx
-                self.rect.y += dy
-
-                screen.blit(self.image,self.rect)
-
-         #define fixed information(NPC/Blocks/Coin)
-        class lvel():
-            def __init__(self,data):
-                self.block_list = [ ] 
-                self.coin_list = [ ] 
-
-
-                block = pg.image.load('graphic/block.png')
-                coin = pg.image.load('graphic/coin.png')
-
-                row_count = 0
-                for row in data:
-                    col_count = 0
-                    for tile in row:
-                        if tile == 1 :
-                            block = pg. transform. scale(block, (tile_size, tile_size))
-                            block_rect = block.get_rect()
-                            block_rect.x = col_count * tile_size
-                            block_rect.y = row_count * tile_size
-                            item = (block, block_rect) 
-                            self.block_list.append(item) 
-                        if tile == 2 :
-                            coin = pg. transform. scale(coin, (tile_size, tile_size))
-                            coin_rect = block.get_rect()
-                            coin_rect.x = col_count * tile_size
-                            coin_rect.y = row_count * tile_size
-                            item = (coin, coin_rect)
-                            self.coin_list.append(item)
-                            
-                        if tile == 3 :
-                            yuen = Monster1(col_count * tile_size,row_count * tile_size)
-                            yuen_group.add(yuen)
-                            
-                        if tile == 4 :
-                            jy = Monster3(col_count * tile_size,row_count * tile_size)
-                            jy_group.add(jy)
-
-                        if tile == 5 :
-                            puolin = Monster2(col_count * tile_size,row_count * tile_size)
-                            puolin_group.add(puolin)
-                        col_count += 1
-                    row_count += 1
-
-            def draw(self):
-                for item in self.block_list:
-                    screen.blit(item[0],item[1]) 
-                for item in self.coin_list:
-                    screen.blit(item[0],item[1])
-
-        class Monster1(pg.sprite.Sprite):
-            def __init__(self,x,y):
-                pg.sprite.Sprite.__init__(self)
-                self.image = pg.image.load('graphic/monster1.png')
-                self.image = pg.transform.scale(self.image, (tile_size, tile_size))
-                self.rect = self.image.get_rect()
-                self.rect.x = x
-                self.rect.y = y
-                self.move_direction = 1
-                self.move_counter = 0
-                
-            def update(self):
-                self.rect.x += self.move_direction
-                self.move_counter += 1
-                if self.move_counter > 100 :
-                    self.move_direction *= -1
-                    self.move_counter *= -1
-
-        class Monster2(pg.sprite.Sprite):
-            def __init__(self,x,y):
-                pg.sprite.Sprite.__init__(self)
-                self.image = pg.image.load('graphic/monster2.png')
-                self.image = pg.transform.scale(self.image, (tile_size, tile_size))
-                self.rect = self.image.get_rect()
-                self.rect.x = x
-                self.rect.y = y
-                
-        class Monster3(pg.sprite.Sprite):
-            def __init__(self,x,y):
-                pg.sprite.Sprite.__init__(self)
-                self.image = pg.image.load('graphic/monster3.png')
-                self.image = pg.transform.scale(self.image, (tile_size, tile_size))
-                self.rect = self.image.get_rect()
-                self.rect.x = x
-                self.rect.y = y
-                self.move_direction = 1
-                self.move_counter = 0
-                
-            def update(self):
-                self.rect.y += self.move_direction
-                self.move_counter += 1
-                if self.move_counter > 100 :
-                    self.move_direction *= -1
-                    self.move_counter *= -1
-
-        lvl3_data=[
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,3,0,0,0,1,1,0],
-        [0,1,1,1,0,1,4,0,1,0],
-        [0,2,5,1,0,1,0,0,1,0],
-        [0,1,1,1,0,1,0,0,1,0],
-        [0,1,5,0,0,1,2,1,1,0],
-        [0,1,1,0,1,1,1,1,0,0],
-        [0,1,2,0,1,5,2,0,0,0],
-        [0,1,1,1,1,1,1,0,1,0],
-        [0,0,0,2,5,1,0,0,1,2]
-        ] 
-        #spawn point
-        Chicky = chicky(0,0)
-        #group for collision
-        yuen_group = pg.sprite.Group()
-        puolin_group = pg.sprite.Group()
-        jy_group = pg.sprite.Group()  
-
-        level = lvel(lvl3_data)
-
-
-        #run loop
-        on = True
-        while on == True :
-
-            screen.blit(board2,(0,0))
-
-            level.draw() 
-
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    on = False
-                    pygame.quit()
-                    sys.exit()
-                if event.type == pg.USEREVENT + 1:
-                    time += 1
-
-                Manager.process_events(event)
-
-            timer_text = font.render(f"{time}", True, (255,255,255))
-            text_rect = timer_text.get_rect(center = (width//2,50))
-            screen.blit(timer_text, text_rect)
-
-            yuen_group.update()
-            yuen_group.draw(screen)
-
-            jy_group.update()
-            jy_group.draw(screen)
-
-            puolin_group.draw(screen)
-            Chicky.update()
-            
-            clock.tick(60)
-            pg.display.update()
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
-            Manager.process_events(event)
-        pygame.display.update()
-
-
-def level4(lvl, username, coin, pull, c, equip, stats):
-    # by 'Puo Puo'(Puo Lin) & Jia Ying
-    import pygame as pg #change pg
-
-    #screen display /setup
-
-    width, height = 500, 500
-    screen = pg.display.set_mode((width,height))
-    font = pg.font.Font("ThaleahFat/ThaleahFat.ttf", 100)
-    pg.display.set_caption('Chicky Simulator - Level 4')
-    board2 = pg.image.load('graphic/10x10map.jpg')
-    tile_size=50
-
-    time = 0
-    # count = False
-    pg.time.set_timer(pg.USEREVENT+1, 1000)
-    clock = pg.time.Clock()
-    time_use =[]
-    
-    while True:
-
-        class chicky():
-            def __init__(self,x,y):
-                chic = pygame.image.load(c)
-                self.image = pg.transform.scale(chic,(50,50))
-                self.rect = self.image.get_rect(center=(25,25))
-                self.rect.x = x
-                self.rect.y = y
-
-            def update(self):
-                dx = 0
-                dy = 0
-
-                key = pg.key.get_pressed()
-                if key[pg.K_w]:
-                    dy -= 3
-                    if self.rect.y<0 :
-                        self.rect.y=0
-                if key[pg.K_a]:
-                    dx -= 3
-                    if self.rect.x<0 :
-                        self.rect.x=0
-                if key[pg.K_s]:
-                    dy += 3
-                    if self.rect.y>450 :
-                        self.rect.y=450
-                if key[pg.K_d]:
-                    dx += 3
-                    if self.rect.x>450 :
-                        self.rect.x=450
-                
-                #collision with blocks
-                for item in level.block_list:
-                    if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20 , 10, 10):
-                        dx = 0
-                        dy = 0
-                #collision with coins
-                for item in level.coin_list:
-                    if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20 , 10, 10):
-                        level.coin_list.remove(item)
-                        if level.coin_list == [] :
-                            # make time stop
-                            pg.time.set_timer(pg.USEREVENT, 0)
-                            # save in list 
-                            time_use.append(time)
-                            levl = 5
-                            win(lvl, username, levl, coin, pull, c, equip, stats)
-                            
-                #collision with monsters
-                if pg.sprite.spritecollide(self,yuen_group,False):
-                    self.rect.x = 0
-                    self.rect.y = 0
-                if pg.sprite.spritecollide(self,jy_group,False):
-                    self.rect.x = 0
-                    self.rect.y = 0
-                if pg.sprite.spritecollide(self,puolin_group,False):
-                    self.rect.x = 0
-                    self.rect.y = 0
-                
-                self.rect.x += dx
-                self.rect.y += dy
-
-                screen.blit(self.image,self.rect)
-
-        #define fixed information(NPC/Blocks/Coin)
-        class lvel():
-            def __init__(self,data):
-                self.block_list = [ ] 
-                self.coin_list = [ ] 
-
-
-                block = pg.image.load('graphic/block.png')
-                coin = pg.image.load('graphic/coin.png')
-
-                row_count = 0
-                for row in data:
-                    col_count = 0
-                    for tile in row:
-                        if tile == 1 :
-                            block = pg. transform. scale(block, (tile_size, tile_size))
-                            block_rect = block.get_rect()
-                            block_rect.x = col_count * tile_size
-                            block_rect.y = row_count * tile_size
-                            item = (block, block_rect) 
-                            self.block_list.append(item) 
-                        if tile == 2 :
-                            coin = pg. transform. scale(coin, (tile_size, tile_size))
-                            coin_rect = block.get_rect()
-                            coin_rect.x = col_count * tile_size
-                            coin_rect.y = row_count * tile_size
-                            item = (coin, coin_rect)
-                            self.coin_list.append(item)
-                            
-                        if tile == 3 :
-                            yuen = Monster1(col_count * tile_size,row_count * tile_size)
-                            yuen_group.add(yuen)
-                            
-                        if tile == 4 :
-                            jy = Monster3(col_count * tile_size,row_count * tile_size)
-                            jy_group.add(jy)
-
-                        if tile == 5 :
-                            puolin = Monster2(col_count * tile_size,row_count * tile_size)
-                            puolin_group.add(puolin)
-                        col_count += 1
-                    row_count += 1
-
-            def draw(self):
-                for item in self.block_list:
-                    screen.blit(item[0],item[1]) 
-                for item in self.coin_list:
-                    screen.blit(item[0],item[1])
-
-        class Monster1(pg.sprite.Sprite):
-            def __init__(self,x,y):
-                pg.sprite.Sprite.__init__(self)
-                self.image = pg.image.load('graphic/monster1.png')
-                self.image = pg.transform.scale(self.image, (tile_size, tile_size))
-                self.rect = self.image.get_rect()
-                self.rect.x = x
-                self.rect.y = y
-                self.move_direction = 1
-                self.move_counter = 0
-                
-            def update(self):
-                self.rect.x += self.move_direction
-                self.move_counter += 1
-                if self.move_counter > 100 :
-                    self.move_direction *= -1
-                    self.move_counter *= -1
-
-        class Monster2(pg.sprite.Sprite):
-            def __init__(self,x,y):
-                pg.sprite.Sprite.__init__(self)
-                self.image = pg.image.load('graphic/monster2.png')
-                self.image = pg.transform.scale(self.image, (tile_size, tile_size))
-                self.rect = self.image.get_rect()
-                self.rect.x = x
-                self.rect.y = y
-                
-
-        class Monster3(pg.sprite.Sprite):
-            def __init__(self,x,y):
-                pg.sprite.Sprite.__init__(self)
-                self.image = pg.image.load('graphic/monster3.png')
-                self.image = pg.transform.scale(self.image, (tile_size, tile_size))
-                self.rect = self.image.get_rect()
-                self.rect.x = x
-                self.rect.y = y
-                self.move_direction = 1
-                self.move_counter = 0
-                
-            def update(self):
-                self.rect.y += self.move_direction
-                self.move_counter += 1
-                if self.move_counter > 100 :
-                    self.move_direction *= -1
-                    self.move_counter *= -1
-
-        lvl4_data=[
-        [0,1,1,1,1,0,1,1,1,0],
-        [0,1,0,0,1,0,0,2,1,0],
-        [0,1,0,0,1,0,1,1,1,0],
-        [0,1,1,1,1,4,0,0,1,0],
-        [4,0,0,0,0,0,1,1,1,0],
-        [0,1,1,1,1,0,0,3,0,0],
-        [0,0,2,5,1,0,1,0,1,0],
-        [0,1,1,1,1,0,1,2,1,0],
-        [0,1,2,0,0,0,1,1,1,0],
-        [2,1,1,1,1,5,0,0,1,2]
-        ] 
-
-        Chicky = chicky(0,0)
-
-        yuen_group = pg.sprite.Group()
-        puolin_group = pg.sprite.Group()
-        jy_group = pg.sprite.Group()  
-
-        level = lvel(lvl4_data)
-
-        on = True
-        while on == True :
-
-            screen.blit(board2,(0,0))
-
-            level.draw() 
-
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    on = False
-                    pygame.quit()
-                    sys.exit()
-                if event.type == pg.USEREVENT + 1:
-                    time += 1
-
-                Manager.process_events(event)
-                
-            timer_text = font.render(f"{time}", True, (255,255,255))
-            text_rect = timer_text.get_rect(center = (width//2,50))
-            screen.blit(timer_text, text_rect)
-
-            yuen_group.update()
-            yuen_group.draw(screen)
-
-            jy_group.update()
-            jy_group.draw(screen)
-
-            puolin_group.draw(screen)
-            Chicky.update()
-                
-            clock.tick(60)
-            pg.display.update()
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
-            Manager.process_events(event)
-        pygame.display.update()
-
-
-def level5(lvl, username, coin, pull, c, equip, stats):
-    # by 'Puo Puo'(Puo Lin) & Jia Ying
-    import pygame as pg #change pg
-
-    #screen display /setup
-
-    width, height = 500, 500
-    screen = pg.display.set_mode((width,height))
-    font = pg.font.Font("ThaleahFat/ThaleahFat.ttf", 100)
-    pg.display.set_caption('Chicky Simulator - Level 5')
-    board2 = pg.image.load('graphic/10x10map.jpg')
-    tile_size=50
-
-    time = 0
-    # count = False
-    pg.time.set_timer(pg.USEREVENT+1, 1000)
-    clock = pg.time.Clock()
-    time_use =[]
-    
-    while True:
-
-        class chicky():
-            def __init__(self,x,y):
-                chic = pygame.image.load(c)
-                self.image = pg.transform.scale(chic,(50,50))
-                self.rect = self.image.get_rect(center=(25,25))
-                self.rect.x = x
-                self.rect.y = y
-
-            def update(self):
-                dx = 0
-                dy = 0
-
-                key = pg.key.get_pressed()
-                if key[pg.K_w]:
-                    dy -= 3
-                    if self.rect.y<0 :
-                        self.rect.y=0
-                if key[pg.K_a]:
-                    dx -= 3
-                    if self.rect.x<0 :
-                        self.rect.x=0
-                if key[pg.K_s]:
-                    dy += 3
-                    if self.rect.y>450 :
-                        self.rect.y=450
-                if key[pg.K_d]:
-                    dx += 3
-                    if self.rect.x>450 :
-                        self.rect.x=450
-                
-                #collision with blocks
-                for item in level.block_list:
-                    if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20 , 10, 10):
-                        dx = 0
-                        dy = 0
-                #collision with coins
-                for item in level.coin_list:
-                    if item[1].colliderect(self.rect.x + dx + 20, self.rect.y + dy + 20 , 10, 10):
-                        level.coin_list.remove(item)
-                        if level.coin_list == [] :
-                            # make time stop
-                            pg.time.set_timer(pg.USEREVENT, 0)
-                            # save in list and save in text file
-                            time_use.append(time)
-                            update_time(username, time_use[0])
-                            win5(lvl, username, coin, pull, c, equip, stats)
-                            
-                            
-                #collision with monsters
-                if pg.sprite.spritecollide(self,yuen_group,False):
-                    self.rect.x = 0
-                    self.rect.y = 0
-                if pg.sprite.spritecollide(self,jy_group,False):
-                    self.rect.x = 0
-                    self.rect.y = 0
-                if pg.sprite.spritecollide(self,puolin_group,False):
-                    self.rect.x = 0
-                    self.rect.y = 0
-                
-                self.rect.x += dx
-                self.rect.y += dy
-
-                screen.blit(self.image,self.rect)
-
-        #define fixed information(NPC/Blocks/Coin)
-        class lvel():
-            def __init__(self,data):
-                self.block_list = [ ] 
-                self.coin_list = [ ] 
-
-
-                block = pg.image.load('graphic/block.png')
-                coin = pg.image.load('graphic/coin.png')
-
-                row_count = 0
-                for row in data:
-                    col_count = 0
-                    for tile in row:
-                        if tile == 1 :
-                            block = pg. transform. scale(block, (tile_size, tile_size))
-                            block_rect = block.get_rect()
-                            block_rect.x = col_count * tile_size
-                            block_rect.y = row_count * tile_size
-                            item = (block, block_rect) 
-                            self.block_list.append(item) 
-                        if tile == 2 :
-                            coin = pg. transform. scale(coin, (tile_size, tile_size))
-                            coin_rect = block.get_rect()
-                            coin_rect.x = col_count * tile_size
-                            coin_rect.y = row_count * tile_size
-                            item = (coin, coin_rect)
-                            self.coin_list.append(item)
-                            
-                        if tile == 3 :
-                            yuen = Monster1(col_count * tile_size,row_count * tile_size)
-                            yuen_group.add(yuen)
-                            
-                        if tile == 4 :
-                            jy = Monster3(col_count * tile_size,row_count * tile_size)
-                            jy_group.add(jy)
-
-                        if tile == 5 :
-                            puolin = Monster2(col_count * tile_size,row_count * tile_size)
-                            puolin_group.add(puolin)
-                        col_count += 1
-                    row_count += 1
-
-            def draw(self):
-                for item in self.block_list:
-                    screen.blit(item[0],item[1]) 
-                for item in self.coin_list:
-                    screen.blit(item[0],item[1])
-
-        class Monster1(pg.sprite.Sprite):
-            def __init__(self,x,y):
-                pg.sprite.Sprite.__init__(self)
-                self.image = pg.image.load('graphic/monster1.png')
-                self.image = pg.transform.scale(self.image, (tile_size, tile_size))
-                self.rect = self.image.get_rect()
-                self.rect.x = x
-                self.rect.y = y
-                self.move_direction = 1
-                self.move_counter = 0
-                
-            def update(self):
-                self.rect.x += self.move_direction
-                self.move_counter += 1
-                if self.move_counter > 100 :
-                    self.move_direction *= -1
-                    self.move_counter *= -1
-
-        class Monster2(pg.sprite.Sprite):
-            def __init__(self,x,y):
-                pg.sprite.Sprite.__init__(self)
-                self.image = pg.image.load('graphic/monster2.png')
-                self.image = pg.transform.scale(self.image, (tile_size, tile_size))
-                self.rect = self.image.get_rect()
-                self.rect.x = x
-                self.rect.y = y
-                
-
-        class Monster3(pg.sprite.Sprite):
-            def __init__(self,x,y):
-                pg.sprite.Sprite.__init__(self)
-                self.image = pg.image.load('graphic/monster3.png')
-                self.image = pg.transform.scale(self.image, (tile_size, tile_size))
-                self.rect = self.image.get_rect()
-                self.rect.x = x
-                self.rect.y = y
-                self.move_direction = 1
-                self.move_counter = 0
-                
-            def update(self):
-                self.rect.y += self.move_direction
-                self.move_counter += 1
-                if self.move_counter > 100 :
-                    self.move_direction *= -1
-                    self.move_counter *= -1
-
-        lvl5_data=[
-        [0,0,0,0,0,0,0,2,5,0],
-        [0,0,0,3,0,0,0,3,0,0],
-        [0,4,0,2,5,4,0,0,0,4],
-        [0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,3,0,0,0,3,0,0],
-        [4,0,2,0,0,0,2,0,4,0],
-        [0,0,0,0,3,0,0,0,0,0],
-        [0,4,5,0,0,4,0,0,0,4],
-        [0,0,2,0,0,0,0,0,0,0],
-        [0,0,3,0,0,0,3,0,0,2]
-        ] 
-                    
-        # lvl5_data=[
-        # [0,0,0,0,0,0,0,0,0,0],
-        # [0,0,1,1,0,1,1,1,0,0],
-        # [0,1,1,2,1,1,2,1,1,0],
-        # [0,1,2,0,1,0,0,2,1,0],                    #Backup plan if mr.willie can get through
-        # [0,1,1,0,0,0,2,1,1,0],
-        # [0,0,1,1,0,0,1,1,0,0],
-        # [0,0,0,1,0,1,1,0,0,0],
-        # [0,0,0,0,2,1,0,0,0,0],
-        # [0,0,0,5,1,0,0,0,0,0],
-        # [0,0,0,0,0,0,0,0,0,0]
-        # ]
-
-        #spawn point
-        Chicky = chicky(0,0)
-
-        #collision group
-        yuen_group = pg.sprite.Group()
-        puolin_group = pg.sprite.Group()
-        jy_group = pg.sprite.Group()  
-
-        level = lvel(lvl5_data)
-
-        #run loop
-        on = True
-        while on == True :
-
-            screen.blit(board2,(0,0))
-
-            level.draw() 
-
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    on = False
-                    pygame.quit()
-                    sys.exit()
-                if event.type == pg.USEREVENT + 1:
-                    time += 1
-
-                Manager.process_events(event)
-
-            timer_text = font.render(f"{time}", True, (255,255,255))
-            text_rect = timer_text.get_rect(center = (width//2,50))
-            screen.blit(timer_text, text_rect)
-
-            yuen_group.update()
-            yuen_group.draw(screen)
-
-            jy_group.update()
-            jy_group.draw(screen)
-
-            puolin_group.draw(screen)
-            Chicky.update()
-
-            clock.tick(60)
-            pg.display.update()
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
-            Manager.process_events(event)
-        pygame.display.update()
-
-
-def win5(lvl, username, coin, pull, c, equip, stats):
-    # winning condition for lvl 5
-
-    # screen display / setup
-    width, height = 900, 700
-    screen = pygame.display.set_mode((width,height))
-    pygame.display.set_caption('Chicky Simulator - Congratulations')
-    screen.blit(level_image, (0,0))
-
-    while True:
-
-        w, h = 600, 400
-        win_image = pygame.image.load('graphic/win.PNG')
-        win_image = pygame.transform.scale(win_image,(w,h))
-        win_image_rect = win_image.get_rect(center = (width/2, height/2))
-        screen.blit(win_image, win_image_rect)
-
-        level_button = Button('graphic/button2.png', 330, 460, 0.25, "LEVEL")
-        level_button.draw(screen)
-
-        rank_button = Button('graphic/button2.png', 570, 460, 0.25, "RANKING")
-        rank_button.draw(screen)
-
-        pos_mouse = pygame.mouse.get_pos()
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if level_button.check_input(pos_mouse):
-                    choose_level(lvl, username, coin, pull, c, equip, stats)
-
-                if rank_button.check_input(pos_mouse):
-                    ranking(username, lvl, coin, pull, c, equip, stats)
-
-        pygame.display.update()
-
-
-def win4(lvl, username, levl, coin, pull, c, equip, stats):
-    # winning condition for lvl 1, 2, 3, 4
-
-    # screen display / setup
-    width, height = 900, 700
-    screen = pygame.display.set_mode((width,height))
-    pygame.display.set_caption('Chicky Simulator - Congratulations')
-    screen.blit(level_image, (0,0))
-
-    # renew user_details with latest lvl   #changed later
-    if lvl < 5:
-        lvl += 1
-        update_level(username, lvl)
-
-    while True:
-
-        w, h = 600, 400
-        win_image = pygame.image.load('graphic/win.PNG')
-        win_image = pygame.transform.scale(win_image,(w,h))
-        win_image_rect = win_image.get_rect(center = (width/2, height/2))
-        screen.blit(win_image, win_image_rect)
-
-        level_button = Button('graphic/button2.png', 330, 460, 0.25, "LEVEL")
-        level_button.draw(screen)
-
-        next_button = Button('graphic/button2.png', 570, 460, 0.25, "NEXT")
-        next_button.draw(screen)
-
-        pos_mouse = pygame.mouse.get_pos()
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if level_button.check_input(pos_mouse):
-                    choose_level(lvl, username, coin, pull, c, equip, stats)
-
-                if next_button.check_input(pos_mouse): #changed later
-                    if levl == 2:
-                        tutorial3(lvl, username, coin, pull, c, equip, stats)
-                    elif levl == 3:
-                        tutorial4(lvl, username, coin, pull, c, equip, stats)
-                    elif levl == 4:
-                        level4(lvl, username, coin, pull, c, equip, stats)
-                    elif levl == 5:
-                        level5(lvl, username, coin, pull, c, equip, stats)
+        # for event in pygame.event.get():
+        #     if event.type == pygame.QUIT:
+        #         run = False
 
         pygame.display.update()
 
@@ -2312,22 +957,6 @@ def update_time(username, time):
                 break
             else:
                 break
-
-    with open('user_details.txt', 'w') as file:
-        file.writelines(lines)
-    return
-
-
-def update_level(username, lvl):
-    with open('user_details.txt', 'r') as file:
-        lines = file.readlines()
-
-    for i, line in enumerate(lines):
-        user_details = line.strip().split(", ")
-        if user_details[0] == username:
-            user_details[2] = str(lvl)
-            lines[i] = ', '.join(user_details) + '\n'
-            break
 
     with open('user_details.txt', 'w') as file:
         file.writelines(lines)
@@ -2514,78 +1143,82 @@ def update_equipchick(username, chicky):
 
 def update_achieve(username, achieve_type, claim):
     claim_con = claim.split('/')
+
     with open('user_achievement.txt', 'r') as file:
         lines = file.readlines()
-        if achieve_type == 'level':
-            for i, line in enumerate(lines):
-                user_achieve = line.strip().split(", ")
-                if user_achieve[0] == username:
-                    collect_list = user_achieve[1].split('/')
-                    if claim_con[0] == '1':
-                        collect_list[0] = '1'
-                    if claim_con[1] == '1':
-                        collect_list[1] = '1'
-                    if claim_con[2] == '1':
-                        collect_list[2] = '1'
-                    if claim_con[3] == '1':
-                        collect_list[3] = '1'
-                    if claim_con[4] == '1':
-                        collect_list[4] = '1'
-                    if claim_con[5] == '1':
-                        collect_list[5] = '1'
-
-            new_str = '/'.join(collect_list)
+        
+    if achieve_type == 'level':
+        for i, line in enumerate(lines):
+            user_achieve = line.strip().split(", ")
+            if user_achieve[0] == username:
+                level_list = user_achieve[1].split('/')
+                if claim_con[0] == '1':
+                    level_list[0] = '1'
+                if claim_con[1] == '1':
+                    level_list[1] = '1'
+                if claim_con[2] == '1':
+                    level_list[2] = '1'
+                if claim_con[3] == '1':
+                    level_list[3] = '1'
+                if claim_con[4] == '1':
+                    level_list[4] = '1'
+                if claim_con[5] == '1':
+                    level_list[5] = '1'
+            new_str = '/'.join(level_list)
+            print(str(new_str))
             user_achieve[1] = str(new_str)
-            lines[i] = ', '.join(user_achieve) + '\n'
+            break
+        lines[i] = ', '.join(user_achieve) + '\n'
 
-        elif achieve_type == 'collect':
-            for i, line in enumerate(lines):
-                user_achieve = line.strip().split(", ")
-                if user_achieve[0] == username:
-                    collect_list = user_achieve[3].split('/')
-                    if claim_con[0] == '1':
-                        collect_list[0] = '1'
-                    if claim_con[1] == '1':
-                        collect_list[1] = '1'
-                    if claim_con[2] == '1':
-                        collect_list[2] = '1'
-                    if claim_con[3] == '1':
-                        collect_list[3] = '1'
-                    if claim_con[4] == '1':
-                        collect_list[4] = '1'
-                    if claim_con[5] == '1':
-                        collect_list[5] = '1'
-
+    if achieve_type == 'collect':
+        for i, line in enumerate(lines):
+            user_achieve = line.strip().split(", ")
+            if user_achieve[0] == username:
+                collect_list = user_achieve[3].split('/')
+                if claim_con[0] == '1':
+                    collect_list[0] = '1'
+                if claim_con[1] == '1':
+                    collect_list[1] = '1'
+                if claim_con[2] == '1':
+                    collect_list[2] = '1'
+                if claim_con[3] == '1':
+                    collect_list[3] = '1'
+                if claim_con[4] == '1':
+                    collect_list[4] = '1'
+                if claim_con[5] == '1':
+                    collect_list[5] = '1'
             new_str = '/'.join(collect_list)
+            print(str(new_str))
             user_achieve[3] = str(new_str)
-            lines[i] = ', '.join(user_achieve) + '\n'
+            break
+        lines[i] = ', '.join(user_achieve) + '\n'
 
-        elif achieve_type == 'arcade':
-            for i, line in enumerate(lines):
-                user_achieve = line.strip().split(", ")
-                if user_achieve[0] == username:
-                    collect_list = user_achieve[2].split('/')
-                    if claim_con[0] == '1':
-                        collect_list[0] = '1'
-                    if claim_con[1] == '1':
-                        collect_list[1] = '1'
-                    if claim_con[2] == '1':
-                        collect_list[2] = '1'
-                    if claim_con[3] == '1':
-                        collect_list[3] = '1'
-                    if claim_con[4] == '1':
-                        collect_list[4] = '1'
-                    if claim_con[5] == '1':
-                        collect_list[5] = '1'
-
+    if achieve_type == 'arcade':
+        for i, line in enumerate(lines):
+            user_achieve = line.strip().split(", ")
+            if user_achieve[0] == username:
+                collect_list = user_achieve[2].split('/')
+                if claim_con[0] == '1':
+                    collect_list[0] = '1'
+                if claim_con[1] == '1':
+                    collect_list[1] = '1'
+                if claim_con[2] == '1':
+                    collect_list[2] = '1'
+                if claim_con[3] == '1':
+                    collect_list[3] = '1'
+                if claim_con[4] == '1':
+                    collect_list[4] = '1'
+                if claim_con[5] == '1':
+                    collect_list[5] = '1'
             new_str = '/'.join(collect_list)
             user_achieve[2] = str(new_str)
-            lines[i] = ', '.join(user_achieve) + '\n'
+            break
+        lines[i] = ', '.join(user_achieve) + '\n'
 
-        with open('user_achievement.txt', 'w') as file:
-            file.writelines(lines)
+    with open('user_achievement.txt', 'w') as file:
+        file.writelines(lines)
 
-        return 
+    return 
 
 
 def check_coinget(username, coin, coinget):
@@ -2702,7 +1335,7 @@ def collect_achieve(username, lvl, coin, pull, chicky, equip, stats):
         achieve_text_rect = achieve_text.get_rect(center = (450,100))
         screen.blit(achieve_text, achieve_text_rect)
 
-        coinlogo = Lock('graphic/manycoin.png', 750, 100, 0.3)
+        coinlogo = Lock('graphic/manycoin.png', 750, 100, 0.4)
         coinlogo.draw(screen)
         coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'white')
         coin_text_rect = coin_text.get_rect(center = (830,100))
@@ -2961,7 +1594,7 @@ def arcade_achieve(username, lvl, coin, pull, chicky, equip, stats):
         #####
 
         #coin display
-        coinlogo = Lock('graphic/manycoin.png', 750, 100, 0.3)
+        coinlogo = Lock('graphic/manycoin.png', 750, 100, 0.4)
         coinlogo.draw(screen)
         coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'white')
         coin_text_rect = coin_text.get_rect(center = (830,100))
@@ -2977,29 +1610,47 @@ def arcade_achieve(username, lvl, coin, pull, chicky, equip, stats):
         ######
 
         #text
-        a1_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Get 20 score\nin arcade mode\n\n    Coin x30', True, 'black')
+        a1_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Get 20 score\nin arcade mode', True, 'black')
         a1_text_rect = a1_text.get_rect(center = (150,230))
         screen.blit(a1_text, a1_text_rect)
+        a11_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Coin x 30', True, 'black')
+        a11_text_rect = a11_text.get_rect(center = (150,280))
+        screen.blit(a11_text, a11_text_rect)
 
-        a2_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Get 40 score\nin arcade mode\n\n    Coin x50', True, 'black')
+        a2_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Get 40 score\nin arcade mode', True, 'black')
         a2_text_rect = a2_text.get_rect(center = (450,230))
         screen.blit(a2_text, a2_text_rect)
+        a22_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Coin x 50', True, 'black')
+        a22_text_rect = a22_text.get_rect(center = (450,280))
+        screen.blit(a22_text, a22_text_rect)
 
-        a3_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Get 60 score\nin arcade mode\n\n    Coin x100', True, 'black')
+        a3_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Get 60 score\nin arcade mode', True, 'black')
         a3_text_rect = a3_text.get_rect(center = (750,230))
         screen.blit(a3_text, a3_text_rect)
+        a33_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Coin x 100', True, 'black')
+        a33_text_rect = a33_text.get_rect(center = (750,280))
+        screen.blit(a33_text, a33_text_rect)
 
-        a4_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Play 20 secs\nin arcade mode\n\n    Coin x30', True, 'black')
+        a4_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Play 10 times\narcade mode', True, 'black')
         a4_text_rect = a4_text.get_rect(center = (150,480))
         screen.blit(a4_text, a4_text_rect)
+        a44_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Coin x 100', True, 'black')
+        a44_text_rect = a44_text.get_rect(center = (150,530))
+        screen.blit(a44_text, a44_text_rect)
 
-        a5_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Play 35 secs\nin arcade mode\n\n    Coin x50', True, 'black')
+        a5_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Play 15 times\narcade mode', True, 'black')
         a5_text_rect = a5_text.get_rect(center = (450,480))
         screen.blit(a5_text, a5_text_rect)
+        a55_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Coin x 300', True, 'black')
+        a55_text_rect = a55_text.get_rect(center = (450,530))
+        screen.blit(a55_text, a55_text_rect)
 
-        a6_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Play 60 secs\nin arcade mode\n\n    Coin x100', True, 'black')
+        a6_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Play 20 times\narcade mode', True, 'black')
         a6_text_rect = a6_text.get_rect(center = (750,480))
         screen.blit(a6_text, a6_text_rect)
+        a66_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Coin x 500', True, 'black')
+        a66_text_rect = a66_text.get_rect(center = (750,530))
+        screen.blit(a66_text, a66_text_rect)
 
         if score20_con == 1:
             if claim_con[0] == '0':
@@ -3015,7 +1666,7 @@ def arcade_achieve(username, lvl, coin, pull, chicky, equip, stats):
             lock1.draw(screen)
         
         if score40_con == 1:
-            if claim_con[0] == '0':
+            if claim_con[1] == '0':
                 claim_button2 = Button('graphic/button2.png', 450, 350, 0.25, "Claim")
                 claim_button2.draw(screen)
             else:
@@ -3028,7 +1679,7 @@ def arcade_achieve(username, lvl, coin, pull, chicky, equip, stats):
             lock1.draw(screen)
 
         if score60_con == 1:
-            if claim_con[0] == '0':
+            if claim_con[2] == '0':
                 claim_button3 = Button('graphic/button2.png', 750, 350, 0.25, "Claim")
                 claim_button3.draw(screen)
             else:
@@ -3121,7 +1772,7 @@ def arcade_achieve(username, lvl, coin, pull, chicky, equip, stats):
                     if (play10_con == 1) and (claim_con[3] == '0'):
                         claim_con[3] = 1
                         claim = str(f'{claim_con[0]}/{claim_con[1]}/{claim_con[2]}/{claim_con[3]}/{claim_con[4]}/{claim_con[5]}')
-                        ncoin = int(coin) + 30
+                        ncoin = int(coin) + 100
                         update_coin(username, ncoin)
                         update_achieve(username, 'arcade', str(claim))
                         arcade_achieve(username, lvl, ncoin, pull, chicky, equip, stats)
@@ -3130,7 +1781,7 @@ def arcade_achieve(username, lvl, coin, pull, chicky, equip, stats):
                     if (play15_con == 1) and (claim_con[4] == '0'):
                         claim_con[4] = 1
                         claim = str(f'{claim_con[0]}/{claim_con[1]}/{claim_con[2]}/{claim_con[3]}/{claim_con[4]}/{claim_con[5]}')
-                        ncoin = int(coin) + 50
+                        ncoin = int(coin) + 300
                         update_coin(username, ncoin)
                         update_achieve(username, 'arcade', str(claim))
                         arcade_achieve(username, lvl, ncoin, pull, chicky, equip, stats)
@@ -3139,7 +1790,7 @@ def arcade_achieve(username, lvl, coin, pull, chicky, equip, stats):
                     if (play20_con == 1) and (claim_con[5] == '0'):
                         claim_con[5] = 1
                         claim = str(f'{claim_con[0]}/{claim_con[1]}/{claim_con[2]}/{claim_con[3]}/{claim_con[4]}/{claim_con[5]}')
-                        ncoin = int(coin) + 100
+                        ncoin = int(coin) + 500
                         update_coin(username, ncoin)
                         update_achieve(username, 'arcade', str(claim))
                         arcade_achieve(username, lvl, ncoin, pull, chicky, equip, stats)
@@ -3196,7 +1847,7 @@ def level_achieve(username, lvl, coin, pull, chicky, equip, stats):
         achieve_text_rect = achieve_text.get_rect(center = (450,100))
         screen.blit(achieve_text, achieve_text_rect)
 
-        coinlogo = Lock('graphic/manycoin.png', 750, 100, 0.3)
+        coinlogo = Lock('graphic/manycoin.png', 750, 100, 0.4)
         coinlogo.draw(screen)
         coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'white')
         coin_text_rect = coin_text.get_rect(center = (830,100))
@@ -3352,6 +2003,8 @@ def level_achieve(username, lvl, coin, pull, chicky, equip, stats):
                     if (lvl6_con == 1) and (claim_con[1] == '0'):
                         claim_con[1] = 1
                         claim = str(f'{claim_con[0]}/{claim_con[1]}/{claim_con[2]}/{claim_con[3]}/{claim_con[4]}/{claim_con[5]}')
+                        print('True')
+                        print(f'befor update {claim}')
                         ncoin = int(coin) + 50
                         update_coin(username, ncoin)
                         update_achieve(username, 'level', str(claim))
@@ -3409,14 +2062,14 @@ def achievement(username, lvl, coin, pull, chicky, equip, stats):
         pygame.display.set_caption('Chicky Simulator - Achievement')
         screen.blit(ranking_image,(0,0))
 
-        chicky_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 90).render('Achievement', True, 'white')
-        chicky_text_rect = chicky_text.get_rect(center = (450,100))
-        screen.blit(chicky_text, chicky_text_rect)
+        achieve_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Achievement', True, 'white')
+        achieve_text_rect = achieve_text.get_rect(center = (450,100))
+        screen.blit(achieve_text, achieve_text_rect)
 
-        coinlogo = Lock('graphic/manycoin.png', 705, 100, 0.3)
+        coinlogo = Lock('graphic/manycoin.png', 750, 100, 0.5)
         coinlogo.draw(screen)
         coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'white')
-        coin_text_rect = coin_text.get_rect(center = (805,100))
+        coin_text_rect = coin_text.get_rect(center = (830,100))
         screen.blit(coin_text, coin_text_rect)
 
         level_button = Button('graphic/button2.png', 180, 350, 0.35, "Level")
@@ -3474,7 +2127,7 @@ def equip_chick2(username, lvl, coin, pull, chicky, equip, stats):
         worrier = Lock('graphic/ninjachic.png', 180, 265, 0.29)
         worrier.draw(screen)
 
-        worrier_info = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('Ninja Chick\nHp = 75\nAtk = 20\nSpd = 10', True, 'black')
+        worrier_info = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('Ninja Chick\nHp = 75\nAtk = 20\nCd = 5', True, 'black')
         worrier_info_rect = worrier_info.get_rect(center = (180,460))
         screen.blit(worrier_info, worrier_info_rect)
 
@@ -3487,7 +2140,7 @@ def equip_chick2(username, lvl, coin, pull, chicky, equip, stats):
         kitty = Lock('graphic/miaoji.png', width/2, 260, 0.29)
         kitty.draw(screen)
 
-        kitty_info = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('Kitty Chick\nHp = 150\nAtk = 10\nSpd = 10', True, 'black')
+        kitty_info = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('Kitty Chick\nHp = 150\nAtk = 10\nCd = 5', True, 'black')
         kitty_info_rect = kitty_info.get_rect(center = (width/2,460))
         screen.blit(kitty_info, kitty_info_rect)
 
@@ -3500,7 +2153,7 @@ def equip_chick2(username, lvl, coin, pull, chicky, equip, stats):
         speedy = Lock('graphic/speedychic.png', 720, 260, 0.3)
         speedy.draw(screen)
 
-        speedy_info = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('Speedy Chick\nHp = 75\nAtk = 10\nSpd = 20', True, 'black')
+        speedy_info = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('Speedy Chick\nHp = 75\nAtk = 10\nCd = 3.5', True, 'black')
         speedy_info_rect = speedy_info.get_rect(center = (720,460))
         screen.blit(speedy_info, speedy_info_rect)
 
@@ -3627,7 +2280,7 @@ def equip_chick(username, lvl, coin, pull, chicky, equip, stats):
         normal = Lock('graphic/chicky.png', 180, 270, 0.28)
         normal.draw(screen)
 
-        normal_info = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('Normal Chick\nHp = 100\nAtk = 10\nSpd = 10', True, 'black')
+        normal_info = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('Normal Chick\nHp = 100\nAtk = 10\nCd = 5', True, 'black')
         normal_info_rect = normal_info.get_rect(center = (180,460))
         screen.blit(normal_info, normal_info_rect)
 
@@ -3640,7 +2293,7 @@ def equip_chick(username, lvl, coin, pull, chicky, equip, stats):
         magnet = Lock('graphic/magnetchic.png', width/2, 260, 0.3)
         magnet.draw(screen)
 
-        magnet_info = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('Richie Chick\nHp = 100\nAtk = 10\nSpd = 10', True, 'black')
+        magnet_info = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('Richie Chick\nHp = 100\nAtk = 10\nCd = 5', True, 'black')
         magnet_info_rect = magnet_info.get_rect(center = (width/2,460))
         screen.blit(magnet_info, magnet_info_rect)
 
@@ -3653,7 +2306,7 @@ def equip_chick(username, lvl, coin, pull, chicky, equip, stats):
         tanker = Lock('graphic/tank chic.png', 720, 270, 0.3)
         tanker.draw(screen)
 
-        tanker_info = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('Tanker Chick\nHp = 200\nAtk = 10\nSpd = 5', True, 'black')
+        tanker_info = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render('Tanker Chick\nHp = 200\nAtk = 10\nCd = 7', True, 'black')
         tanker_info_rect = tanker_info.get_rect(center = (720,460))
         screen.blit(tanker_info, tanker_info_rect)
 
@@ -3818,7 +2471,7 @@ def backpack(username, lvl, coin, pull, chicky, equip, stats):
                     item_info = (f'{item_details[2]}\n{item_details[3]}')
                     item_type = (f'{item_details[5]}')
                     item_stat = (f'{item_details[4]}')
-                    item = Item(item_graphic, item_type, item_info, item_stat, item_name, 0.65)
+                    item = Item(item_graphic, item_type, item_info, item_stat, item_name, 1)
                     items.append(item)
 
             for i in equips_list:
@@ -3828,18 +2481,8 @@ def backpack(username, lvl, coin, pull, chicky, equip, stats):
                     equip1_info = (f'{item_details[2]}\n{item_details[3]}')
                     equip1_type = (f'{item_details[5]}')
                     equip1_stat = (f'{item_details[4]}')
-                    equip1 = Item(equip1_graphic, equip1_type, equip1_info, equip1_stat, equip1_name, 0.65)
+                    equip1 = Item(equip1_graphic, equip1_type, equip1_info, equip1_stat, equip1_name, 1)
                     equips.append(equip1)
-
-            #for i in equipments_list:
-                #if i in item_details[0]:
-                    #aequip_name = (f'{item_details[0]}')
-                    #aequip_graphic = (f'{item_details[1]}')
-                    #aequip_info = (f'{item_details[2]}\n{item_details[3]}')
-                    #aequip_type = (f'{item_details[5]}')
-                    #aequip_stat = (f'{item_details[4]}')
-                    #aequip = Item(aequip_graphic, aequip_type, aequip_info, aequip_stat, aequip_name, 0.65)
-                    #all_equip.append(aequip)
 
     for i, item in enumerate(items):
         if i <= len(backpack_slots):
@@ -3853,16 +2496,7 @@ def backpack(username, lvl, coin, pull, chicky, equip, stats):
         Hp, Def, Atk, Spd, Mag = stats.split('/')
         a = int(Atk)
         d = int(Def)
-        s = int(Spd)
-
-        #for item in equips:
-            #for stat, value in item.stats.items():
-                #if stat == 'Atk':
-                    #a += value
-                #elif stat == 'Def':
-                    #d += value
-                #elif stat == 'Spd':
-                    #s += value
+        s = float(Spd)
 
         with open('equipment_details.txt', 'r') as file:
             lines = file.readlines()
@@ -3872,35 +2506,17 @@ def backpack(username, lvl, coin, pull, chicky, equip, stats):
                     atk, de, spd = item_details[4].split('/')
                     atk1 = int(atk)
                     de1 = int(de)
-                    spd1 = int(spd)
+                    spd1 = float(spd)
                     if is_adding == 1:
                         a += atk1
                         d += de1
-                        s += spd1
+                        s -= spd1
                         break
                     else:
                         a -= atk1
                         d -= de1
-                        s -= spd1
+                        s += spd1
                         break
-                    
-
-        #for stat, value in selected_item.stats.items():
-            #if stat == 'Atk':
-                #if is_adding == 1:
-                    #a += value
-                #else:
-                    #a -= value
-            #elif stat == 'Def':
-                #if is_adding == 1:
-                    #d += value
-                #else:
-                    #d -= value
-            #elif stat == 'Spd':
-                #if is_adding == 1:
-                    #s += value
-                #else:
-                    #s -= value
 
         return (f'{Hp}/{d}/{a}/{s}/{Mag}')
 
@@ -3997,8 +2613,9 @@ def backpack(username, lvl, coin, pull, chicky, equip, stats):
                         if (slot.rect.collidepoint(pos_mouse)):
                             if slot.item == None:
                                 same_type_item = next((equip for equip in equips if equip.type == selected_item.type), None)
+                                
+                                print(str(same_type_item))
                                 if same_type_item:
-                                    # Revert to original state
                                     for slot in backpack_slots:
                                         if slot.item == None:
                                             slot.item = selected_item
@@ -4008,8 +2625,11 @@ def backpack(username, lvl, coin, pull, chicky, equip, stats):
                                             backpack(username, lvl, coin, pull, chicky, equip, temp_stats)
                                             break
                                 else:
-                                    items.remove(selected_item)
-                                    equips.append(selected_item)
+                                    if selected_item in items:
+                                        items.remove(selected_item)
+                                        equips.append(selected_item)
+                                    else:
+                                        break
                                     eequipp = str(f'{selected_item.name}')
                                     slot.item = selected_item
                                     selected_item = None
@@ -4030,8 +2650,9 @@ def backpack(username, lvl, coin, pull, chicky, equip, stats):
                     if selected_item:
                         for slot in backpack_slots:
                             if slot.item is None:
-                                equips.remove(selected_item)
-                                items.append(selected_item)
+                                if selected_item in equips:
+                                    equips.remove(selected_item)
+                                    items.append(selected_item)
                                 eequipp = str(f'{selected_item.name}')
                                 slot.item = selected_item
                                 selected_item = None
@@ -4048,15 +2669,15 @@ def backpack(username, lvl, coin, pull, chicky, equip, stats):
 
         if selected_item == None:
             Hp,Def,Atk,Spd,Mag = stats.split('/')
-            default = Info(50, 150, (f'Hp={Hp}\nDef={Def}\nAtk={Atk}\nSpd={Spd}'))
+            default = Info(50, 150, (f'Hp={Hp}\nDef={Def}\nAtk={Atk}\nCd={Spd}'))
             default.draw_info(screen)
         else:
             screen.blit(selected_item.image, selected_item.rect.topleft)
             Hp,Def,Atk,Spd,Mag = stats.split('/')
-            default = Info(50, 150, (f'Hp={Hp}\nDef={Def}\nAtk={Atk}\nSpd={Spd}'))
+            default = Info(50, 150, (f'Hp={Hp}\nDef={Def}\nAtk={Atk}\nCd={Spd}'))
             default.draw_info(screen)
             nHp,nDef,nAtk,nSpd,nMag = temp_stats.split('/')
-            new_default = Info(250, 150, (f'Hp={nHp}\nDef={nDef}\nAtk={nAtk}\nSpd={nSpd}'))
+            new_default = Info(250, 150, (f'Hp={nHp}\nDef={nDef}\nAtk={nAtk}\nCd={nSpd}'))
             new_default.draw_info(screen)
             info = Info(50, 335, selected_item.info)
             info.draw_info(screen)
@@ -4815,10 +3436,11 @@ def ranking(username, lvl, coin, pull, chicky, equip, stats):
 
 def mode(username, lvl, coin, pull, chicky, equip, stats):
     # let user pick normal/arcade - by puopuo
+
     while True:
         # screen display / setup
         pygame.display.set_caption('Chicky Simulator - Chicky')
-        screen.blit(background_image,(0,0))
+        screen.blit(ranking_image,(0,0))
 
         title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('Choose mode', True, 'white')
         title_text_rect = title_text.get_rect(center = (450,150))
@@ -4848,10 +3470,10 @@ def mode(username, lvl, coin, pull, chicky, equip, stats):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button1.check_input(pos_mouse):
-                    choose_level( lvl,username, coin, pull, chicky, equip, stats)
+                    choose_level(lvl, username, coin, pull, chicky, equip, stats)
                 
                 if play_button2.check_input(pos_mouse):
-                    arcade_lobby(username,lvl,  coin, pull, chicky, equip, stats)
+                    arcade_lobby(username, lvl,  coin, pull, chicky, equip, stats)
 
                 if back_button.check_input(pos_mouse):
                     lobby(username, lvl, coin, pull, chicky, equip, stats)
@@ -4869,7 +3491,7 @@ def choose_level(lvl, username, coin, pull, chicky, equip, stats):
         
         # screen display / setup
         pygame.display.set_caption('Chicky Simulator - Level')
-        screen.blit(background_image,(0,0))
+        screen.blit(ranking_image,(0,0))
 
         title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('LEVEL', True, 'white')
         title_text_rect = title_text.get_rect(center = (450,150))
@@ -4909,25 +3531,25 @@ def choose_level(lvl, username, coin, pull, chicky, equip, stats):
         lock5_con = False
 
         # check if user unlock the level or not
-        if lvl == 1:
+        if int(lvl) == 1:
             lock2.draw(screen)
             lock3.draw(screen)
             lock4.draw(screen)
             lock5.draw(screen)
 
-        elif lvl == 2:
+        elif int(lvl) == 2:
             lock2_con = True
             lock3.draw(screen)
             lock4.draw(screen)
             lock5.draw(screen)
 
-        elif lvl == 3:
+        elif int(lvl) == 3:
             lock2_con = True
             lock3_con = True
             lock4.draw(screen)
             lock5.draw(screen)
 
-        elif lvl == 4:
+        elif int(lvl) == 4:
             lock2_con = True
             lock3_con = True
             lock4_con = True
@@ -4984,7 +3606,7 @@ def choose_level2(lvl, username, coin, pull, chicky, equip, stats):
         
         # screen display / setup
         pygame.display.set_caption('Chicky Simulator - Level')
-        screen.blit(background_image,(0,0))
+        screen.blit(ranking_image,(0,0))
 
         title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('LEVEL', True, 'white')
         title_text_rect = title_text.get_rect(center = (450,150))
@@ -5026,42 +3648,42 @@ def choose_level2(lvl, username, coin, pull, chicky, equip, stats):
         lock10_con = False
 
         # check if user unlock the level or not
-        if lvl == 1 or lvl == 2 or lvl == 3 or lvl == 4 or lvl == 5 :
+        if int(lvl) < 6 :
             lock6.draw(screen)
             lock7.draw(screen)
             lock8.draw(screen)
             lock9.draw(screen)
             lock10.draw(screen)
 
-        elif lvl == 6:
+        if int(lvl) == 6:
             lock6_con = True
             lock7.draw(screen)
             lock8.draw(screen)
             lock9.draw(screen)
             lock10.draw(screen)
 
-        elif lvl == 7:
+        elif int(lvl) == 7:
             lock6_con = True
             lock7_con = True
             lock8.draw(screen)
             lock9.draw(screen)
             lock10.draw(screen)
 
-        elif lvl == 8:
+        elif int(lvl) == 8:
             lock6_con = True
             lock7_con = True
             lock8_con = True
             lock9.draw(screen)
             lock10.draw(screen)
 
-        elif lvl == 9:
+        elif int(lvl) == 9:
             lock6_con = True
             lock7_con = True
             lock8_con = True
             lock9_con = True
             lock10.draw(screen)
 
-        elif lvl == 10:
+        else:
             lock6_con = True
             lock7_con = True
             lock8_con = True
@@ -5114,7 +3736,7 @@ def choose_level3(lvl, username, coin, pull, chicky, equip, stats):
         
         # screen display / setup
         pygame.display.set_caption('Chicky Simulator - Level')
-        screen.blit(background_image,(0,0))
+        screen.blit(ranking_image,(0,0))
 
         title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('LEVEL', True, 'white')
         title_text_rect = title_text.get_rect(center = (450,150))
@@ -5156,42 +3778,42 @@ def choose_level3(lvl, username, coin, pull, chicky, equip, stats):
         lock15_con = False
 
         # check if user unlock the level or not
-        if lvl == 1 or lvl == 2 or lvl == 3 or lvl == 4 or lvl == 5 or lvl == 6 or lvl == 7 or lvl == 8 or lvl == 9 or lvl == 10:
+        if int(lvl) < 11:
             lock11.draw(screen)
             lock12.draw(screen)
             lock13.draw(screen)
             lock14.draw(screen)
             lock15.draw(screen)
 
-        elif lvl == 11:
+        elif int(lvl) == 11:
             lock11_con = True
             lock12.draw(screen)
             lock13.draw(screen)
             lock14.draw(screen)
             lock15.draw(screen)
 
-        elif lvl == 12:
+        elif int(lvl) == 12:
             lock11_con = True
             lock12_con = True
             lock13.draw(screen)
             lock14.draw(screen)
             lock15.draw(screen)
 
-        elif lvl == 13:
+        elif int(lvl) == 13:
             lock11_con = True
             lock12_con = True
             lock13_con = True
             lock14.draw(screen)
             lock15.draw(screen)
 
-        elif lvl == 14:
+        elif int(lvl) == 14:
             lock11_con = True
             lock12_con = True
             lock13_con = True
             lock14_con = True
             lock15.draw(screen)
 
-        elif lvl == 15:
+        else:
             lock11_con = True
             lock12_con = True
             lock13_con = True
@@ -5244,7 +3866,7 @@ def choose_level4(lvl, username, coin, pull, chicky, equip, stats):
         
         # screen display / setup
         pygame.display.set_caption('Chicky Simulator - Level')
-        screen.blit(background_image,(0,0))
+        screen.blit(ranking_image,(0,0))
 
         title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('LEVEL', True, 'white')
         title_text_rect = title_text.get_rect(center = (450,150))
@@ -5286,42 +3908,42 @@ def choose_level4(lvl, username, coin, pull, chicky, equip, stats):
         lock20_con = False
 
         # check if user unlock the level or not
-        if lvl == 1 or lvl == 2 or lvl == 3 or lvl == 4 or lvl == 5 or lvl == 6 or lvl == 7 or lvl == 8 or lvl == 9 or lvl == 10 or lvl == 11 or lvl == 12 or lvl == 13 or lvl == 14 or lvl == 15:
+        if int(lvl) < 16 :
             lock16.draw(screen)
             lock17.draw(screen)
             lock18.draw(screen)
             lock19.draw(screen)
             lock20.draw(screen)
 
-        elif lvl == 16:
+        elif int(lvl) == 16:
             lock16_con = True
             lock17.draw(screen)
             lock18.draw(screen)
             lock19.draw(screen)
             lock20.draw(screen)
 
-        elif lvl == 17:
+        elif int(lvl) == 17:
             lock16_con = True
             lock17_con = True
             lock18.draw(screen)
             lock19.draw(screen)
             lock20.draw(screen)
 
-        elif lvl == 18:
+        elif int(lvl) == 18:
             lock16_con = True
             lock17_con = True
             lock18_con = True
             lock19.draw(screen)
             lock20.draw(screen)
 
-        elif lvl == 19:
+        elif int(lvl) == 19:
             lock16_con = True
             lock17_con = True
             lock18_con = True
             lock19_con = True
             lock20.draw(screen)
 
-        elif lvl == 20:
+        else:
             lock16_con = True
             lock17_con = True
             lock18_con = True
@@ -5360,7 +3982,7 @@ def choose_level4(lvl, username, coin, pull, chicky, equip, stats):
                     choose_level3(lvl,username , coin, pull, chicky, equip, stats)
                 
                 if next_button.check_input(pos_mouse):
-                    arcade_lobby(lvl,username , coin, pull, chicky, equip, stats)
+                    arcade_lobby(username, lvl, coin, pull, chicky, equip, stats)
             
             Manager.process_events(event)
 
@@ -5376,9 +3998,6 @@ def lobby(username, lvl, coin, pull, chicky, equip, stats):
         pygame.display.set_caption('Chicky Simulator')
         screen.blit(background_image,(0,0))
         
-
-        
-
         title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Chicky Simulator', True, 'white')
         title_text_rect = title_text.get_rect(center = (450,150))
         screen.blit(title_text, title_text_rect)
@@ -5469,32 +4088,22 @@ def check_default(username):
             if user_default[0] == username:
                 chicky = user_default[6]
                 if chicky == 'normal':
-                    chicky_graphic = 'graphic/chicky.png'
-                    Hp, Def, Atk, Cd, Mag = 100, 0, 10, 5000, 0
+                    Hp, Def, Atk, Cd, Mag = 100, 0, 10, 5, 0
                     break
                 elif chicky == 'kitty':
-                    chicky_graphic = 'graphic/miaoji.png'
-                    Hp, Def, Atk, Cd, Mag = 150, 0, 10, 5000, 0
-                    Hp, Def, Atk, Cd, Mag = 150, 0, 10, 5000, 0
+                    Hp, Def, Atk, Cd, Mag = 150, 0, 10, 5, 0
                     break
                 elif chicky == 'worrier':
-                    chicky_graphic = 'graphic/ninjachic.png'
-                    Hp, Def, Atk, Cd, Mag = 75, 0, 20, 5000, 0
-                    Hp, Def, Atk, Cd, Mag = 75, 0, 20, 5000, 0
+                    Hp, Def, Atk, Cd, Mag = 75, 0, 20, 5, 0
                     break
                 elif chicky == 'magnet':
-                    chicky_graphic = 'graphic/magnetchic.png'
-                    Hp, Def, Atk, Cd, Mag = 100, 0, 10, 5000, 1
+                    Hp, Def, Atk, Cd, Mag = 100, 0, 10, 5, 1
                     break
                 elif chicky == 'speedy':
-                    chicky_graphic = 'graphic/speedychic.png'
-                    Hp, Def, Atk, Cd, Mag = 75, 0, 10, 2500, 0
-                    Hp, Def, Atk, Cd, Mag = 75, 0, 10, 2500, 0
+                    Hp, Def, Atk, Cd, Mag = 75, 0, 10, 3.5, 0
                     break
                 elif chicky == 'tanker':
-                    chicky_graphic = 'graphic/tank chic.png'
-                    Hp, Def, Atk, Cd, Mag = 200, 20, 10, 10000, 0
-                    Hp, Def, Atk, Cd, Mag = 200, 20, 10, 10000, 0
+                    Hp, Def, Atk, Cd, Mag = 200, 0, 10, 7, 0
                     break
 
     with open('user_details.txt', 'r') as file2:
@@ -5513,14 +4122,9 @@ def check_default(username):
                     a, d, s = item_details[4].split('/')
                     Atk += int(a)
                     Def += int(d)
-                    Cd += int(s)
+                    Cd -= float(s)
 
     stats = str(f'{Hp}/{Def}/{Atk}/{Cd}/{Mag}')
-    #stats = str(f'{Hp}/{Def}/{Atk}/{Cd}/{Mag}')
-    #equip_str = '/'.join(equip_list)
-    #print(str(equip_str))
-    #print(chicky)
-    # print(stats)
     return stats 
     
 
@@ -6985,14 +5589,8 @@ def equipment2(username, lvl, coin, pull, chicky, equip, stats) :
 def arcade_lobby(username, lvl, coin, pull, chicky, equip, stats):
     ## also puo puo did this
     
-
-
-
-
-
     on = True
-    
-                            
+                       
     while on:
         screen.blit(background_image,(0,0))
         pos_mouse = pygame.mouse.get_pos()
@@ -7059,6 +5657,10 @@ def snake_lobby(username, lvl, coin, pull, chicky, equip, stats) :
         pygame.display.set_caption('Chicky Simulator - Chick Game')
         title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('Chick Game', True, 'white')
         title_text_rect = title_text.get_rect(center = (450,100))
+        tutosnake = pygame.image.load('graphic/tutosnake.PNG')
+        tutosnake = pygame.transform.scale(tutosnake,(600,400))
+        tutosnake_rect = tutosnake.get_rect(center = (width/2, height/2))
+        screen.blit(tutosnake, tutosnake_rect)
         screen.blit(title_text, title_text_rect)
 
         #buttons#
@@ -7124,63 +5726,6 @@ def crush_lobby(username, lvl, coin, pull, chicky, equip, stats) :
 
     pygame.quit()
     sys.exit()
-
-
-#def collection(username, lvl, coin, pull, chicky, equip, stats) :
-    ##puo puo did this
-    on = True
-    buy = False
-    no = False
-    sword = pygame.image.load("graphic/sword.png")
-    shield = pygame.image.load("graphic/shield.png")
-    bow = pygame.image.load("graphic/bow.png")
-    x_bow = pygame.image.load("graphic/x-bow.png")
-    hammer= pygame.image.load("graphic/hammer.png")
-    axe= pygame.image.load("graphic/axe.png")
-    font = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50)
-
-    while on:
-        pygame.display.set_caption('Chicky Simulator - Collection')
-        screen.blit(background_image,(0,0))
-        pos_mouse = pygame.mouse.get_pos()
-
-        #####Text Display
-        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Collection', True, 'white')
-        store_text_rect = store_text.get_rect(center = (450,70))
-        screen.blit(store_text, store_text_rect)
-        #################
-
-        #white surface
-        store_surface = pygame.Surface((850,500))
-        store_surface.fill('white')
-        store_surface.set_alpha(150)
-        store_surface_rect = store_surface.get_rect(center=(width/2,380))
-        screen.blit(store_surface, store_surface_rect)
-        #########
-
-        #EQUIPMENT DisPLAY
-        screen.blit(sword,(85,130))
-        screen.blit(shield,(380,130))
-        screen.blit(bow,(680,130))
-        screen.blit(x_bow,(85,375))
-        screen.blit(hammer,(380,375))
-        screen.blit(axe,(680,375))
-        #################
-
-        #Next page button#
-        next_button = Button('graphic/botton1.png', 850, 70, 0.6, ">>")
-        next_button.draw(screen)
-
-        #Back page button#
-        back_button = Button('graphic/botton1.png', 70, 70, 0.6, "<<")
-        back_button.draw(screen)
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                on = False
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if sword.check_input(pos_mouse):
-                    sword(username, lvl, coin, pull, chicky, equip, stats)
 
 
 def axe_info(username, lvl, coin, pull, chicky, equip, stats) :
@@ -8417,8 +6962,6 @@ def collection5(username, lvl, coin, pull, chicky, equip, stats):
                 if next_button.check_input(pos_mouse):
                     collection6(username, lvl, coin, pull, chicky, equip, stats)
 
-
-
         pygame.display.flip()
 
     pygame.quit()
@@ -8516,10 +7059,7 @@ def collection7(username, lvl, coin, pull, chicky, equip, stats):
         next_button = Button('graphic/botton1.png', 830, 70, 0.6, ">>")
         next_button.draw(screen)
         
-
         #check user got or no
-
-
         with open('user_backpack.txt', 'r') as file:
             lines = file.readlines()        
             for i, line in enumerate(lines):
@@ -8543,8 +7083,6 @@ def collection7(username, lvl, coin, pull, chicky, equip, stats):
                 user_backpack[1] = str(weapon_str)
                 lines[i] = ', '.join(user_backpack) + '\n'
                 break
-
-
             
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -8611,8 +7149,6 @@ def collection7(username, lvl, coin, pull, chicky, equip, stats):
                 if next_button.check_input(pos_mouse):
                     collection8(username, lvl, coin, pull, chicky, equip, stats)
 
-
-
         pygame.display.flip()
 
     pygame.quit()
@@ -8672,21 +7208,21 @@ def collection6(username, lvl, coin, pull, chicky, equip, stats):
         info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Tanker Chic', True, (0,0,0))
         text_rect = info_text.get_rect(center =(750,305))
         screen.blit(info_text, text_rect)
-        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render('5-Star Character\nChic evolution\nChic loves military\nchic is transformer\nit\'s Perfect!!!\n\n        hp+100\n         CD-5', True, (0,0,0))
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render('5-Star Character\nChic evolution\nChic loves military\nchic is transformer\nit\'s Perfect!!!\n\n        hp+100\n         CD+2', True, (0,0,0))
         text_rect = info_text.get_rect(center =(750,450))
         screen.blit(info_text, text_rect)
         ######miao#####        
         info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Speedy Chic', True, (0,0,0))
         text_rect = info_text.get_rect(center =(450,305))
         screen.blit(info_text, text_rect)
-        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render('5-Star Character\nChic evolution\nChic is the flash pro\nChic fast as Jiaying\nchic save the world\nit\'s Perfect!!!\n\n         CD+10', True, (0,0,0))
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render('5-Star Character\nChic evolution\nChic is the flash pro\nChic fast as Jiaying\nchic save the world\nit\'s Perfect!!!\n\n         CD-1.5', True, (0,0,0))
         text_rect = info_text.get_rect(center =(450,450))
         screen.blit(info_text, text_rect)
         #######unknown#########     
         info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('normal Chic', True, (0,0,0))
         text_rect = info_text.get_rect(center =(150,305))
         screen.blit(info_text, text_rect)
-        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render('4-star character\nChic is not pro\nChic stand like man\nchic is muscular\nchic want evolution\n\nBasic Atk = 10\nBasic Hp = 100\nBasic CD = 10', True, (0,0,0))
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render('4-star character\nChic is not pro\nChic stand like man\nchic is muscular\nchic want evolution\n\nBasic Atk = 10\nBasic Hp = 100\nBasic CD = 5', True, (0,0,0))
         text_rect = info_text.get_rect(center =(150,450))
         screen.blit(info_text, text_rect)
 
@@ -9022,7 +7558,7 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
     on = True
     time = 0
     coins = 0
-    played = 0
+    play = 0
     chick_position = [50, 50]
     chick_speed = 15
     chick_body =[[50,50]]
@@ -9031,15 +7567,11 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
     coin_position = [random.randrange(1,width-50),random.randrange(1,height-50)]
     coin_spawn = True
     chick_index = 0
-    played_time = [0]
-    time_played = []
 
     def game_over(username, lvl, coin, pull, chicky, equip, stats, play, coins) :
         font = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50)
 
         on = True
-        #coins_get = []
-        #played_time = []
 
         update_progress(username, coins)
         update_played(username, play)
@@ -9050,9 +7582,6 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
             screen.blit(font.render('Click again to go back.',True,'white'),(230,350))
             pygame.display.flip()
 
-            #played_time.append(play)
-            #coins_get.append(coins)
-
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     pygame.mixer.music.load("graphic/bgmusic1.mp3")
@@ -9062,7 +7591,6 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-
 
             pygame.display.flip()
 
@@ -9083,8 +7611,9 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
                     user_score[0] = '1'
                 score_str = '/'.join(user_score)
                 user_snake[4] = str(score_str)
-                lines[i] = ', '.join(user_snake) + '\n'
                 break
+
+        lines[i] = ', '.join(user_snake) + '\n'
 
         with open('user_achievement.txt', 'w') as file:
             file.writelines(lines)
@@ -9101,10 +7630,12 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
                 if user_snake[0] == username:
                     played = int(user_snake[5]) + 1
                     user_snake[5] = str(played)
-                lines[i] = ', '.join(user_snake) + '\n'
+                    print(played)
                 break
             else:
                 break
+
+        lines[i] = ', '.join(user_snake) + '\n'
 
         with open('user_achievement.txt', 'w') as file:
             file.writelines(lines)
@@ -9179,12 +7710,10 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
         # Game Over conditions
         #left right
         if chick_position[0] < 0 or chick_position[0] > width-35:
-            play = 0
             game_over(username, lvl, coin, pull, chicky, equip, stats, play, ccoinn)
             
         #up down
-        if chick_position[1] < 0 or chick_position[1] > height-35: 
-            play = 0  
+        if chick_position[1] < 0 or chick_position[1] > height-35:
             game_over(username, lvl, coin, pull, chicky, equip, stats, play, ccoinn)
             
         #timer
@@ -9196,7 +7725,6 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
         #collision with body
         for block in chick_body[1:]:
             if chick_position == block:
-                play = 0
                 game_over(username, lvl, coin, pull, chicky, equip, stats, play, ccoinn)
                      
         #text display
