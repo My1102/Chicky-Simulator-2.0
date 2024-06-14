@@ -9,4 +9,4 @@ kaijian, 1234, 5, 454, 1000, 0, normal, no/no/no/no/no
 raziq, 1234, 5, 788, 1000, 0, normal, no/no/no/no/no
 lhs, LHMM8328, 5, 1270, 1000, 0, normal, no/no/no/no/no
 Angelyn, 1234, 5, 420, 1000, 0, normal, no/no/no/no/no
-pog, 1234, 9, 330, 1000, 0, normal, no/no/no/no/no
+pog, 1234, 20, 330, 1000, 0, normal, no/no/no/no/no
