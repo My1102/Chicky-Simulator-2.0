@@ -8989,6 +8989,7 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
                 if user_snake[0] == username:
                     played = int(user_snake[5]) + 1
                     user_snake[5] = str(played)
+                    print(played)
                 break
             else:
                 break
@@ -9077,7 +9078,7 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
         #timer
         time = 60 - (pygame.time.get_ticks() - ticks) // 1000
         if time <= 0 :
-            play = 1
+            play = '1'
             game_over(username, lvl, coin, pull, chicky, equip, stats, play, ccoinn)
             
         #collision with body
