@@ -1139,9 +1139,8 @@ def update_equipchick(username, chicky):
 
 
 def update_achieve(username, achieve_type, claim):
-    print(str(claim))
     claim_con = claim.split('/')
-    update = False
+
     with open('user_achievement.txt', 'r') as file:
         lines = file.readlines()
         
@@ -1151,7 +1150,6 @@ def update_achieve(username, achieve_type, claim):
             if user_achieve[0] == username:
                 level_list = user_achieve[1].split('/')
                 if claim_con[0] == '1':
-                    print("True")
                     level_list[0] = '1'
                 if claim_con[1] == '1':
                     level_list[1] = '1'
@@ -1163,16 +1161,13 @@ def update_achieve(username, achieve_type, claim):
                     level_list[4] = '1'
                 if claim_con[5] == '1':
                     level_list[5] = '1'
-
-        new_str = '/'.join(level_list)
-        print(str(new_str))
-        user_achieve[1] = str(new_str)
+            new_str = '/'.join(level_list)
+            print(str(new_str))
+            user_achieve[1] = str(new_str)
+            break
         lines[i] = ', '.join(user_achieve) + '\n'
-        with open('user_achievement.txt', 'w') as file:
-            file.writelines(lines)
-            update = True
 
-    elif achieve_type == 'collect':
+    if achieve_type == 'collect':
         for i, line in enumerate(lines):
             user_achieve = line.strip().split(", ")
             if user_achieve[0] == username:
@@ -1189,16 +1184,13 @@ def update_achieve(username, achieve_type, claim):
                     collect_list[4] = '1'
                 if claim_con[5] == '1':
                     collect_list[5] = '1'
-
-        new_str = '/'.join(collect_list)
-        print(str(new_str))
-        user_achieve[3] = str(new_str)
+            new_str = '/'.join(collect_list)
+            print(str(new_str))
+            user_achieve[3] = str(new_str)
+            break
         lines[i] = ', '.join(user_achieve) + '\n'
-        with open('user_achievement.txt', 'w') as file:
-            file.writelines(lines)
-            update = True
 
-    elif achieve_type == 'arcade':
+    if achieve_type == 'arcade':
         for i, line in enumerate(lines):
             user_achieve = line.strip().split(", ")
             if user_achieve[0] == username:
@@ -1215,19 +1207,15 @@ def update_achieve(username, achieve_type, claim):
                     collect_list[4] = '1'
                 if claim_con[5] == '1':
                     collect_list[5] = '1'
-
-        new_str = '/'.join(collect_list)
-        user_achieve[2] = str(new_str)
+            new_str = '/'.join(collect_list)
+            user_achieve[2] = str(new_str)
+            break
         lines[i] = ', '.join(user_achieve) + '\n'
-        with open('user_achievement.txt', 'w') as file:
-            file.writelines(lines)
-            update = True
 
-        #with open('user_achievement.txt', 'w') as file:
-            #file.writelines(lines)
-        
-        if update == True:
-            return 
+    with open('user_achievement.txt', 'w') as file:
+        file.writelines(lines)
+
+    return 
 
 
 def check_coinget(username, coin, coinget):
@@ -1344,7 +1332,7 @@ def collect_achieve(username, lvl, coin, pull, chicky, equip, stats):
         achieve_text_rect = achieve_text.get_rect(center = (450,100))
         screen.blit(achieve_text, achieve_text_rect)
 
-        coinlogo = Lock('graphic/manycoin.png', 750, 100, 0.3)
+        coinlogo = Lock('graphic/manycoin.png', 750, 100, 0.4)
         coinlogo.draw(screen)
         coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'white')
         coin_text_rect = coin_text.get_rect(center = (830,100))
@@ -1603,7 +1591,7 @@ def arcade_achieve(username, lvl, coin, pull, chicky, equip, stats):
         #####
 
         #coin display
-        coinlogo = Lock('graphic/manycoin.png', 750, 100, 0.3)
+        coinlogo = Lock('graphic/manycoin.png', 750, 100, 0.4)
         coinlogo.draw(screen)
         coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'white')
         coin_text_rect = coin_text.get_rect(center = (830,100))
@@ -1619,29 +1607,47 @@ def arcade_achieve(username, lvl, coin, pull, chicky, equip, stats):
         ######
 
         #text
-        a1_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Get 20 score\nin arcade mode\n\n    Coin x30', True, 'black')
+        a1_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Get 20 score\nin arcade mode', True, 'black')
         a1_text_rect = a1_text.get_rect(center = (150,230))
         screen.blit(a1_text, a1_text_rect)
+        a11_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Coin x 30', True, 'black')
+        a11_text_rect = a11_text.get_rect(center = (150,280))
+        screen.blit(a11_text, a11_text_rect)
 
-        a2_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Get 40 score\nin arcade mode\n\n    Coin x50', True, 'black')
+        a2_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Get 40 score\nin arcade mode', True, 'black')
         a2_text_rect = a2_text.get_rect(center = (450,230))
         screen.blit(a2_text, a2_text_rect)
+        a22_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Coin x 50', True, 'black')
+        a22_text_rect = a22_text.get_rect(center = (450,280))
+        screen.blit(a22_text, a22_text_rect)
 
-        a3_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Get 60 score\nin arcade mode\n\n    Coin x100', True, 'black')
+        a3_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Get 60 score\nin arcade mode', True, 'black')
         a3_text_rect = a3_text.get_rect(center = (750,230))
         screen.blit(a3_text, a3_text_rect)
+        a33_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Coin x 100', True, 'black')
+        a33_text_rect = a33_text.get_rect(center = (750,280))
+        screen.blit(a33_text, a33_text_rect)
 
-        a4_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Play 20 secs\nin arcade mode\n\n    Coin x30', True, 'black')
+        a4_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Play 10 times\narcade mode', True, 'black')
         a4_text_rect = a4_text.get_rect(center = (150,480))
         screen.blit(a4_text, a4_text_rect)
+        a44_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Coin x 100', True, 'black')
+        a44_text_rect = a44_text.get_rect(center = (150,530))
+        screen.blit(a44_text, a44_text_rect)
 
-        a5_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Play 35 secs\nin arcade mode\n\n    Coin x50', True, 'black')
+        a5_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Play 15 times\narcade mode', True, 'black')
         a5_text_rect = a5_text.get_rect(center = (450,480))
         screen.blit(a5_text, a5_text_rect)
+        a55_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Coin x 300', True, 'black')
+        a55_text_rect = a55_text.get_rect(center = (450,530))
+        screen.blit(a55_text, a55_text_rect)
 
-        a6_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Play 60 secs\nin arcade mode\n\n    Coin x100', True, 'black')
+        a6_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Play 20 times\narcade mode', True, 'black')
         a6_text_rect = a6_text.get_rect(center = (750,480))
         screen.blit(a6_text, a6_text_rect)
+        a66_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Coin x 500', True, 'black')
+        a66_text_rect = a66_text.get_rect(center = (750,530))
+        screen.blit(a66_text, a66_text_rect)
 
         if score20_con == 1:
             if claim_con[0] == '0':
@@ -1657,7 +1663,7 @@ def arcade_achieve(username, lvl, coin, pull, chicky, equip, stats):
             lock1.draw(screen)
         
         if score40_con == 1:
-            if claim_con[0] == '0':
+            if claim_con[1] == '0':
                 claim_button2 = Button('graphic/button2.png', 450, 350, 0.25, "Claim")
                 claim_button2.draw(screen)
             else:
@@ -1670,7 +1676,7 @@ def arcade_achieve(username, lvl, coin, pull, chicky, equip, stats):
             lock1.draw(screen)
 
         if score60_con == 1:
-            if claim_con[0] == '0':
+            if claim_con[2] == '0':
                 claim_button3 = Button('graphic/button2.png', 750, 350, 0.25, "Claim")
                 claim_button3.draw(screen)
             else:
@@ -1763,7 +1769,7 @@ def arcade_achieve(username, lvl, coin, pull, chicky, equip, stats):
                     if (play10_con == 1) and (claim_con[3] == '0'):
                         claim_con[3] = 1
                         claim = str(f'{claim_con[0]}/{claim_con[1]}/{claim_con[2]}/{claim_con[3]}/{claim_con[4]}/{claim_con[5]}')
-                        ncoin = int(coin) + 30
+                        ncoin = int(coin) + 100
                         update_coin(username, ncoin)
                         update_achieve(username, 'arcade', str(claim))
                         arcade_achieve(username, lvl, ncoin, pull, chicky, equip, stats)
@@ -1772,7 +1778,7 @@ def arcade_achieve(username, lvl, coin, pull, chicky, equip, stats):
                     if (play15_con == 1) and (claim_con[4] == '0'):
                         claim_con[4] = 1
                         claim = str(f'{claim_con[0]}/{claim_con[1]}/{claim_con[2]}/{claim_con[3]}/{claim_con[4]}/{claim_con[5]}')
-                        ncoin = int(coin) + 50
+                        ncoin = int(coin) + 300
                         update_coin(username, ncoin)
                         update_achieve(username, 'arcade', str(claim))
                         arcade_achieve(username, lvl, ncoin, pull, chicky, equip, stats)
@@ -1781,7 +1787,7 @@ def arcade_achieve(username, lvl, coin, pull, chicky, equip, stats):
                     if (play20_con == 1) and (claim_con[5] == '0'):
                         claim_con[5] = 1
                         claim = str(f'{claim_con[0]}/{claim_con[1]}/{claim_con[2]}/{claim_con[3]}/{claim_con[4]}/{claim_con[5]}')
-                        ncoin = int(coin) + 100
+                        ncoin = int(coin) + 500
                         update_coin(username, ncoin)
                         update_achieve(username, 'arcade', str(claim))
                         arcade_achieve(username, lvl, ncoin, pull, chicky, equip, stats)
@@ -1829,7 +1835,6 @@ def level_achieve(username, lvl, coin, pull, chicky, equip, stats):
             user_achieve = line.strip().split(", ")
             if user_achieve[0] == username:
                 claim_con = user_achieve[1].split('/')
-                print(str(f'{claim_con[0]}/{claim_con[1]}/{claim_con[2]}/{claim_con[3]}/{claim_con[4]}/{claim_con[5]}'))
     
     while True:
         pygame.display.set_caption('Chicky Simulator - Achievement')
@@ -1839,7 +1844,7 @@ def level_achieve(username, lvl, coin, pull, chicky, equip, stats):
         achieve_text_rect = achieve_text.get_rect(center = (450,100))
         screen.blit(achieve_text, achieve_text_rect)
 
-        coinlogo = Lock('graphic/manycoin.png', 750, 100, 0.3)
+        coinlogo = Lock('graphic/manycoin.png', 750, 100, 0.4)
         coinlogo.draw(screen)
         coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'white')
         coin_text_rect = coin_text.get_rect(center = (830,100))
@@ -1983,10 +1988,9 @@ def level_achieve(username, lvl, coin, pull, chicky, equip, stats):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if claim_button1.check_input(pos_mouse):
-                    if (lvl3_con == 1) and (claim_con[0] == 0):
+                    if (lvl3_con == 1) and (claim_con[0] == '0'):
                         claim_con[0] = 1
                         claim = str(f'{claim_con[0]}/{claim_con[1]}/{claim_con[2]}/{claim_con[3]}/{claim_con[4]}/{claim_con[5]}')
-                        print(claim)
                         ncoin = int(coin) + 30
                         update_coin(username, ncoin)
                         update_achieve(username, 'level', str(claim))
@@ -1996,6 +2000,8 @@ def level_achieve(username, lvl, coin, pull, chicky, equip, stats):
                     if (lvl6_con == 1) and (claim_con[1] == '0'):
                         claim_con[1] = 1
                         claim = str(f'{claim_con[0]}/{claim_con[1]}/{claim_con[2]}/{claim_con[3]}/{claim_con[4]}/{claim_con[5]}')
+                        print('True')
+                        print(f'befor update {claim}')
                         ncoin = int(coin) + 50
                         update_coin(username, ncoin)
                         update_achieve(username, 'level', str(claim))
@@ -2053,14 +2059,14 @@ def achievement(username, lvl, coin, pull, chicky, equip, stats):
         pygame.display.set_caption('Chicky Simulator - Achievement')
         screen.blit(ranking_image,(0,0))
 
-        chicky_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 90).render('Achievement', True, 'white')
-        chicky_text_rect = chicky_text.get_rect(center = (450,100))
-        screen.blit(chicky_text, chicky_text_rect)
+        achieve_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Achievement', True, 'white')
+        achieve_text_rect = achieve_text.get_rect(center = (450,100))
+        screen.blit(achieve_text, achieve_text_rect)
 
-        coinlogo = Lock('graphic/manycoin.png', 705, 100, 0.3)
+        coinlogo = Lock('graphic/manycoin.png', 750, 100, 0.5)
         coinlogo.draw(screen)
         coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'white')
-        coin_text_rect = coin_text.get_rect(center = (805,100))
+        coin_text_rect = coin_text.get_rect(center = (830,100))
         screen.blit(coin_text, coin_text_rect)
 
         level_button = Button('graphic/button2.png', 180, 350, 0.35, "Level")
@@ -3423,12 +3429,10 @@ def ranking(username, lvl, coin, pull, chicky, equip, stats):
 def mode(username, lvl, coin, pull, chicky, equip, stats):
     # let user pick normal/arcade - by puopuo
 
-    
-
     while True:
         # screen display / setup
         pygame.display.set_caption('Chicky Simulator - Chicky')
-        screen.blit(background_image,(0,0))
+        screen.blit(ranking_image,(0,0))
 
         title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('Choose mode', True, 'white')
         title_text_rect = title_text.get_rect(center = (450,150))
@@ -3479,7 +3483,7 @@ def choose_level(lvl, username, coin, pull, chicky, equip, stats):
         
         # screen display / setup
         pygame.display.set_caption('Chicky Simulator - Level')
-        screen.blit(background_image,(0,0))
+        screen.blit(ranking_image,(0,0))
 
         title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('LEVEL', True, 'white')
         title_text_rect = title_text.get_rect(center = (450,150))
@@ -3594,7 +3598,7 @@ def choose_level2(lvl, username, coin, pull, chicky, equip, stats):
         
         # screen display / setup
         pygame.display.set_caption('Chicky Simulator - Level')
-        screen.blit(background_image,(0,0))
+        screen.blit(ranking_image,(0,0))
 
         title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('LEVEL', True, 'white')
         title_text_rect = title_text.get_rect(center = (450,150))
@@ -3724,7 +3728,7 @@ def choose_level3(lvl, username, coin, pull, chicky, equip, stats):
         
         # screen display / setup
         pygame.display.set_caption('Chicky Simulator - Level')
-        screen.blit(background_image,(0,0))
+        screen.blit(ranking_image,(0,0))
 
         title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('LEVEL', True, 'white')
         title_text_rect = title_text.get_rect(center = (450,150))
@@ -3854,7 +3858,7 @@ def choose_level4(lvl, username, coin, pull, chicky, equip, stats):
         
         # screen display / setup
         pygame.display.set_caption('Chicky Simulator - Level')
-        screen.blit(background_image,(0,0))
+        screen.blit(ranking_image,(0,0))
 
         title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('LEVEL', True, 'white')
         title_text_rect = title_text.get_rect(center = (450,150))
@@ -3986,9 +3990,6 @@ def lobby(username, lvl, coin, pull, chicky, equip, stats):
         pygame.display.set_caption('Chicky Simulator')
         screen.blit(background_image,(0,0))
         
-
-        
-
         title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Chicky Simulator', True, 'white')
         title_text_rect = title_text.get_rect(center = (450,150))
         screen.blit(title_text, title_text_rect)
@@ -4120,11 +4121,6 @@ def check_default(username):
                     Cd -= float(s)
 
     stats = str(f'{Hp}/{Def}/{Atk}/{Cd}/{Mag}')
-    #stats = str(f'{Hp}/{Def}/{Atk}/{Cd}/{Mag}')
-    #equip_str = '/'.join(equip_list)
-    #print(str(equip_str))
-    #print(chicky)
-    # print(stats)
     return stats 
     
 
@@ -6959,8 +6955,6 @@ def collection5(username, lvl, coin, pull, chicky, equip, stats):
                 if next_button.check_input(pos_mouse):
                     collection6(username, lvl, coin, pull, chicky, equip, stats)
 
-
-
         pygame.display.flip()
 
     pygame.quit()
@@ -7058,10 +7052,7 @@ def collection7(username, lvl, coin, pull, chicky, equip, stats):
         next_button = Button('graphic/botton1.png', 830, 70, 0.6, ">>")
         next_button.draw(screen)
         
-
         #check user got or no
-
-
         with open('user_backpack.txt', 'r') as file:
             lines = file.readlines()        
             for i, line in enumerate(lines):
@@ -7085,8 +7076,6 @@ def collection7(username, lvl, coin, pull, chicky, equip, stats):
                 user_backpack[1] = str(weapon_str)
                 lines[i] = ', '.join(user_backpack) + '\n'
                 break
-
-
             
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -7152,8 +7141,6 @@ def collection7(username, lvl, coin, pull, chicky, equip, stats):
                     collection6(username, lvl, coin, pull, chicky, equip, stats)
                 if next_button.check_input(pos_mouse):
                     collection8(username, lvl, coin, pull, chicky, equip, stats)
-
-
 
         pygame.display.flip()
 
@@ -7564,7 +7551,7 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
     on = True
     time = 0
     coins = 0
-    played = 0
+    play = 0
     chick_position = [50, 50]
     chick_speed = 15
     chick_body =[[50,50]]
@@ -7573,15 +7560,11 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
     coin_position = [random.randrange(1,width-50),random.randrange(1,height-50)]
     coin_spawn = True
     chick_index = 0
-    played_time = [0]
-    time_played = []
 
     def game_over(username, lvl, coin, pull, chicky, equip, stats, play, coins) :
         font = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50)
 
         on = True
-        #coins_get = []
-        #played_time = []
 
         update_progress(username, coins)
         update_played(username, play)
@@ -7592,16 +7575,12 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
             screen.blit(font.render('Click again to go back.',True,'white'),(230,350))
             pygame.display.flip()
 
-            #played_time.append(play)
-            #coins_get.append(coins)
-
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     snake_lobby(username, lvl, coin, pull, chicky, equip, stats)
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-
 
             pygame.display.flip()
 
@@ -7622,8 +7601,9 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
                     user_score[0] = '1'
                 score_str = '/'.join(user_score)
                 user_snake[4] = str(score_str)
-                lines[i] = ', '.join(user_snake) + '\n'
                 break
+
+        lines[i] = ', '.join(user_snake) + '\n'
 
         with open('user_achievement.txt', 'w') as file:
             file.writelines(lines)
@@ -7640,10 +7620,12 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
                 if user_snake[0] == username:
                     played = int(user_snake[5]) + 1
                     user_snake[5] = str(played)
-                lines[i] = ', '.join(user_snake) + '\n'
+                    print(played)
                 break
             else:
                 break
+
+        lines[i] = ', '.join(user_snake) + '\n'
 
         with open('user_achievement.txt', 'w') as file:
             file.writelines(lines)
@@ -7718,12 +7700,10 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
         # Game Over conditions
         #left right
         if chick_position[0] < 0 or chick_position[0] > width-35:
-            play = 0
             game_over(username, lvl, coin, pull, chicky, equip, stats, play, ccoinn)
             
         #up down
-        if chick_position[1] < 0 or chick_position[1] > height-35: 
-            play = 0  
+        if chick_position[1] < 0 or chick_position[1] > height-35:
             game_over(username, lvl, coin, pull, chicky, equip, stats, play, ccoinn)
             
         #timer
@@ -7735,7 +7715,6 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
         #collision with body
         for block in chick_body[1:]:
             if chick_position == block:
-                play = 0
                 game_over(username, lvl, coin, pull, chicky, equip, stats, play, ccoinn)
                      
         #text display
