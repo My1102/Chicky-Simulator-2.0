@@ -1,4 +1,4 @@
-my, normal/worrier/magnet, axe/hammer/sword, no
+my, normal/worrier/magnet/kitty/speedy/tanker, axe/hammer/sword/shield4/shield5/shoe5/shoe3/shoe4/armor5/helmet5, no
 jy, normal/0, no, no
 pl, normal/0, no, no
 renliang, normal/0, no, no
