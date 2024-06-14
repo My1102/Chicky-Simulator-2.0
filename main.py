@@ -7033,6 +7033,10 @@ def snake_lobby(username, lvl, coin, pull, chicky, equip, stats) :
         pygame.display.set_caption('Chicky Simulator - Chick Game')
         title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('Chick Game', True, 'white')
         title_text_rect = title_text.get_rect(center = (450,100))
+        tutosnake = pygame.image.load('graphic/tutosnake.PNG')
+        tutosnake = pygame.transform.scale(tutosnake,(600,400))
+        tutosnake_rect = tutosnake.get_rect(center = (width/2, height/2))
+        screen.blit(tutosnake, tutosnake_rect)
         screen.blit(title_text, title_text_rect)
 
         #buttons#
