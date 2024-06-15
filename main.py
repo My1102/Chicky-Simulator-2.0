@@ -1331,13 +1331,13 @@ def collect_achieve(username, lvl, coin, pull, chicky, equip, stats):
         pygame.display.set_caption('Chicky Simulator - Achievement')
         screen.blit(ranking_image,(0,0))
 
-        achieve_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Achievement', True, 'white')
+        achieve_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Achievement', True, 'black')
         achieve_text_rect = achieve_text.get_rect(center = (450,100))
         screen.blit(achieve_text, achieve_text_rect)
 
-        coinlogo = Lock('graphic/manycoin.png', 750, 100, 0.4)
+        coinlogo = Lock('graphic/manycoin.png', 750, 100, 0.5)
         coinlogo.draw(screen)
-        coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'white')
+        coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render(f'{coin}', True, 'black')
         coin_text_rect = coin_text.get_rect(center = (830,100))
         screen.blit(coin_text, coin_text_rect)
 
@@ -1588,15 +1588,15 @@ def arcade_achieve(username, lvl, coin, pull, chicky, equip, stats):
         pygame.display.set_caption('Chicky Simulator - Achievement')
         screen.blit(ranking_image,(0,0))
 
-        achieve_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Achievement', True, 'white')
+        achieve_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Achievement', True, 'black')
         achieve_text_rect = achieve_text.get_rect(center = (450,100))
         screen.blit(achieve_text, achieve_text_rect)
         #####
 
         #coin display
-        coinlogo = Lock('graphic/manycoin.png', 750, 100, 0.4)
+        coinlogo = Lock('graphic/manycoin.png', 750, 100, 0.5)
         coinlogo.draw(screen)
-        coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'white')
+        coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render(f'{coin}', True, 'black')
         coin_text_rect = coin_text.get_rect(center = (830,100))
         screen.blit(coin_text, coin_text_rect)
         ####
@@ -1843,13 +1843,13 @@ def level_achieve(username, lvl, coin, pull, chicky, equip, stats):
         pygame.display.set_caption('Chicky Simulator - Achievement')
         screen.blit(ranking_image,(0,0))
 
-        achieve_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Achievement', True, 'white')
+        achieve_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Achievement', True, 'black')
         achieve_text_rect = achieve_text.get_rect(center = (450,100))
         screen.blit(achieve_text, achieve_text_rect)
 
-        coinlogo = Lock('graphic/manycoin.png', 750, 100, 0.4)
+        coinlogo = Lock('graphic/manycoin.png', 750, 100, 0.5)
         coinlogo.draw(screen)
-        coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'white')
+        coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render(f'{coin}', True, 'black')
         coin_text_rect = coin_text.get_rect(center = (830,100))
         screen.blit(coin_text, coin_text_rect)
 
@@ -2062,13 +2062,13 @@ def achievement(username, lvl, coin, pull, chicky, equip, stats):
         pygame.display.set_caption('Chicky Simulator - Achievement')
         screen.blit(ranking_image,(0,0))
 
-        achieve_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Achievement', True, 'white')
+        achieve_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Achievement', True, 'black')
         achieve_text_rect = achieve_text.get_rect(center = (450,100))
         screen.blit(achieve_text, achieve_text_rect)
 
         coinlogo = Lock('graphic/manycoin.png', 750, 100, 0.5)
         coinlogo.draw(screen)
-        coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'white')
+        coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 40).render(f'{coin}', True, 'black')
         coin_text_rect = coin_text.get_rect(center = (830,100))
         screen.blit(coin_text, coin_text_rect)
 
@@ -2114,7 +2114,7 @@ def equip_chick2(username, lvl, coin, pull, chicky, equip, stats):
         pygame.display.set_caption('Chicky Simulator - Chicky')
         screen.blit(ranking_image,(0,0))
 
-        chicky_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Chicky', True, 'white')
+        chicky_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Chicky', True, 'black')
         chicky_text_rect = chicky_text.get_rect(center = (450,100))
         screen.blit(chicky_text, chicky_text_rect)
 
@@ -2267,7 +2267,7 @@ def equip_chick(username, lvl, coin, pull, chicky, equip, stats):
         pygame.display.set_caption('Chicky Simulator - Chicky')
         screen.blit(ranking_image,(0,0))
 
-        chicky_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Chicky', True, 'white')
+        chicky_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Chicky', True, 'black')
         chicky_text_rect = chicky_text.get_rect(center = (450,100))
         screen.blit(chicky_text, chicky_text_rect)
 
@@ -2524,14 +2524,14 @@ def backpack(username, lvl, coin, pull, chicky, equip, stats):
         pygame.display.set_caption('Chicky Simulator - Backpack')
         screen.blit(ranking_image,(0,0))
 
-        backpack_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Backpack', True, 'white')
+        backpack_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Backpack', True, 'black')
         backpack_text_rect = backpack_text.get_rect(center = (450,80))
         screen.blit(backpack_text, backpack_text_rect)
 
-        coinlogo = Lock('graphic/manycoin.png', 700, 80, 0.3)
+        coinlogo = Lock('graphic/manycoin.png', 700, 80, 0.5)
         coinlogo.draw(screen)
 
-        coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'white')
+        coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'black')
         coin_text_rect = coin_text.get_rect(center = (780,80))
         screen.blit(coin_text, coin_text_rect)
 
@@ -2823,7 +2823,7 @@ def items(username, lvl, coin, times, itemget, pull, c, equip, stats):
         pygame.display.set_caption('Chicky Simulator - Items Get')
         screen.blit(ranking_image,(0,0))
 
-        item_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Items Get', True, 'white')
+        item_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Items Get', True, 'black')
         item_text_rect = item_text.get_rect(center = (450,100))
         screen.blit(item_text, item_text_rect)
 
@@ -2842,25 +2842,40 @@ def items(username, lvl, coin, times, itemget, pull, c, equip, stats):
             if itemget == 'kitty':
                 kitty = Lock('graphic/miaoji.png', width/2, 350, 0.18)
                 kitty.draw(screen)
-
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Kitty', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (width/2,420))
+                screen.blit(chickget_text, chickget_text_rect)
+                
             elif itemget == 'tanker':
                 tanker = Lock('graphic/tank chic.png', width/2, 350, 0.18)
                 tanker.draw(screen)
-
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Tanker', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (width/2,420))
+                screen.blit(chickget_text, chickget_text_rect)
+                
             elif itemget == 'magnet':
                 magnet = Lock('graphic/magnetchic.png', width/2, 350, 0.18)
                 magnet.draw(screen)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Richie', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (width/2,420))
+                screen.blit(chickget_text, chickget_text_rect)
 
             elif itemget == 'speedy':
                 speedy = Lock('graphic/speedychic.png', width/2, 350, 0.18)
                 speedy.draw(screen)
-
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Speedy', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (width/2,420))
+                screen.blit(chickget_text, chickget_text_rect)
+                
             elif itemget == 'worrier':
                 worrier = Lock('graphic/ninjachic.png', width/2, 350, 0.18)
                 worrier.draw(screen)
-
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Ninja', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (width/2,420))
+                screen.blit(chickget_text, chickget_text_rect)
+                
             else:
-                coins = Lock('graphic/itemcoin.png', width/2, 350, 1.5)
+                coins = Lock('graphic/itemcoin.png', width/2, 350, 1)
                 coins.draw(screen)
                 coinget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Coin x{coinsget}', True, 'black')
                 coinget_text_rect = coinget_text.get_rect(center = (width/2,420))
@@ -2872,20 +2887,40 @@ def items(username, lvl, coin, times, itemget, pull, c, equip, stats):
             if item1 == 'kitty':
                 kitty = Lock('graphic/miaoji.png', 200, 350, 0.18)
                 kitty.draw(screen)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Kitty', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (200,420))
+                screen.blit(chickget_text, chickget_text_rect)
+                
             elif item1 == 'tanker':
                 tanker = Lock('graphic/tank chic.png', 200, 350, 0.18)
                 tanker.draw(screen)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Tanker', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (200,420))
+                screen.blit(chickget_text, chickget_text_rect)
+                
             elif item1 == 'magnet':
                 magnet = Lock('graphic/magnetchic.png', 200, 350, 0.18)
                 magnet.draw(screen)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Richie', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (200,420))
+                screen.blit(chickget_text, chickget_text_rect)
+
             elif item1 == 'speedy':
                 speedy = Lock('graphic/speedychic.png', 200, 350, 0.18)
                 speedy.draw(screen)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Speedy', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (200,420))
+                screen.blit(chickget_text, chickget_text_rect)
+                
             elif item1 == 'worrier':
                 worrier = Lock('graphic/ninjachic.png', 200, 350, 0.18)
                 worrier.draw(screen)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Ninja', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (200,420))
+                screen.blit(chickget_text, chickget_text_rect)
+                
             else:
-                coins = Lock('graphic/itemcoin.png', 200, 350, 1.5)
+                coins = Lock('graphic/itemcoin.png', 200, 350, 1)
                 coins.draw(screen)
                 coinget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Coin x{coinsget1}', True, 'black')
                 coinget_text_rect = coinget_text.get_rect(center = (200,420))
@@ -2894,20 +2929,40 @@ def items(username, lvl, coin, times, itemget, pull, c, equip, stats):
             if item2 == 'kitty':
                 kitty = Lock('graphic/miaoji.png', 325, 350, 0.18)
                 kitty.draw(screen)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Kitty', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (325,420))
+                screen.blit(chickget_text, chickget_text_rect)
+                
             elif item2 == 'tanker':
                 tanker = Lock('graphic/tank chic.png', 325, 350, 0.18)
                 tanker.draw(screen)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Tanker', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (325,420))
+                screen.blit(chickget_text, chickget_text_rect)
+                
             elif item2 == 'magnet':
                 magnet = Lock('graphic/magnetchic.png', 325, 350, 0.18)
                 magnet.draw(screen)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Richie', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (325,420))
+                screen.blit(chickget_text, chickget_text_rect)
+                
             elif item2 == 'speedy':
                 speedy = Lock('graphic/speedychic.png', 325, 350, 0.18)
                 speedy.draw(screen)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Speedy', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (325,420))
+                screen.blit(chickget_text, chickget_text_rect)
+                
             elif item2 == 'worrier':
                 worrier = Lock('graphic/ninjachic.png', 325, 350, 0.18)
                 worrier.draw(screen)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Ninja', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (325,420))
+                screen.blit(chickget_text, chickget_text_rect)
+                
             else:
-                coins = Lock('graphic/itemcoin.png', 325, 350, 1.5)
+                coins = Lock('graphic/itemcoin.png', 325, 350, 1)
                 coins.draw(screen)
                 coinget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Coin x{coinsget2}', True, 'black')
                 coinget_text_rect = coinget_text.get_rect(center = (325,420))
@@ -2915,21 +2970,36 @@ def items(username, lvl, coin, times, itemget, pull, c, equip, stats):
 
             if item3 == 'kitty':
                 kitty = Lock('graphic/miaoji.png', width/2, 350, 0.18)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Kitty', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (width/2,420))
+                screen.blit(chickget_text, chickget_text_rect)
                 kitty.draw(screen)
             elif item3 == 'tanker':
                 tanker = Lock('graphic/tank chic.png', width/2, 350, 0.18)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Tanker', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (width/2,420))
+                screen.blit(chickget_text, chickget_text_rect)
                 tanker.draw(screen)
             elif item3 == 'magnet':
                 magnet = Lock('graphic/magnetchic.png', width/2, 350, 0.18)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Richie', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (width/2,420))
+                screen.blit(chickget_text, chickget_text_rect)
                 magnet.draw(screen)
             elif item3 == 'speedy':
                 speedy = Lock('graphic/speedychic.png', width/2, 350, 0.18)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Speedy', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (width/2,420))
+                screen.blit(chickget_text, chickget_text_rect)
                 speedy.draw(screen)
             elif item3 == 'worrier':
                 worrier = Lock('graphic/ninjachic.png', width/2, 350, 0.18)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Ninja', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (width/2,420))
+                screen.blit(chickget_text, chickget_text_rect)
                 worrier.draw(screen)
             else:
-                coins = Lock('graphic/itemcoin.png', width/2, 350, 1.5)
+                coins = Lock('graphic/itemcoin.png', width/2, 350, 1)
                 coins.draw(screen)
                 coinget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Coin x{coinsget3}', True, 'black')
                 coinget_text_rect = coinget_text.get_rect(center = (width/2,420))
@@ -2937,21 +3007,36 @@ def items(username, lvl, coin, times, itemget, pull, c, equip, stats):
 
             if item4 == 'kitty':
                 kitty = Lock('graphic/miaoji.png', 575, 350, 0.18)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Kitty', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (575,420))
+                screen.blit(chickget_text, chickget_text_rect)
                 kitty.draw(screen)
             elif item4 == 'tanker':
                 tanker = Lock('graphic/tank chic.png', 575, 350, 0.18)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Tanker', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (575,420))
+                screen.blit(chickget_text, chickget_text_rect)
                 tanker.draw(screen)
             elif item4 == 'magnet':
                 magnet = Lock('graphic/magnetchic.png', 575, 350, 0.18)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Richie', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (575,420))
+                screen.blit(chickget_text, chickget_text_rect)
                 magnet.draw(screen)
             elif item4 == 'speedy':
                 speedy = Lock('graphic/speedychic.png', 575, 350, 0.18)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Speedy', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (575,420))
+                screen.blit(chickget_text, chickget_text_rect)
                 speedy.draw(screen)
             elif item4 == 'worrier':
                 worrier = Lock('graphic/ninjachic.png', 575, 350, 0.18)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Ninja', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (575,420))
+                screen.blit(chickget_text, chickget_text_rect)
                 worrier.draw(screen)
             else:
-                coins = Lock('graphic/itemcoin.png', 575, 350, 1.5)
+                coins = Lock('graphic/itemcoin.png', 575, 350, 1)
                 coins.draw(screen)
                 coinget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Coin x{coinsget4}', True, 'black')
                 coinget_text_rect = coinget_text.get_rect(center = (575,420))
@@ -2959,21 +3044,36 @@ def items(username, lvl, coin, times, itemget, pull, c, equip, stats):
             
             if item5 == 'kitty':
                 kitty = Lock('graphic/miaoji.png', 700, 350, 0.18)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Kitty', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (700,420))
+                screen.blit(chickget_text, chickget_text_rect)
                 kitty.draw(screen)
             elif item5 == 'tanker':
                 tanker = Lock('graphic/tank chic.png', 700, 350, 0.18)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Tanker', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (700,420))
+                screen.blit(chickget_text, chickget_text_rect)
                 tanker.draw(screen)
             elif item5 == 'magnet':
                 magnet = Lock('graphic/magnetchic.png', 700, 350, 0.18)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Richie', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (700,420))
+                screen.blit(chickget_text, chickget_text_rect)
                 magnet.draw(screen)
             elif item5 == 'speedy':
                 speedy = Lock('graphic/speedychic.png', 700, 350, 0.18)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Speedy', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (700,420))
+                screen.blit(chickget_text, chickget_text_rect)
                 speedy.draw(screen)
             elif item5 == 'worrier':
                 worrier = Lock('graphic/ninjachic.png', 700, 350, 0.18)
+                chickget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Ninja', True, 'black')
+                chickget_text_rect = chickget_text.get_rect(center = (700,420))
+                screen.blit(chickget_text, chickget_text_rect)
                 worrier.draw(screen)
             else:
-                coins = Lock('graphic/itemcoin.png', 700, 350, 1.5)
+                coins = Lock('graphic/itemcoin.png', 700, 350, 1)
                 coins.draw(screen)
                 coinget_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render(f'Coin x{coinsget5}', True, 'black')
                 coinget_text_rect = coinget_text.get_rect(center = (700,420))
@@ -3126,7 +3226,7 @@ def wish(username, lvl, coin, pull, c, equip, stats):
         pygame.display.set_caption('Chicky Simulator - Wishes')
         screen.blit(ranking_image,(0,0))
 
-        wish_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Wishes', True, 'white')
+        wish_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Wishes', True, 'black')
         wish_text_rect = wish_text.get_rect(center = (450,100))
         screen.blit(wish_text, wish_text_rect)
 
@@ -3139,11 +3239,11 @@ def wish(username, lvl, coin, pull, c, equip, stats):
         all_chicky = Lock('graphic/allchicky.png', width/2, 340, 0.9)
         all_chicky.draw(screen)
 
-        coinlogo = Lock('graphic/manycoin.png', 700, 100, 0.3)
+        coinlogo = Lock('graphic/manycoin.png', 700, 100, 0.5)
         coinlogo.draw(screen)
 
-        coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'white')
-        coin_text_rect = coin_text.get_rect(center = (780,100))
+        coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'black')
+        coin_text_rect = coin_text.get_rect(center = (790,100))
         screen.blit(coin_text, coin_text_rect)
 
         rpull = 50 - pull
@@ -3493,7 +3593,7 @@ def choose_level(lvl, username, coin, pull, chicky, equip, stats):
         pygame.display.set_caption('Chicky Simulator - Level')
         screen.blit(ranking_image,(0,0))
 
-        title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('LEVEL', True, 'white')
+        title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('LEVEL', True, 'black')
         title_text_rect = title_text.get_rect(center = (450,150))
         screen.blit(title_text, title_text_rect)
 
@@ -3608,7 +3708,7 @@ def choose_level2(lvl, username, coin, pull, chicky, equip, stats):
         pygame.display.set_caption('Chicky Simulator - Level')
         screen.blit(ranking_image,(0,0))
 
-        title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('LEVEL', True, 'white')
+        title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('LEVEL', True, 'black')
         title_text_rect = title_text.get_rect(center = (450,150))
         screen.blit(title_text, title_text_rect)
 
@@ -3738,7 +3838,7 @@ def choose_level3(lvl, username, coin, pull, chicky, equip, stats):
         pygame.display.set_caption('Chicky Simulator - Level')
         screen.blit(ranking_image,(0,0))
 
-        title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('LEVEL', True, 'white')
+        title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('LEVEL', True, 'black')
         title_text_rect = title_text.get_rect(center = (450,150))
         screen.blit(title_text, title_text_rect)
 
@@ -3868,7 +3968,7 @@ def choose_level4(lvl, username, coin, pull, chicky, equip, stats):
         pygame.display.set_caption('Chicky Simulator - Level')
         screen.blit(ranking_image,(0,0))
 
-        title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('LEVEL', True, 'white')
+        title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('LEVEL', True, 'black')
         title_text_rect = title_text.get_rect(center = (450,150))
         screen.blit(title_text, title_text_rect)
 
