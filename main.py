@@ -4342,20 +4342,7 @@ def read_userinput(username, password):
                     Equip = equip.strip()
                     Stats = check_default(username)
 
-                return Level, Coin, Pull, Chicky, Equip, Stats
-                
-        # file = open('user_details.txt', 'r')
-        # for i in file:
-        #     Username, Password, Level, Time, Coin, Pull, Chicky, Equip= i.split(",")
-        #     Password = Password.strip()
-        #     Level = Level.strip()
-        #     Coin = Coin.strip()
-        #     Pull = Pull.strip()
-        #     Chicky = Chicky.strip()
-        #     Equip = Equip.strip()
-        #     Stats = check_default(username)
-        #     if (Username == username and Password == password):
-        #         return Level, Coin, Pull, Chicky, Equip, Stats
+                    return Level, Coin, Pull, Chicky, Equip, Stats
             
             else:
                 screen.blit(background_image,(0,0))
@@ -7298,7 +7285,7 @@ def collection7(username, lvl, coin, pull, chicky, equip, stats):
                 user_backpack = line.strip().split(", ")
                 if user_backpack[0] == username:
                     equipments_list = user_backpack[1].split('/')
-                    if equipments_list[0] == 'no':
+                    if equipments_list[1] == 'no':
                         get_button1.draw(screen)
                         get_button2.draw(screen)
                         get_button3.draw(screen)
