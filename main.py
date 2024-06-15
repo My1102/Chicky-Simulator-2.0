@@ -68,7 +68,7 @@ def caution(lvl, username, coin, pull, c, equip, stats):
         caution_rect = caution.get_rect(center = (width/2, height/2))
         screen.blit(caution, caution_rect)
 
-        next_button = Button('graphic/botton1.png', 630, 470, 0.6, ">>")
+        next_button = Button('graphic/botton1.png', 650, 490, 0.5, ">>")
         next_button.draw(screen)
 
         back_button = Button('graphic/botton1.png', 100, 100, 0.6, "<<")
@@ -87,6 +87,9 @@ def caution(lvl, username, coin, pull, c, equip, stats):
                     tutorial2(lvl, username, coin, pull, c, equip, stats)
 
                 if back_button.check_input(pos_mouse):
+                    pygame.mixer.music.load("graphic/bgmusic1.mp3")
+                    pygame.mixer.music.set_volume(0.1)
+                    pygame.mixer.music.play(-1)
                     choose_level(lvl, username, coin, pull, c, equip, stats)
 
                 Manager.process_events(event)
@@ -126,6 +129,9 @@ def tutorial1(lvl, username, coin, pull, c, equip, stats):
                     caution(lvl, username, coin, pull, c, equip, stats)
 
                 if back_button.check_input(pos_mouse):
+                    pygame.mixer.music.load("graphic/bgmusic1.mp3")
+                    pygame.mixer.music.set_volume(0.1)
+                    pygame.mixer.music.play(-1)
                     choose_level(lvl, username, coin, pull, c, equip, stats)
 
                 Manager.process_events(event)
@@ -146,7 +152,7 @@ def tutorial2(lvl, username, coin, pull, c, equip, stats):
         tuto2_rect = tuto2.get_rect(center = (width/2, height/2))
         screen.blit(tuto2, tuto2_rect)
 
-        start_button = Button('graphic/button2.png', 620, 470, 0.2, "START")
+        start_button = Button('graphic/button2.png', 650, 590, 0.2, "START")
         start_button.draw(screen)
 
         back_button = Button('graphic/botton1.png', 100, 100, 0.6, "<<")
@@ -165,6 +171,9 @@ def tutorial2(lvl, username, coin, pull, c, equip, stats):
                     leveltest(lvl, username, coin, pull, c, equip, stats,level=1)
 
                 if back_button.check_input(pos_mouse):
+                    pygame.mixer.music.load("graphic/bgmusic1.mp3")
+                    pygame.mixer.music.set_volume(0.1)
+                    pygame.mixer.music.play(-1)
                     choose_level(lvl, username, coin, pull, c, equip, stats)
 
                 Manager.process_events(event)
@@ -187,7 +196,7 @@ def tutorial3(lvl, username, coin, pull, c, equip, stats):
         tuto3_rect = tuto3.get_rect(center = (width/2, height/2))
         screen.blit(tuto3, tuto3_rect)
 
-        start_button = Button('graphic/button2.png', 620, 475, 0.2, "START")
+        start_button = Button('graphic/button2.png', 620, 590, 0.15, "START")
         start_button.draw(screen)
 
         back_button = Button('graphic/botton1.png', 100, 100, 0.6, "<<")
@@ -206,6 +215,9 @@ def tutorial3(lvl, username, coin, pull, c, equip, stats):
                     leveltest(lvl, username, coin, pull, c, equip, stats,level=6)
 
                 if back_button.check_input(pos_mouse):
+                    pygame.mixer.music.load("graphic/bgmusic1.mp3")
+                    pygame.mixer.music.set_volume(0.1)
+                    pygame.mixer.music.play(-1)
                     choose_level(lvl, username, coin, pull, c, equip, stats)
 
         pygame.display.update()   
@@ -251,9 +263,9 @@ def leveltest(lvl, username, coin, pull, c, equip, stats, level):
     clock = pygame.time.Clock()
     time_use =[]
 
-    pygame.mixer.music.load("graphic/bgmusic2.mp3")
-    pygame.mixer.music.set_volume(0.1)
-    pygame.mixer.music.play(-1)
+    # pygame.mixer.music.load("graphic/bgmusic2.mp3")
+    # pygame.mixer.music.set_volume(0.1)
+    # pygame.mixer.music.play(-1)
 
 
     def reset_level(lvl, level):
@@ -777,6 +789,9 @@ def leveltest(lvl, username, coin, pull, c, equip, stats, level):
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if level_button.check_input(pos_mouse):
+                        pygame.mixer.music.load("graphic/bgmusic1.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         choose_level(levl, username, ncoin, pull, c, equip, stats)
 
                     elif next_button.check_input(pos_mouse):
@@ -826,9 +841,15 @@ def leveltest(lvl, username, coin, pull, c, equip, stats, level):
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if level_button.check_input(pos_mouse):
+                        pygame.mixer.music.load("graphic/bgmusic1.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         choose_level(lvl, username, ncoin, pull, c, equip, stats)
 
                     if rank_button.check_input(pos_mouse):
+                        pygame.mixer.music.load("graphic/bgmusic1.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         ranking(username, lvl, ncoin, pull, c, equip, stats)
 
             pygame.display.update()
@@ -933,6 +954,9 @@ def leveltest(lvl, username, coin, pull, c, equip, stats, level):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if quit_button.check_input(pygame.mouse.get_pos()):
+                    pygame.mixer.music.load("graphic/bgmusic1.mp3")
+                    pygame.mixer.music.set_volume(0.1)
+                    pygame.mixer.music.play(-1)
                     choose_level(lvl, username, coin, pull, c, equip, stats)
 
             Manager.process_events(event)
@@ -3669,23 +3693,38 @@ def choose_level(lvl, username, coin, pull, chicky, equip, stats):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if lvl1_button.check_input(pos_mouse):
+                    pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                    pygame.mixer.music.set_volume(0.1)
+                    pygame.mixer.music.play(-1)
                     tutorial1(lvl, username, coin, pull, chicky, equip, stats)
 
                 if lvl2_button.check_input(pos_mouse):
                     if lock2_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=2)
                        
 
                 if lvl3_button.check_input(pos_mouse):
                     if lock3_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=3)
 
                 if lvl4_button.check_input(pos_mouse):
                     if lock4_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=4)
 
                 if lvl5_button.check_input(pos_mouse):
                     if lock5_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=5)
 
                 if back_button.check_input(pos_mouse):
@@ -3799,23 +3838,38 @@ def choose_level2(lvl, username, coin, pull, chicky, equip, stats):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if lvl6_button.check_input(pos_mouse):
                     if lock6_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         tutorial3(lvl, username, coin, pull, chicky, equip, stats)
 
                 if lvl7_button.check_input(pos_mouse):
                     if lock7_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=7)
                        
 
                 if lvl8_button.check_input(pos_mouse):
                     if lock8_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=8)
 
                 if lvl9_button.check_input(pos_mouse):
                     if lock9_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=9)
 
                 if lvl10_button.check_input(pos_mouse):
                     if lock10_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=10)
 
                 if back_button.check_input(pos_mouse):
@@ -3929,23 +3983,38 @@ def choose_level3(lvl, username, coin, pull, chicky, equip, stats):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if lvl11_button.check_input(pos_mouse):
                     if lock11_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=11)
 
                 if lvl12_button.check_input(pos_mouse):
                     if lock12_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=12)
                        
 
                 if lvl13_button.check_input(pos_mouse):
                     if lock13_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=13)
 
                 if lvl14_button.check_input(pos_mouse):
                     if lock14_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=14)
 
                 if lvl15_button.check_input(pos_mouse):
                     if lock15_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=15)
                         
                 if back_button.check_input(pos_mouse):
@@ -4059,23 +4128,38 @@ def choose_level4(lvl, username, coin, pull, chicky, equip, stats):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if lvl16_button.check_input(pos_mouse):
                     if lock16_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=16)
 
                 if lvl17_button.check_input(pos_mouse):
                     if lock17_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=17)
                        
 
                 if lvl18_button.check_input(pos_mouse):
                     if lock18_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=18)
 
                 if lvl19_button.check_input(pos_mouse):
                     if lock19_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=19)
 
                 if lvl20_button.check_input(pos_mouse):
                     if lock20_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=20)
                         
                 if back_button.check_input(pos_mouse):
@@ -5737,6 +5821,9 @@ def arcade_lobby(username, lvl, coin, pull, chicky, equip, stats):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button1.check_input(pos_mouse):
+                    pygame.mixer.music.load("graphic/bgmusic3.mp3")
+                    pygame.mixer.music.set_volume(0.3)
+                    pygame.mixer.music.play(-1)
                     snake_lobby(username, lvl, coin, pull, chicky, equip, stats)                                   
                     
                 if back_button.check_input(pos_mouse):
@@ -5778,11 +5865,12 @@ def snake_lobby(username, lvl, coin, pull, chicky, equip, stats) :
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN :
                 if back_button.check_input(pos_mouse):
-                    arcade_lobby(username, lvl, coin, pull, chicky, equip, stats)
-                if play_button.check_input(pos_mouse):
-                    pygame.mixer.music.load("graphic/bgmusic3.mp3")
+                    pygame.mixer.music.load("graphic/bgmusic1.mp3")
                     pygame.mixer.music.set_volume(0.3)
                     pygame.mixer.music.play(-1)
+                    arcade_lobby(username, lvl, coin, pull, chicky, equip, stats)
+                if play_button.check_input(pos_mouse):
+                    
                     snake(username, lvl, coin, pull, chicky, equip, stats)
         
         
@@ -7694,7 +7782,6 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
                 if user_snake[0] == username:
                     played = int(user_snake[5]) + 1
                     user_snake[5] = str(played)
-                    print(played)
                 break
             else:
                 break
