@@ -1,6 +1,6 @@
-my, 1234, 20, 1000, 91205, 17, speedy, no/no/no/no/no
+my, 1234, 20, 1000, 88705, 0, speedy, no/no/no/no/no
 jy, 1q2w3e, 20, 246, 1000, 0, normal, no/no/no/no/no
-pl, 1234, 20, 208, 1000, 0, normal, no/no/no/no/no
+pl, 1234, 20, 208, 0, 0, normal, no/no/no/no/no
 renliang, 1234, 20, 568, 1000, 0, normal, no/no/no/no/no
 wong, 1234, 20, 179, 1000, 0, normal, no/no/no/no/no
 cyun, 1234, 20, 109, 1000, 0, normal, no/no/no/no/no
