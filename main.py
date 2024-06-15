@@ -2,7 +2,7 @@
 # Program: main.py
 # Course: CSP1123 MINI IT PROJECT
 # Class: TT3L-7
-# Year: 2023/24 Trimester 2
+# Year: 2024 Trimester 2
 # Names: LIM MIN YUEN | TAN JIA YING | TAN PUO LIN
 # IDs: 1221107408 | 1221107413 | 1221169365
 # Emails: 1221107408@student.mmu.edu.my | 1221107413@student.mmu.edu.my | 1221169360@student.mmu.edu.my
@@ -4341,21 +4341,23 @@ def read_userinput(username, password):
                     Chicky = chicky.strip()
                     Equip = equip.strip()
                     Stats = check_default(username)
-
-                return Level, Coin, Pull, Chicky, Equip, Stats
+                    return Level, Coin, Pull, Chicky, Equip, Stats
                 
-        # file = open('user_details.txt', 'r')
-        # for i in file:
-        #     Username, Password, Level, Time, Coin, Pull, Chicky, Equip= i.split(",")
-        #     Password = Password.strip()
-        #     Level = Level.strip()
-        #     Coin = Coin.strip()
-        #     Pull = Pull.strip()
-        #     Chicky = Chicky.strip()
-        #     Equip = Equip.strip()
-        #     Stats = check_default(username)
-        #     if (Username == username and Password == password):
-        #         return Level, Coin, Pull, Chicky, Equip, Stats
+                else:
+                    screen.blit(background_image,(0,0))
+                
+                    title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Chicky Simulator', True, 'white')
+                    title_text_rect = title_text.get_rect(center = (450,150))
+                    screen.blit(title_text, title_text_rect)
+
+                    incorrect_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render('Username or password incorrect.', True, 'white')
+                    incorrect_text_rect = incorrect_text.get_rect(center = (width/2,height/2))
+                    screen.blit(incorrect_text, incorrect_text_rect)
+
+                    tryagain_button = Button('graphic/button2.png', 450, 580, 0.35, "TRY AGAIN")
+                    tryagain_button.draw(screen)
+
+                    pos_mouse = pygame.mouse.get_pos()
             
             else:
                 screen.blit(background_image,(0,0))
@@ -4372,8 +4374,6 @@ def read_userinput(username, password):
                 tryagain_button.draw(screen)
 
                 pos_mouse = pygame.mouse.get_pos()
-            
-        file.close()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -4451,7 +4451,7 @@ def save_userinput(username, password):
             file1.close()
 
             file2 = open('user_backpack.txt', 'a')
-            file2.write(f'{username}, normal/0, no/, no' + '\n')
+            file2.write(f'{username}, normal/0, no, no' + '\n')
             # username, what chick they have, what equip they have, ini no jika takdak akan error dunno why 
             file2.close()
 
@@ -4830,44 +4830,35 @@ def store(username, lvl, coin, pull, chicky, equip, stats):
                 user_backpack = line.strip().split(", ")
                 if user_backpack[0] == username:
                     weapon_list = user_backpack[2].split('/')
-                    if weapon_list == 'no':
+                    if 'axe' in weapon_list :
+                        view_button1.draw(screen)
+                    elif 'axe' not in weapon_list :
                         buy_button1.draw(screen)
+                    if 'hammer' in weapon_list :
+                        view_button2.draw(screen)
+                    elif 'hammer' not in weapon_list :
                         buy_button2.draw(screen)
+                    if 'sword' in weapon_list :
+                        view_button3.draw(screen)
+                    elif 'sword' not in weapon_list :
                         buy_button3.draw(screen)
+                    if 'shield3' in weapon_list :
+                        view_button4.draw(screen)
+                    elif 'shield3' not in weapon_list :
                         buy_button4.draw(screen)
+                    if 'shield4' in weapon_list :
+                        view_button5.draw(screen)
+                    elif 'shield4' not in weapon_list :
+                        buy_button5.draw(screen)
+                    if 'shield5' in weapon_list :
+                        view_button6.draw(screen)
+                    elif 'shield5' not in weapon_list :
                         buy_button6.draw(screen)
-                        buy_button6.draw(screen)
-                        break
-                    else:
-                        if 'axe' in weapon_list :
-                            view_button1.draw(screen)
-                        elif 'axe' not in weapon_list :
-                            buy_button1.draw(screen)
-                        if 'hammer' in weapon_list :
-                            view_button2.draw(screen)
-                        elif 'hammer' not in weapon_list :
-                            buy_button2.draw(screen)
-                        if 'sword' in weapon_list :
-                            view_button3.draw(screen)
-                        elif 'sword' not in weapon_list :
-                            buy_button3.draw(screen)
-                        if 'shield3' in weapon_list :
-                            view_button4.draw(screen)
-                        elif 'shield3' not in weapon_list :
-                            buy_button4.draw(screen)
-                        if 'shield4' in weapon_list :
-                            view_button5.draw(screen)
-                        elif 'shield4' not in weapon_list :
-                            buy_button5.draw(screen)
-                        if 'shield5' in weapon_list :
-                            view_button6.draw(screen)
-                        elif 'shield5' not in weapon_list :
-                            buy_button6.draw(screen)
 
-                        weapon_str = '/'.join(weapon_list)
-                        user_backpack[2] = str(weapon_str)
-                lines[i] = ', '.join(user_backpack) + '\n'
-                break  
+                    weapon_str = '/'.join(weapon_list)
+                    user_backpack[2] = str(weapon_str)
+                    lines[i] = ', '.join(user_backpack) + '\n'
+                    break
 
         for event in pygame.event.get():
 
@@ -5325,44 +5316,35 @@ def equipment(username, lvl, coin, pull, chicky, equip, stats) :
                 user_backpack = line.strip().split(", ")
                 if user_backpack[0] == username:
                     equipments_list = user_backpack[2].split('/')
-                    if equipments_list == 'no':
+                    if 'armor3' in equipments_list :
+                        view_button1.draw(screen)
+                    elif 'armor3' not in equipments_list :
                         buy_button1.draw(screen)
+                    if 'armor4' in equipments_list :
+                        view_button2.draw(screen)
+                    elif 'armor4' not in equipments_list :
                         buy_button2.draw(screen)
+                    if 'armor5' in equipments_list :
+                        view_button3.draw(screen)
+                    elif 'armor5' not in equipments_list :
                         buy_button3.draw(screen)
+                    if 'shoe3' in equipments_list :
+                        view_button4.draw(screen)
+                    elif 'shoe3' not in equipments_list :
                         buy_button4.draw(screen)
+                    if 'shoe4' in equipments_list :
+                        view_button5.draw(screen)
+                    elif 'shoe4' not in equipments_list :
+                        buy_button5.draw(screen)
+                    if 'shoe5' in equipments_list :
+                        view_button6.draw(screen)
+                    elif 'shoe5' not in equipments_list :
                         buy_button6.draw(screen)
-                        buy_button6.draw(screen)
-                        break
-                    else:
-                        if 'armor3' in equipments_list :
-                            view_button1.draw(screen)
-                        elif 'armor3' not in equipments_list :
-                            buy_button1.draw(screen)
-                        if 'armor4' in equipments_list :
-                            view_button2.draw(screen)
-                        elif 'armor4' not in equipments_list :
-                            buy_button2.draw(screen)
-                        if 'armor5' in equipments_list :
-                            view_button3.draw(screen)
-                        elif 'armor5' not in equipments_list :
-                            buy_button3.draw(screen)
-                        if 'shoe3' in equipments_list :
-                            view_button4.draw(screen)
-                        elif 'shoe3' not in equipments_list :
-                            buy_button4.draw(screen)
-                        if 'shoe4' in equipments_list :
-                            view_button5.draw(screen)
-                        elif 'shoe4' not in equipments_list :
-                            buy_button5.draw(screen)
-                        if 'shoe5' in equipments_list :
-                            view_button6.draw(screen)
-                        elif 'shoe5' not in equipments_list :
-                            buy_button6.draw(screen)
 
-                        weapon_str = '/'.join(equipments_list)
-                        user_backpack[2] = str(weapon_str)
-                lines[i] = ', '.join(user_backpack) + '\n'
-                break
+                    weapon_str = '/'.join(equipments_list)
+                    user_backpack[2] = str(weapon_str)
+                    lines[i] = ', '.join(user_backpack) + '\n'
+                    break
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -5672,29 +5654,23 @@ def equipment2(username, lvl, coin, pull, chicky, equip, stats) :
                 user_backpack = line.strip().split(", ")
                 if user_backpack[0] == username:
                     equipments_list = user_backpack[2].split('/')
-                    if equipments_list == 'no':
+                    if 'helmet3' in equipments_list :
+                        view_button1.draw(screen)
+                    elif 'helmet3' not in equipments_list :
                         buy_button1.draw(screen)
+                    if 'helmet4' in equipments_list :
+                        view_button2.draw(screen)
+                    elif 'helmet4' not in equipments_list :
                         buy_button2.draw(screen)
+                    if 'helmet5' in equipments_list :
+                        view_button3.draw(screen)
+                    elif 'helmet5' not in equipments_list :
                         buy_button3.draw(screen)
-                        break
-                    else:
-                        if 'helmet3' in equipments_list :
-                            view_button1.draw(screen)
-                        elif 'helmet3' not in equipments_list :
-                            buy_button1.draw(screen)
-                        if 'helmet4' in equipments_list :
-                            view_button2.draw(screen)
-                        elif 'helmet4' not in equipments_list :
-                            buy_button2.draw(screen)
-                        if 'helmet5' in equipments_list :
-                            view_button3.draw(screen)
-                        elif 'helmet5' not in equipments_list :
-                            buy_button3.draw(screen)
-
-                        weapon_str = '/'.join(equipments_list)
-                        user_backpack[2] = str(weapon_str)
-                lines[i] = ', '.join(user_backpack) + '\n'
-                break
+                    
+                    weapon_str = '/'.join(equipments_list)
+                    user_backpack[2] = str(weapon_str)
+                    lines[i] = ', '.join(user_backpack) + '\n'
+                    break
             
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -6316,30 +6292,24 @@ def collection(username, lvl, coin, pull, chicky, equip, stats):
                 user_backpack = line.strip().split(", ")
                 if user_backpack[0] == username:
                     equipments_list = user_backpack[2].split('/')
-                    if equipments_list[0] == 'no':
+                    if 'armor3' in equipments_list :
+                        view_button1.draw(screen)
+                    elif 'armor3' not in equipments_list :
                         get_button1.draw(screen)
+                    if 'armor4' in equipments_list :
+                        view_button2.draw(screen)
+                    elif 'armor4' not in equipments_list :
                         get_button2.draw(screen)
+                    if 'armor5' in equipments_list :
+                        view_button3.draw(screen)
+                    elif 'armor5' not in equipments_list :
                         get_button3.draw(screen)
-                        break
-                    else:
-                        if 'armor3' in equipments_list :
-                            view_button1.draw(screen)
-                        elif 'armor3' not in equipments_list :
-                            get_button1.draw(screen)
-                        if 'armor4' in equipments_list :
-                            view_button2.draw(screen)
-                        elif 'armor4' not in equipments_list :
-                            get_button2.draw(screen)
-                        if 'armor5' in equipments_list :
-                            view_button3.draw(screen)
-                        elif 'armor5' not in equipments_list :
-                            get_button3.draw(screen)
 
-                        weapon_str = '/'.join(equipments_list)
-                        user_backpack[2] = str(weapon_str)
+                    weapon_str = '/'.join(equipments_list)
+                    user_backpack[2] = str(weapon_str)
                 
-                lines[i] = ', '.join(user_backpack) + '\n'
-                break
+                    lines[i] = ', '.join(user_backpack) + '\n'
+                    break
 
 
         for event in pygame.event.get():
@@ -6515,29 +6485,26 @@ def collection2(username, lvl, coin, pull, chicky, equip, stats):
                 user_backpack = line.strip().split(", ")
                 if user_backpack[0] == username:
                     equipments_list = user_backpack[2].split('/')
-                    if equipments_list[0] == 'no':
+                    if 'helmet3' in equipments_list :
+                        view_button1.draw(screen)
+                    elif 'helmet3' not in equipments_list :
                         get_button1.draw(screen)
+                    if 'helmet4' in equipments_list :
+                        view_button2.draw(screen)
+                    elif 'helmet4' not in equipments_list :
                         get_button2.draw(screen)
+                    if 'helmet5' in equipments_list :
+                        view_button3.draw(screen)
+                    elif 'helmet5' not in equipments_list :
                         get_button3.draw(screen)
-                        break
-                    else:
-                        if 'helmet3' in equipments_list :
-                            view_button1.draw(screen)
-                        elif 'helmet3' not in equipments_list :
-                            get_button1.draw(screen)
-                        if 'helmet4' in equipments_list :
-                            view_button2.draw(screen)
-                        elif 'helmet4' not in equipments_list :
-                            get_button2.draw(screen)
-                        if 'helmet5' in equipments_list :
-                            view_button3.draw(screen)
-                        elif 'helmet5' not in equipments_list :
-                            get_button3.draw(screen)
-                        weapon_str = '/'.join(equipments_list)
-                        user_backpack[2] = str(weapon_str)
+                    
+                    weapon_str = '/'.join(equipments_list)
+                    user_backpack[2] = str(weapon_str)
+                
+                    lines[i] = ', '.join(user_backpack) + '\n'
+                    break
 
-                lines[i] = ', '.join(user_backpack) + '\n'
-                break
+
             
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -6711,29 +6678,23 @@ def collection3(username, lvl, coin, pull, chicky, equip, stats):
                 user_backpack = line.strip().split(", ")
                 if user_backpack[0] == username:
                     equipments_list = user_backpack[2].split('/')
-                    if equipments_list[0] == 'no':
+                    if 'shoe3' in equipments_list :
+                        view_button1.draw(screen)
+                    elif 'shoe3' not in equipments_list :
                         get_button1.draw(screen)
+                    if 'shoe4' in equipments_list :
+                        view_button2.draw(screen)
+                    elif 'shoe4' not in equipments_list :
                         get_button2.draw(screen)
+                    if 'shoe5' in equipments_list :
+                        view_button3.draw(screen)
+                    elif 'shoe5' not in equipments_list :
                         get_button3.draw(screen)
-                        break
-                    else:
-                        if 'shoe3' in equipments_list :
-                            view_button1.draw(screen)
-                        elif 'shoe3' not in equipments_list :
-                            get_button1.draw(screen)
-                        if 'shoe4' in equipments_list :
-                            view_button2.draw(screen)
-                        elif 'shoe4' not in equipments_list :
-                            get_button2.draw(screen)
-                        if 'shoe5' in equipments_list :
-                            view_button3.draw(screen)
-                        elif 'shoe5' not in equipments_list :
-                            get_button3.draw(screen)
 
-                        weapon_str = '/'.join(equipments_list)
-                        user_backpack[2] = str(weapon_str)
-                lines[i] = ', '.join(user_backpack) + '\n'
-                break
+                    weapon_str = '/'.join(equipments_list)
+                    user_backpack[2] = str(weapon_str)
+                    lines[i] = ', '.join(user_backpack) + '\n'
+                    break
             
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -6905,29 +6866,23 @@ def collection4(username, lvl, coin, pull, chicky, equip, stats):
                 user_backpack = line.strip().split(", ")
                 if user_backpack[0] == username:
                     equipments_list = user_backpack[2].split('/')
-                    if equipments_list[0] == 'no':
+                    if 'shield3' in equipments_list :
+                        view_button1.draw(screen)
+                    elif 'shield3' not in equipments_list :
                         get_button1.draw(screen)
+                    if 'shield4' in equipments_list :
+                        view_button2.draw(screen)
+                    elif 'shield4' not in equipments_list :
                         get_button2.draw(screen)
+                    if 'shield5' in equipments_list :
+                        view_button3.draw(screen)
+                    elif 'shield5' not in equipments_list :
                         get_button3.draw(screen)
-                        break
-                    else:
-                        if 'shield3' in equipments_list :
-                            view_button1.draw(screen)
-                        elif 'shield3' not in equipments_list :
-                            get_button1.draw(screen)
-                        if 'shield4' in equipments_list :
-                            view_button2.draw(screen)
-                        elif 'shield4' not in equipments_list :
-                            get_button2.draw(screen)
-                        if 'shield5' in equipments_list :
-                            view_button3.draw(screen)
-                        elif 'shield5' not in equipments_list :
-                            get_button3.draw(screen)
 
-                        weapon_str = '/'.join(equipments_list)
-                        user_backpack[2] = str(weapon_str)
-                lines[i] = ', '.join(user_backpack) + '\n'
-                break
+                    weapon_str = '/'.join(equipments_list)
+                    user_backpack[2] = str(weapon_str)
+                    lines[i] = ', '.join(user_backpack) + '\n'
+                    break
 
 
             
@@ -7104,29 +7059,24 @@ def collection5(username, lvl, coin, pull, chicky, equip, stats):
                 user_backpack = line.strip().split(", ")
                 if user_backpack[0] == username:
                     equipments_list = user_backpack[2].split('/')
-                    if equipments_list[0] == 'no':
+                
+                    if 'axe' in equipments_list :
+                        view_button1.draw(screen)
+                    elif 'axe' not in equipments_list :
                         get_button1.draw(screen)
+                    if 'hammer' in equipments_list :
+                        view_button2.draw(screen)
+                    elif 'hammer' not in equipments_list :
                         get_button2.draw(screen)
+                    if 'sword' in equipments_list :
+                        view_button3.draw(screen)
+                    elif 'sword' not in equipments_list :
                         get_button3.draw(screen)
-                        break
-                    else:
-                        if 'axe' in equipments_list :
-                            view_button1.draw(screen)
-                        elif 'axe' not in equipments_list :
-                            get_button1.draw(screen)
-                        if 'hammer' in equipments_list :
-                            view_button2.draw(screen)
-                        elif 'hammer' not in equipments_list :
-                            get_button2.draw(screen)
-                        if 'sword' in equipments_list :
-                            view_button3.draw(screen)
-                        elif 'sword' not in equipments_list :
-                            get_button3.draw(screen)
 
-                        weapon_str = '/'.join(equipments_list)
-                        user_backpack[2] = str(weapon_str)
-                lines[i] = ', '.join(user_backpack) + '\n'
-                break
+                    weapon_str = '/'.join(equipments_list)
+                    user_backpack[2] = str(weapon_str)
+                    lines[i] = ', '.join(user_backpack) + '\n'
+                    break
 
             
         for event in pygame.event.get():
@@ -7298,29 +7248,18 @@ def collection7(username, lvl, coin, pull, chicky, equip, stats):
                 user_backpack = line.strip().split(", ")
                 if user_backpack[0] == username:
                     equipments_list = user_backpack[1].split('/')
-                    if equipments_list[0] == 'no':
+                    if 'magnet' in equipments_list :
+                        view_button1.draw(screen)
+                    elif 'magnet' not in equipments_list :
                         get_button1.draw(screen)
+                    if 'kitty' in equipments_list :
+                        view_button2.draw(screen)
+                    elif 'kitty' not in equipments_list :
                         get_button2.draw(screen)
+                    if 'worrier' in equipments_list :
+                        view_button3.draw(screen)
+                    elif 'worrier' not in equipments_list :
                         get_button3.draw(screen)
-                        break
-                    else:
-                        if 'magnet' in equipments_list :
-                            view_button1.draw(screen)
-                        elif 'magnet' not in equipments_list :
-                            get_button1.draw(screen)
-                        if 'kitty' in equipments_list :
-                            view_button2.draw(screen)
-                        elif 'kitty' not in equipments_list :
-                            get_button2.draw(screen)
-                        if 'worrier' in equipments_list :
-                            view_button3.draw(screen)
-                        elif 'worrier' not in equipments_list :
-                            get_button3.draw(screen)
-
-                        weapon_str = '/'.join(equipments_list)
-                        user_backpack[1] = str(weapon_str)
-                lines[i] = ', '.join(user_backpack) + '\n'
-                break
             
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
