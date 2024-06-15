@@ -777,6 +777,9 @@ def leveltest(lvl, username, coin, pull, c, equip, stats, level):
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if level_button.check_input(pos_mouse):
+                        pygame.mixer.music.load("graphic/bgmusic1.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         choose_level(levl, username, ncoin, pull, c, equip, stats)
 
                     elif next_button.check_input(pos_mouse):
