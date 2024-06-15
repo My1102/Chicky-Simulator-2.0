@@ -68,7 +68,7 @@ def caution(lvl, username, coin, pull, c, equip, stats):
         caution_rect = caution.get_rect(center = (width/2, height/2))
         screen.blit(caution, caution_rect)
 
-        next_button = Button('graphic/botton1.png', 630, 470, 0.6, ">>")
+        next_button = Button('graphic/botton1.png', 650, 490, 0.5, ">>")
         next_button.draw(screen)
 
         back_button = Button('graphic/botton1.png', 100, 100, 0.6, "<<")
@@ -87,6 +87,9 @@ def caution(lvl, username, coin, pull, c, equip, stats):
                     tutorial2(lvl, username, coin, pull, c, equip, stats)
 
                 if back_button.check_input(pos_mouse):
+                    pygame.mixer.music.load("graphic/bgmusic1.mp3")
+                    pygame.mixer.music.set_volume(0.1)
+                    pygame.mixer.music.play(-1)
                     choose_level(lvl, username, coin, pull, c, equip, stats)
 
                 Manager.process_events(event)
@@ -126,6 +129,9 @@ def tutorial1(lvl, username, coin, pull, c, equip, stats):
                     caution(lvl, username, coin, pull, c, equip, stats)
 
                 if back_button.check_input(pos_mouse):
+                    pygame.mixer.music.load("graphic/bgmusic1.mp3")
+                    pygame.mixer.music.set_volume(0.1)
+                    pygame.mixer.music.play(-1)
                     choose_level(lvl, username, coin, pull, c, equip, stats)
 
                 Manager.process_events(event)
@@ -146,7 +152,7 @@ def tutorial2(lvl, username, coin, pull, c, equip, stats):
         tuto2_rect = tuto2.get_rect(center = (width/2, height/2))
         screen.blit(tuto2, tuto2_rect)
 
-        start_button = Button('graphic/button2.png', 620, 470, 0.2, "START")
+        start_button = Button('graphic/button2.png', 650, 590, 0.2, "START")
         start_button.draw(screen)
 
         back_button = Button('graphic/botton1.png', 100, 100, 0.6, "<<")
@@ -165,6 +171,9 @@ def tutorial2(lvl, username, coin, pull, c, equip, stats):
                     leveltest(lvl, username, coin, pull, c, equip, stats,level=1)
 
                 if back_button.check_input(pos_mouse):
+                    pygame.mixer.music.load("graphic/bgmusic1.mp3")
+                    pygame.mixer.music.set_volume(0.1)
+                    pygame.mixer.music.play(-1)
                     choose_level(lvl, username, coin, pull, c, equip, stats)
 
                 Manager.process_events(event)
@@ -187,7 +196,7 @@ def tutorial3(lvl, username, coin, pull, c, equip, stats):
         tuto3_rect = tuto3.get_rect(center = (width/2, height/2))
         screen.blit(tuto3, tuto3_rect)
 
-        start_button = Button('graphic/button2.png', 620, 475, 0.2, "START")
+        start_button = Button('graphic/button2.png', 620, 590, 0.15, "START")
         start_button.draw(screen)
 
         back_button = Button('graphic/botton1.png', 100, 100, 0.6, "<<")
@@ -206,6 +215,9 @@ def tutorial3(lvl, username, coin, pull, c, equip, stats):
                     leveltest(lvl, username, coin, pull, c, equip, stats,level=6)
 
                 if back_button.check_input(pos_mouse):
+                    pygame.mixer.music.load("graphic/bgmusic1.mp3")
+                    pygame.mixer.music.set_volume(0.1)
+                    pygame.mixer.music.play(-1)
                     choose_level(lvl, username, coin, pull, c, equip, stats)
 
         pygame.display.update()   
@@ -251,9 +263,9 @@ def leveltest(lvl, username, coin, pull, c, equip, stats, level):
     clock = pygame.time.Clock()
     time_use =[]
 
-    pygame.mixer.music.load("graphic/bgmusic2.mp3")
-    pygame.mixer.music.set_volume(0.1)
-    pygame.mixer.music.play(-1)
+    # pygame.mixer.music.load("graphic/bgmusic2.mp3")
+    # pygame.mixer.music.set_volume(0.1)
+    # pygame.mixer.music.play(-1)
 
 
     def reset_level(lvl, level):
@@ -798,7 +810,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats, level):
         screen.blit(level_image, (0,0))
 
         if c == 'magnet':
-            extra = random.randint(300,331)
+            extra = random.randint(100,131)
             coins_get = 1000 + extra
             ncoin = coin + coins_get
             update_coin(username, ncoin)
@@ -829,9 +841,15 @@ def leveltest(lvl, username, coin, pull, c, equip, stats, level):
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if level_button.check_input(pos_mouse):
+                        pygame.mixer.music.load("graphic/bgmusic1.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         choose_level(lvl, username, ncoin, pull, c, equip, stats)
 
                     if rank_button.check_input(pos_mouse):
+                        pygame.mixer.music.load("graphic/bgmusic1.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         ranking(username, lvl, ncoin, pull, c, equip, stats)
 
             pygame.display.update()
@@ -936,6 +954,9 @@ def leveltest(lvl, username, coin, pull, c, equip, stats, level):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if quit_button.check_input(pygame.mouse.get_pos()):
+                    pygame.mixer.music.load("graphic/bgmusic1.mp3")
+                    pygame.mixer.music.set_volume(0.1)
+                    pygame.mixer.music.play(-1)
                     choose_level(lvl, username, coin, pull, c, equip, stats)
 
             Manager.process_events(event)
@@ -3572,23 +3593,38 @@ def choose_level(lvl, username, coin, pull, chicky, equip, stats):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if lvl1_button.check_input(pos_mouse):
+                    pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                    pygame.mixer.music.set_volume(0.1)
+                    pygame.mixer.music.play(-1)
                     tutorial1(lvl, username, coin, pull, chicky, equip, stats)
 
                 if lvl2_button.check_input(pos_mouse):
                     if lock2_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=2)
                        
 
                 if lvl3_button.check_input(pos_mouse):
                     if lock3_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=3)
 
                 if lvl4_button.check_input(pos_mouse):
                     if lock4_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=4)
 
                 if lvl5_button.check_input(pos_mouse):
                     if lock5_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=5)
 
                 if back_button.check_input(pos_mouse):
@@ -3702,23 +3738,38 @@ def choose_level2(lvl, username, coin, pull, chicky, equip, stats):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if lvl6_button.check_input(pos_mouse):
                     if lock6_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         tutorial3(lvl, username, coin, pull, chicky, equip, stats)
 
                 if lvl7_button.check_input(pos_mouse):
                     if lock7_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=7)
                        
 
                 if lvl8_button.check_input(pos_mouse):
                     if lock8_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=8)
 
                 if lvl9_button.check_input(pos_mouse):
                     if lock9_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=9)
 
                 if lvl10_button.check_input(pos_mouse):
                     if lock10_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=10)
 
                 if back_button.check_input(pos_mouse):
@@ -3832,23 +3883,38 @@ def choose_level3(lvl, username, coin, pull, chicky, equip, stats):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if lvl11_button.check_input(pos_mouse):
                     if lock11_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=11)
 
                 if lvl12_button.check_input(pos_mouse):
                     if lock12_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=12)
                        
 
                 if lvl13_button.check_input(pos_mouse):
                     if lock13_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=13)
 
                 if lvl14_button.check_input(pos_mouse):
                     if lock14_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=14)
 
                 if lvl15_button.check_input(pos_mouse):
                     if lock15_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=15)
                         
                 if back_button.check_input(pos_mouse):
@@ -3962,23 +4028,38 @@ def choose_level4(lvl, username, coin, pull, chicky, equip, stats):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if lvl16_button.check_input(pos_mouse):
                     if lock16_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=16)
 
                 if lvl17_button.check_input(pos_mouse):
                     if lock17_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=17)
                        
 
                 if lvl18_button.check_input(pos_mouse):
                     if lock18_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=18)
 
                 if lvl19_button.check_input(pos_mouse):
                     if lock19_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=19)
 
                 if lvl20_button.check_input(pos_mouse):
                     if lock20_con == True:
+                        pygame.mixer.music.load("graphic/bgmusic2.mp3")
+                        pygame.mixer.music.set_volume(0.1)
+                        pygame.mixer.music.play(-1)
                         leveltest(lvl, username, coin, pull, chicky, equip, stats,level=20)
                         
                 if back_button.check_input(pos_mouse):
@@ -4526,19 +4607,19 @@ def store(username, lvl, coin, pull, chicky, equip, stats):
                             
     while on:
         pygame.display.set_caption('Chicky Simulator - Store')
-        screen.blit(background_image,(0,0))
+        screen.blit(ranking_image,(0,0))
         pos_mouse = pygame.mouse.get_pos()
 
         #Coin Display
-        coinlogo = Lock('graphic/manycoin.png', 620, 70, 0.3)
+        coinlogo = Lock('graphic/manycoin.png', 630, 70, 0.5)
         coinlogo.draw(screen)
-        coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'white')
-        coin_text_rect = coin_text.get_rect(center = (720,70))
+        coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'black')
+        coin_text_rect = coin_text.get_rect(center = (720,75))
         screen.blit(coin_text, coin_text_rect)
         ###############
 
         #####Text Display        
-        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Store', True, 'white')
+        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Store', True, 'black')
         store_text_rect = store_text.get_rect(center = (450,70))
         screen.blit(store_text, store_text_rect)
         #################
@@ -4561,27 +4642,27 @@ def store(username, lvl, coin, pull, chicky, equip, stats):
 
         #PRICE
         #####sword####
-        price_text = font.render(f"{500}", True, (255,255,255))
+        price_text = font.render(f"{500}", True, 'black')
         text_rect = price_text.get_rect(center =(150,305))
         screen.blit(price_text, text_rect)
         ######Shield######
-        price_text = font.render(f"{1000}", True, (255,255,255))
+        price_text = font.render(f"{1000}", True, 'black')
         text_rect = price_text.get_rect(center =(450,305))
         screen.blit(price_text, text_rect)
         ######bow######
-        price_text = font.render(f"{2000}", True, (255,255,255))
+        price_text = font.render(f"{2000}", True, 'black')
         text_rect = price_text.get_rect(center =(750,305))
         screen.blit(price_text, text_rect)
         ####x-bow#####
-        price_text = font.render(f"{500}", True, (255,255,255))
+        price_text = font.render(f"{500}", True, 'black')
         text_rect = price_text.get_rect(center =(150,555))
         screen.blit(price_text, text_rect)
         ######hammer#####        
-        price_text = font.render(f"{1000}", True, (255,255,255))
+        price_text = font.render(f"{1000}", True, 'black')
         text_rect = price_text.get_rect(center =(450,555))
         screen.blit(price_text, text_rect)
         #######axe#########        
-        price_text = font.render(f"{2000}", True, (255,255,255))
+        price_text = font.render(f"{2000}", True, 'black')
         text_rect = price_text.get_rect(center =(750,555))
         screen.blit(price_text, text_rect)
 
@@ -4883,9 +4964,9 @@ def bought1(username, lvl, coin, pull, chicky, equip, stats) :
     #puopuo did this too
 
     pygame.display.set_caption('Chicky Simulator - Store')
-    screen.blit(background_image,(0,0))
-    screen.blit(font.render('You bought an item.',True,'white'),(280,300))
-    screen.blit(font.render('Click again to go back.',True,'white'),(230,350))
+    screen.blit(ranking_image,(0,0))
+    screen.blit(font.render('You bought an item.',True,'black'),(280,300))
+    screen.blit(font.render('Click again to go back.',True,'black'),(230,350))
     on = True
     while on :
         for event in pygame.event.get():
@@ -4907,9 +4988,9 @@ def bought2(username, lvl, coin, pull, chicky, equip, stats) :
     #puopuo did this too
 
     pygame.display.set_caption('Chicky Simulator - Store')
-    screen.blit(background_image,(0,0))
-    screen.blit(font.render('You bought an item.',True,'white'),(280,300))
-    screen.blit(font.render('Click again to go back.',True,'white'),(230,350))
+    screen.blit(ranking_image,(0,0))
+    screen.blit(font.render('You bought an item.',True,'black'),(280,300))
+    screen.blit(font.render('Click again to go back.',True,'black'),(230,350))
     while True :
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -4926,9 +5007,9 @@ def bought3(username, lvl, coin, pull, chicky, equip, stats) :
     #puopuo did this too
 
     pygame.display.set_caption('Chicky Simulator - Store')
-    screen.blit(background_image,(0,0))
-    screen.blit(font.render('You bought an item.',True,'white'),(280,300))
-    screen.blit(font.render('Click again to go back.',True,'white'),(230,350))
+    screen.blit(ranking_image,(0,0))
+    screen.blit(font.render('You bought an item.',True,'black'),(280,300))
+    screen.blit(font.render('Click again to go back.',True,'black'),(230,350))
 
     while True :
         for event in pygame.event.get():
@@ -4946,9 +5027,9 @@ def no_money(username, lvl, coin, pull, chicky, equip, stats) :
     #puopuo did this too
 
     pygame.display.set_caption('Chicky Simulator - Store')
-    screen.blit(background_image,(0,0))
-    screen.blit(font.render('You do not have enough coin.',True,'white'),(180,300))
-    screen.blit(font.render('Click again to go back.',True,'white'),(230,350))
+    screen.blit(ranking_image,(0,0))
+    screen.blit(font.render('You do not have enough coin.',True,'black'),(180,300))
+    screen.blit(font.render('Click again to go back.',True,'black'),(230,350))
     while True :
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -4965,9 +5046,9 @@ def no_money2(username, lvl, coin, pull, chicky, equip, stats) :
     #puopuo did this too
 
     pygame.display.set_caption('Chicky Simulator - Store')
-    screen.blit(background_image,(0,0))
-    screen.blit(font.render('You do not have enough coin.',True,'white'),(180,300))
-    screen.blit(font.render('Click again to go back.',True,'white'),(230,350))
+    screen.blit(ranking_image,(0,0))
+    screen.blit(font.render('You do not have enough coin.',True,'black'),(180,300))
+    screen.blit(font.render('Click again to go back.',True,'black'),(230,350))
     while True :
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -4983,9 +5064,9 @@ def no_money2(username, lvl, coin, pull, chicky, equip, stats) :
 def no_money3(username, lvl, coin, pull, chicky, equip, stats) :
     #puopuo did this too
 
-    screen.blit(background_image,(0,0))
-    screen.blit(font.render('You do not have enough coin.',True,'white'),(180,300))
-    screen.blit(font.render('Click again to go back.',True,'white'),(230,350))
+    screen.blit(ranking_image,(0,0))
+    screen.blit(font.render('You do not have enough coin.',True,'black'),(180,300))
+    screen.blit(font.render('Click again to go back.',True,'black'),(230,350))
     while True :
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -5012,19 +5093,19 @@ def equipment(username, lvl, coin, pull, chicky, equip, stats) :
                             
     while on:
         pygame.display.set_caption('Chicky Simulator - Store')
-        screen.blit(background_image,(0,0))
+        screen.blit(ranking_image,(0,0))
         pos_mouse = pygame.mouse.get_pos()
 
         #Coin Display
-        coinlogo = Lock('graphic/manycoin.png', 620, 70, 0.3)
+        coinlogo = Lock('graphic/manycoin.png', 630, 70, 0.5)
         coinlogo.draw(screen)
-        coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'white')
-        coin_text_rect = coin_text.get_rect(center = (720,70))
+        coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'black')
+        coin_text_rect = coin_text.get_rect(center = (720,75))
         screen.blit(coin_text, coin_text_rect)
         ###############
 
         #####Text Display        
-        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Store', True, 'white')
+        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Store', True, 'black')
         store_text_rect = store_text.get_rect(center = (450,70))
         screen.blit(store_text, store_text_rect)
         #################
@@ -5047,27 +5128,27 @@ def equipment(username, lvl, coin, pull, chicky, equip, stats) :
 
         #PRICE
         ####armor3#####
-        price_text = font.render(f"{500}", True, (255,255,255))
+        price_text = font.render(f"{500}", True, 'black')
         text_rect = price_text.get_rect(center =(150,305))
         screen.blit(price_text, text_rect)
         ######armor4#####        
-        price_text = font.render(f"{1000}", True, (255,255,255))
+        price_text = font.render(f"{1000}", True, 'black')
         text_rect = price_text.get_rect(center =(450,305))
         screen.blit(price_text, text_rect)
         #######aRmor5#########        
-        price_text = font.render(f"{2000}", True, (255,255,255))
+        price_text = font.render(f"{2000}", True, 'black')
         text_rect = price_text.get_rect(center =(750,305))
         screen.blit(price_text, text_rect)
         ####nleg1#####
-        price_text = font.render(f"{500}", True, (255,255,255))
+        price_text = font.render(f"{500}", True, 'black')
         text_rect = price_text.get_rect(center =(150,555))
         screen.blit(price_text, text_rect)
         ######leg2#####        
-        price_text = font.render(f"{1000}", True, (255,255,255))
+        price_text = font.render(f"{1000}", True, 'black')
         text_rect = price_text.get_rect(center =(450,555))
         screen.blit(price_text, text_rect)
         #######leg3#########        
-        price_text = font.render(f"{2000}", True, (255,255,255))
+        price_text = font.render(f"{2000}", True, 'black')
         text_rect = price_text.get_rect(center =(750,555))
         screen.blit(price_text, text_rect)
 
@@ -5375,19 +5456,19 @@ def equipment2(username, lvl, coin, pull, chicky, equip, stats) :
                             
     while on:
         pygame.display.set_caption('Chicky Simulator - Store')
-        screen.blit(background_image,(0,0))
+        screen.blit(ranking_image,(0,0))
         pos_mouse = pygame.mouse.get_pos()
 
         #Coin Display
-        coinlogo = Lock('graphic/manycoin.png', 620, 70, 0.3)
+        coinlogo = Lock('graphic/manycoin.png', 630, 70, 0.5)
         coinlogo.draw(screen)
-        coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'white')
-        coin_text_rect = coin_text.get_rect(center = (720,70))
+        coin_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render(f'{coin}', True, 'black')
+        coin_text_rect = coin_text.get_rect(center = (720,75))
         screen.blit(coin_text, coin_text_rect)
         ###############
 
         #####Text Display        
-        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Store', True, 'white')
+        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Store', True, 'black')
         store_text_rect = store_text.get_rect(center = (450,70))
         screen.blit(store_text, store_text_rect)
         #################
@@ -5408,15 +5489,15 @@ def equipment2(username, lvl, coin, pull, chicky, equip, stats) :
 
         #PRICE
         #####helmet3####
-        price_text = font.render(f"{500}", True, (255,255,255))
+        price_text = font.render(f"{500}", True, 'black')
         text_rect = price_text.get_rect(center =(150,305))
         screen.blit(price_text, text_rect)
         ######helmet4######
-        price_text = font.render(f"{1000}", True, (255,255,255))
+        price_text = font.render(f"{1000}", True, 'black')
         text_rect = price_text.get_rect(center =(450,305))
         screen.blit(price_text, text_rect)
         ######helmet 5######
-        price_text = font.render(f"{2000}", True, (255,255,255))
+        price_text = font.render(f"{2000}", True, 'black')
         text_rect = price_text.get_rect(center =(750,305))
         screen.blit(price_text, text_rect)
 
@@ -5595,7 +5676,7 @@ def arcade_lobby(username, lvl, coin, pull, chicky, equip, stats):
     on = True
                        
     while on:
-        screen.blit(background_image,(0,0))
+        screen.blit(ranking_image,(0,0))
         pos_mouse = pygame.mouse.get_pos()
 
         title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('ARCADE', True, 'white')
@@ -5640,6 +5721,9 @@ def arcade_lobby(username, lvl, coin, pull, chicky, equip, stats):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if play_button1.check_input(pos_mouse):
+                    pygame.mixer.music.load("graphic/bgmusic3.mp3")
+                    pygame.mixer.music.set_volume(0.3)
+                    pygame.mixer.music.play(-1)
                     snake_lobby(username, lvl, coin, pull, chicky, equip, stats)                                   
                     
                 if back_button.check_input(pos_mouse):
@@ -5655,7 +5739,7 @@ def snake_lobby(username, lvl, coin, pull, chicky, equip, stats) :
     # puo puo did also this
     on = True
     while on :
-        screen.blit(background_image,(0,0))
+        screen.blit(ranking_image,(0,0))
         pos_mouse = pygame.mouse.get_pos()
         pygame.display.set_caption('Chicky Simulator - Chick Game')
         title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('Chick Game', True, 'white')
@@ -5681,11 +5765,12 @@ def snake_lobby(username, lvl, coin, pull, chicky, equip, stats) :
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN :
                 if back_button.check_input(pos_mouse):
-                    arcade_lobby(username, lvl, coin, pull, chicky, equip, stats)
-                if play_button.check_input(pos_mouse):
-                    pygame.mixer.music.load("graphic/bgmusic3.mp3")
+                    pygame.mixer.music.load("graphic/bgmusic1.mp3")
                     pygame.mixer.music.set_volume(0.3)
                     pygame.mixer.music.play(-1)
+                    arcade_lobby(username, lvl, coin, pull, chicky, equip, stats)
+                if play_button.check_input(pos_mouse):
+                    
                     snake(username, lvl, coin, pull, chicky, equip, stats)
         
         
@@ -5695,51 +5780,15 @@ def snake_lobby(username, lvl, coin, pull, chicky, equip, stats) :
         pygame.display.update()
 
 
-def crush_lobby(username, lvl, coin, pull, chicky, equip, stats) :
-    # puo puo did also this
-    on = True
-    while on :
-        screen.blit(background_image,(0,0))
-        pos_mouse = pygame.mouse.get_pos()
-        pygame.display.set_caption('Chicky Simulator - Coming Soon')
-        title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 80).render('Unnamed', True, 'white')
-        title_text_rect = title_text.get_rect(center = (450,200))
-        screen.blit(title_text, title_text_rect)
-
-        #buttons#
-        back_button = Button('graphic/botton1.png', 50, 35, 0.5, "<<")
-        back_button.draw(screen)
-        # play_button = Button('graphic/button2.png', 450, 600, 0.3, "")
-        # play_button.draw(screen)
-
-        #tutorial
-
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                on = False
-            if event.type == pygame.MOUSEBUTTONDOWN :
-                if back_button.check_input(pos_mouse):
-                    arcade_lobby(username, lvl, coin, pull, chicky, equip, stats)
-                # if play_button.check_input(pos_mouse):
-                #     crush(username, lvl, coin, pull, chicky, equip, stats)
-        
-        
-        pygame.display.flip()
-
-    pygame.quit()
-    sys.exit()
-
-
 def axe_info(username, lvl, coin, pull, chicky, equip, stats) :
     #all info made by puopuo
 
     while True :
 
-        surface = pygame.Surface((175,195))
-        surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Axe\n3-Star\nATK+10',True,'white'),(5,5))
-        screen.blit(surface,(80,130))
+        surface = pygame.Surface((170,170))
+        surface.fill('white')
+        surface.blit(font.render('Axe\n3-Star\nATK +10',True,'black'),(12,12))
+        screen.blit(surface, (65,147))
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -5755,10 +5804,10 @@ def hammer_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
-        surface = pygame.Surface((175,195))
-        surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Hammer\n4-Star\nATK+20',True,'white'),(5,5))
-        screen.blit(surface,(380,130))
+        surface = pygame.Surface((170,170))
+        surface.fill('white')
+        surface.blit(font.render('Hammer\n4-Star\nATK +20',True,'black'),(10,12))
+        screen.blit(surface,(365,147))
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -5774,10 +5823,10 @@ def sword_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
-        surface = pygame.Surface((175,195))
-        surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Sword\n5-Star\nATK+30',True,'white'),(5,5))
-        screen.blit(surface,(680,130))
+        surface = pygame.Surface((170,170))
+        surface.fill('white')
+        surface.blit(font.render('Sword\n5-Star\nATK +30',True,'black'),(10,12))
+        screen.blit(surface,(665,147))
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -5793,10 +5842,10 @@ def shoe3_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
-        surface = pygame.Surface((175,195))
-        surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Boots\n3-Star\nSPEED+2',True,'white'),(5,5))
-        screen.blit(surface,(80,375))
+        surface = pygame.Surface((170,170))
+        surface.fill('white')
+        surface.blit(font.render('Boots\n3-Star\nCd -0.5',True,'black'),(12,12))
+        screen.blit(surface, (65,395))
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -5812,10 +5861,10 @@ def shoe4_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
-        surface = pygame.Surface((175,195))
-        surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Boots\n4-Star\nSPEED+4',True,'white'),(5,5))
-        screen.blit(surface,(380,375))
+        surface = pygame.Surface((170,170))
+        surface.fill('white')
+        surface.blit(font.render('Boots\n4-Star\nCd -1',True,'black'),(12,12))
+        screen.blit(surface, (365,395))
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -5831,10 +5880,10 @@ def shoe5_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
-        surface = pygame.Surface((175,195))
-        surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Boots\n5-Star\nSPEED+6',True,'white'),(5,5))
-        screen.blit(surface,(680,375))
+        surface = pygame.Surface((170,170))
+        surface.fill('white')
+        surface.blit(font.render('Boots\n5-Star\nCd -2',True,'black'),(12,12))
+        screen.blit(surface, (665,395))
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -5850,10 +5899,10 @@ def shield3_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
-        surface = pygame.Surface((175,195))
-        surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Shield\n3-Star\nDEF+5',True,'white'),(5,5))
-        screen.blit(surface,(80,375))
+        surface = pygame.Surface((170,170))
+        surface.fill('white')
+        surface.blit(font.render('Shield\n3-Star\nDEF +5',True,'black'),(12,12))
+        screen.blit(surface, (65,395))
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -5869,10 +5918,10 @@ def shield4_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
-        surface = pygame.Surface((175,195))
-        surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Shield\n4-Star\nDEF+7',True,'white'),(5,5))
-        screen.blit(surface,(380,375))
+        surface = pygame.Surface((170,170))
+        surface.fill('white')
+        surface.blit(font.render('Shield\n4-Star\nDEF +7',True,'black'),(12,12))
+        screen.blit(surface, (365,395))
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -5888,10 +5937,10 @@ def shield5_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
-        surface = pygame.Surface((175,195))
-        surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Shield\n5-Star\nDEF+10',True,'white'),(5,5))
-        screen.blit(surface,(680,375))
+        surface = pygame.Surface((170,170))
+        surface.fill('white')
+        surface.blit(font.render('Shield\n4-Star\nDEF +10',True,'black'),(12,12))
+        screen.blit(surface, (665,395))
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -5907,10 +5956,10 @@ def helmet3_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
-        surface = pygame.Surface((175,195))
-        surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Helmet\n3-Star\nDEF+5',True,'white'),(5,5))
-        screen.blit(surface,(80,130))
+        surface = pygame.Surface((170,170))
+        surface.fill('white')
+        surface.blit(font.render('Helmet\n3-Star\nDEF +5',True,'black'),(10,12))
+        screen.blit(surface,(65,147))
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -5926,10 +5975,10 @@ def helmet4_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
-        surface = pygame.Surface((175,195))
-        surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Helmet\n4-Star\nDEF+7',True,'white'),(5,5))
-        screen.blit(surface,(380,130))
+        surface = pygame.Surface((170,170))
+        surface.fill('white')
+        surface.blit(font.render('Helmet\n4-Star\nDEF +7',True,'black'),(10,12))
+        screen.blit(surface,(365,147))
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -5945,10 +5994,10 @@ def helmet5_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
-        surface = pygame.Surface((175,195))
-        surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Helmet\n5-Star\nDEF+10',True,'white'),(5,5))
-        screen.blit(surface,(680,130))
+        surface = pygame.Surface((170,170))
+        surface.fill('white')
+        surface.blit(font.render('Helmet\n5-Star\nDEF +10',True,'black'),(10,12))
+        screen.blit(surface,(665,147))
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -5964,10 +6013,10 @@ def armor3_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
-        surface = pygame.Surface((175,195))
-        surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Armor\n3-Star\nDEF+5',True,'white'),(5,5))
-        screen.blit(surface,(80,130))
+        surface = pygame.Surface((170,170))
+        surface.fill('white')
+        surface.blit(font.render('Armor\n3-Star\nDEF +5',True,'black'),(10,12))
+        screen.blit(surface,(65,147))
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -5983,10 +6032,10 @@ def armor4_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
-        surface = pygame.Surface((175,195))
-        surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Armor\n4-Star\nDEF+7',True,'white'),(5,5))
-        screen.blit(surface,(380,130))
+        surface = pygame.Surface((170,170))
+        surface.fill('white')
+        surface.blit(font.render('Armor\n4-Star\nDEF +7',True,'black'),(10,12))
+        screen.blit(surface,(365,147))
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -6002,10 +6051,10 @@ def armor5_info(username, lvl, coin, pull, chicky, equip, stats) :
 
     while True :
 
-        surface = pygame.Surface((175,195))
-        surface.blit(ranking_image,(0,0))
-        surface.blit(font.render('Armor\n5-Star\nDEF+10',True,'white'),(5,5))
-        screen.blit(surface,(680,130))
+        surface = pygame.Surface((170,170))
+        surface.fill('white')
+        surface.blit(font.render('Armor\n5-Star\nDEF +10',True,'black'),(10,12))
+        screen.blit(surface,(665,147))
 
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -6026,11 +6075,11 @@ def collection(username, lvl, coin, pull, chicky, equip, stats):
                             
     while on:
         pygame.display.set_caption('Chicky Simulator - Collection')
-        screen.blit(background_image,(0,0))
+        screen.blit(ranking_image,(0,0))
         pos_mouse = pygame.mouse.get_pos()
 
         #####Text Display        
-        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Collections', True, 'white')
+        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Collections', True, 'black')
         store_text_rect = store_text.get_rect(center = (450,70))
         screen.blit(store_text, store_text_rect)
         #################
@@ -6217,11 +6266,11 @@ def collection2(username, lvl, coin, pull, chicky, equip, stats):
                             
     while on:
         pygame.display.set_caption('Chicky Simulator - Collection')
-        screen.blit(background_image,(0,0))
+        screen.blit(ranking_image,(0,0))
         pos_mouse = pygame.mouse.get_pos()
 
         #####Text Display        
-        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Collections', True, 'white')
+        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Collections', True, 'black')
         store_text_rect = store_text.get_rect(center = (450,70))
         screen.blit(store_text, store_text_rect)
         #################
@@ -6409,11 +6458,11 @@ def collection3(username, lvl, coin, pull, chicky, equip, stats):
                             
     while on:
         pygame.display.set_caption('Chicky Simulator - Collection')
-        screen.blit(background_image,(0,0))
+        screen.blit(ranking_image,(0,0))
         pos_mouse = pygame.mouse.get_pos()
 
         #####Text Display        
-        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Collections', True, 'white')
+        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Collections', True, 'black')
         store_text_rect = store_text.get_rect(center = (450,70))
         screen.blit(store_text, store_text_rect)
         #################
@@ -6599,11 +6648,11 @@ def collection4(username, lvl, coin, pull, chicky, equip, stats):
                             
     while on:
         pygame.display.set_caption('Chicky Simulator - Collection')
-        screen.blit(background_image,(0,0))
+        screen.blit(ranking_image,(0,0))
         pos_mouse = pygame.mouse.get_pos()
 
         #####Text Display        
-        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Collections', True, 'white')
+        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Collections', True, 'black')
         store_text_rect = store_text.get_rect(center = (450,70))
         screen.blit(store_text, store_text_rect)
         #################
@@ -6789,11 +6838,11 @@ def collection5(username, lvl, coin, pull, chicky, equip, stats):
                             
     while on:
         pygame.display.set_caption('Chicky Simulator - Collection')
-        screen.blit(background_image,(0,0))
+        screen.blit(ranking_image,(0,0))
         pos_mouse = pygame.mouse.get_pos()
 
         #####Text Display        
-        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Collections', True, 'white')
+        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Collections', True, 'black')
         store_text_rect = store_text.get_rect(center = (450,70))
         screen.blit(store_text, store_text_rect)
         #################
@@ -6980,11 +7029,11 @@ def collection7(username, lvl, coin, pull, chicky, equip, stats):
                             
     while on:
         pygame.display.set_caption('Chicky Simulator - Collection')
-        screen.blit(background_image,(0,0))
+        screen.blit(ranking_image,(0,0))
         pos_mouse = pygame.mouse.get_pos()
 
         #####Text Display        
-        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Collections', True, 'white')
+        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Collections', True, 'black')
         store_text_rect = store_text.get_rect(center = (450,70))
         screen.blit(store_text, store_text_rect)
         #################
@@ -7024,7 +7073,7 @@ def collection7(username, lvl, coin, pull, chicky, equip, stats):
         info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 35).render('Richie Chic', True, (0,0,0))
         text_rect = info_text.get_rect(center =(150,305))
         screen.blit(info_text, text_rect)
-        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render('5-Star Character\nChic evolution\nChic loves moneyss\nchic has $100million\nit\'s Perfect!!!\n\ngive 2~20 extra coin\n    after playing', True, (0,0,0))
+        info_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 25).render('5-Star Character\nChic evolution\nChic loves moneyss\nchic has $100million\nit\'s Perfect!!!\n\n give 100-130 extra \n coin after playing', True, (0,0,0))
         text_rect = info_text.get_rect(center =(150,450))
         screen.blit(info_text, text_rect)
         ######miao#####        
@@ -7167,11 +7216,11 @@ def collection6(username, lvl, coin, pull, chicky, equip, stats):
                             
     while on:
         pygame.display.set_caption('Chicky Simulator - Collection')
-        screen.blit(background_image,(0,0))
+        screen.blit(ranking_image,(0,0))
         pos_mouse = pygame.mouse.get_pos()
 
         #####Text Display        
-        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Collections', True, 'white')
+        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Collections', True, 'black')
         store_text_rect = store_text.get_rect(center = (450,70))
         screen.blit(store_text, store_text_rect)
         #################
@@ -7355,11 +7404,11 @@ def collection8(username, lvl, coin, pull, chicky, equip, stats):
                             
     while on:
         pygame.display.set_caption('Chicky Simulator - Collection')
-        screen.blit(background_image,(0,0))
+        screen.blit(ranking_image,(0,0))
         pos_mouse = pygame.mouse.get_pos()
 
         #####Text Display        
-        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Collections', True, 'white')
+        store_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Collections', True, 'black')
         store_text_rect = store_text.get_rect(center = (450,70))
         screen.blit(store_text, store_text_rect)
         #################
@@ -7633,7 +7682,6 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
                 if user_snake[0] == username:
                     played = int(user_snake[5]) + 1
                     user_snake[5] = str(played)
-                    print(played)
                 break
             else:
                 break
