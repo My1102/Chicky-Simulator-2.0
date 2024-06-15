@@ -1,6 +1,6 @@
-my, 1234, 20, 47, 71228, 0, magnet, sword/shield5/helmet5/armor5/shoe5
+my, 1234, 20, 1000, 88705, 0, speedy, no/no/no/no/no
 jy, 1q2w3e, 20, 246, 1000, 0, normal, no/no/no/no/no
-pl, 1234, 20, 208, 1000, 0, normal, no/no/no/no/no
+pl, 1234, 20, 208, 0, 0, normal, no/no/no/no/no
 renliang, 1234, 20, 568, 1000, 0, normal, no/no/no/no/no
 wong, 1234, 20, 179, 1000, 0, normal, no/no/no/no/no
 cyun, 1234, 20, 109, 1000, 0, normal, no/no/no/no/no
@@ -11,3 +11,4 @@ lhs, LHMM8328, 20, 1270, 1000, 0, normal, no/no/no/no/no
 Angelyn, 1234, 20, 420, 1000, 0, normal, no/no/no/no/no
 pog, 1234, 20, 330, 1000, 0, normal, no/no/no/no/no
 wc, 12, 1, 10000, 0, 0, normal, no/no/no/no/no
+tpl123, 123, 1, 10000, 3500, 0, normal, no/no/no/no/no

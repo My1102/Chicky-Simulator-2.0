@@ -11,3 +11,4 @@ lhs, normal/0, no/, no
 Angelyn, normal/0, no/, no
 pog, normal/0, no/, no
 wc, normal/0, no/, no
+tpl123, normal/0, axe/hammer, no
