@@ -10,6 +10,6 @@ helmet5,graphic/helmet5.png,Diamond Helmet,Defence +10,0/10/0,h
 armor3,graphic/armor5.png,Leather Armor,Defence +5,0/5/0,a
 armor4,graphic/armor3.png,Iron Armor,Defence +7,0/7/0,a
 armor5,graphic/armor4.png,Diamond Armor,Defence +10,0/10/0,a
-shoe3,graphic/shoe3.png,Leather Shoes,Cd -0.5,0/0/0.5,sho
-shoe4,graphic/shoe4.png,Iron Shoes,Cd -1,0/0/1,sho
-shoe5,graphic/shoe5.png,Diamond Shoes,Cd -2,0/0/2,sho
+shoe3,graphic/shoe3.png,Leather Boots,Cd -0.5,0/0/0.5,sho
+shoe4,graphic/shoe4.png,Iron Boots,Cd -1,0/0/1,sho
+shoe5,graphic/shoe5.png,Diamond Boots,Cd -2,0/0/2,sho
