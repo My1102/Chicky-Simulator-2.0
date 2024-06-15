@@ -2,7 +2,7 @@
 # Program: main.py
 # Course: CSP1123 MINI IT PROJECT
 # Class: TT3L-7
-# Year: 2023/24 Trimester 2
+# Year: 2024 Trimester 2
 # Names: LIM MIN YUEN | TAN JIA YING | TAN PUO LIN
 # IDs: 1221107408 | 1221107413 | 1221169365
 # Emails: 1221107408@student.mmu.edu.my | 1221107413@student.mmu.edu.my | 1221169360@student.mmu.edu.my
@@ -4341,8 +4341,23 @@ def read_userinput(username, password):
                     Chicky = chicky.strip()
                     Equip = equip.strip()
                     Stats = check_default(username)
-
                     return Level, Coin, Pull, Chicky, Equip, Stats
+                
+                else:
+                    screen.blit(background_image,(0,0))
+                
+                    title_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 100).render('Chicky Simulator', True, 'white')
+                    title_text_rect = title_text.get_rect(center = (450,150))
+                    screen.blit(title_text, title_text_rect)
+
+                    incorrect_text = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50).render('Username or password incorrect.', True, 'white')
+                    incorrect_text_rect = incorrect_text.get_rect(center = (width/2,height/2))
+                    screen.blit(incorrect_text, incorrect_text_rect)
+
+                    tryagain_button = Button('graphic/button2.png', 450, 580, 0.35, "TRY AGAIN")
+                    tryagain_button.draw(screen)
+
+                    pos_mouse = pygame.mouse.get_pos()
             
             else:
                 screen.blit(background_image,(0,0))
@@ -4359,8 +4374,6 @@ def read_userinput(username, password):
                 tryagain_button.draw(screen)
 
                 pos_mouse = pygame.mouse.get_pos()
-            
-        file.close()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -4438,7 +4451,7 @@ def save_userinput(username, password):
             file1.close()
 
             file2 = open('user_backpack.txt', 'a')
-            file2.write(f'{username}, normal/0, no/, no' + '\n')
+            file2.write(f'{username}, normal/0, no, no' + '\n')
             # username, what chick they have, what equip they have, ini no jika takdak akan error dunno why 
             file2.close()
 
