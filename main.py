@@ -46,9 +46,9 @@ clock = pygame.time.Clock()
 Manager = pygame_gui.UIManager((width,height))
 UI_REFRESH_RATE = clock.tick(60)/1000
 font = pygame.font.Font("ThaleahFat/ThaleahFat.ttf", 50)
-# pygame.mixer.music.load("graphic/bgmusic.mp3")
-# pygame.mixer.music.set_volume(0.3)
-# pygame.mixer.music.play(-1)
+pygame.mixer.music.load("graphic/bgmusic1.mp3")
+pygame.mixer.music.set_volume(0.1)
+pygame.mixer.music.play(-1)
 
 # let user enter their username and password (using pygame_gui manager) - by my
 # learn from tutorial
@@ -250,8 +250,11 @@ def leveltest(lvl, username, coin, pull, c, equip, stats, level):
     pygame.time.set_timer(pygame.USEREVENT+1, 1000)
     clock = pygame.time.Clock()
     time_use =[]
-    
-    
+
+    pygame.mixer.music.load("graphic/bgmusic2.mp3")
+    pygame.mixer.music.set_volume(0.1)
+    pygame.mixer.music.play(-1)
+
 
     def reset_level(lvl, level):
         
@@ -3318,6 +3321,7 @@ def wish(username, lvl, coin, pull, c, equip, stats):
                     equip_chick(username, lvl, coin, pull, chicky, equip, stats)
 
                 if one_pull_button.check_input(pos_mouse):
+                    pygame.mixer.music.set_volume(0)
                     if coin >= 100:
                         times = 1
                         coin -= 100
@@ -3342,6 +3346,7 @@ def wish(username, lvl, coin, pull, c, equip, stats):
                         ohno(username, lvl, coin, pull, c, equip, stats)
 
                 if five_pull_button.check_input(pos_mouse):
+                    pygame.mixer.music.set_volume(0)
                     if coin >= 500:
                         times = 5
                         coin -= 500
@@ -3373,7 +3378,10 @@ def wish(username, lvl, coin, pull, c, equip, stats):
                     else:
                         ohno(username, lvl, coin, pull, c, equip, stats)
 
+            pygame.mixer.music.set_volume(0.1)
+
             Manager.process_events(event)
+        
 
         pygame.display.update()
 
@@ -4025,10 +4033,6 @@ def lobby(username, lvl, coin, pull, chicky, equip, stats):
         achievement_button.draw(screen)
 
         pos_mouse = pygame.mouse.get_pos()
-
-        pygame.mixer.music.load("graphic/bgmusic.mp3")
-        pygame.mixer.music.set_volume(0.3)
-        pygame.mixer.music.play(-1)
 
         # get user events (their selections)
         for event in pygame.event.get():
@@ -5676,6 +5680,9 @@ def snake_lobby(username, lvl, coin, pull, chicky, equip, stats) :
                 if back_button.check_input(pos_mouse):
                     arcade_lobby(username, lvl, coin, pull, chicky, equip, stats)
                 if play_button.check_input(pos_mouse):
+                    pygame.mixer.music.load("graphic/bgmusic3.mp3")
+                    pygame.mixer.music.set_volume(0.3)
+                    pygame.mixer.music.play(-1)
                     snake(username, lvl, coin, pull, chicky, equip, stats)
         
         
@@ -7577,6 +7584,9 @@ def snake(username, lvl, coin, pull, chicky, equip, stats) :
 
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
+                    pygame.mixer.music.load("graphic/bgmusic1.mp3")
+                    pygame.mixer.music.set_volume(0.1)
+                    pygame.mixer.music.play(-1)
                     snake_lobby(username, lvl, coin, pull, chicky, equip, stats)
                 if event.type == pygame.QUIT:
                     pygame.quit()
