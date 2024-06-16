@@ -11,7 +11,3 @@ lhs, normal/0, no, no
 Angelyn, normal/0, no, no
 pog, normal/0, no, no
 wc, normal/0, axe, no
-tpl123, normal/0, axe/hammer, no
-cb, normal/0, no, no
-eh, normal/0, sword/hammer/axe, no
-wtfbro, normal/0, no, no

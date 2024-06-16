@@ -4,7 +4,7 @@
 # Class: TT3L-7
 # Year: 2024 Trimester 2
 # Names: LIM MIN YUEN | TAN JIA YING | TAN PUO LIN
-# IDs: 1221107408 | 1221107413 | 1221169365
+# IDs: 1221107408 | 1221107413 | 1221106935
 # Emails: 1221107408@student.mmu.edu.my | 1221107413@student.mmu.edu.my | 1221169360@student.mmu.edu.my
 # Phones: 010-5268328 | 012-9331640 | 012-9873238
 # *********************************************************
@@ -813,6 +813,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats, level):
             ncoin = coin + coins_get
             update_coin(username, ncoin)
         else:
+            coins_get = 1000
             ncoin = coin + 1000
             update_coin(username, ncoin)
 
