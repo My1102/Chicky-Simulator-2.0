@@ -457,7 +457,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats, level):
     class KillCounter():
         def __init__(self):
             current = level
-            print(current)
+            # print(current)
             if current == 1 or current == 2 or current == 3 or current == 4 or current == 5:
                 target = 0
 
@@ -889,7 +889,7 @@ def leveltest(lvl, username, coin, pull, c, equip, stats, level):
     if path.exists(f'level{level}_data'):
         pickle_in = open(f'level{level}_data', 'rb')
         world_data = pickle.load(pickle_in)
-        print('yes im here')
+        # print('yes im here')
     world = World(world_data)
 
     while run:
@@ -1191,11 +1191,12 @@ def update_achieve(username, achieve_type, claim):
                     level_list[4] = '1'
                 if claim_con[5] == '1':
                     level_list[5] = '1'
-            new_str = '/'.join(level_list)
-            print(str(new_str))
-            user_achieve[1] = str(new_str)
-            break
-        lines[i] = ', '.join(user_achieve) + '\n'
+                new_str = '/'.join(level_list)
+                # print(str(new_str))
+                user_achieve[1] = str(new_str)
+                lines[i] = ', '.join(user_achieve) + '\n'
+                break
+        
 
     if achieve_type == 'collect':
         for i, line in enumerate(lines):
@@ -1214,12 +1215,13 @@ def update_achieve(username, achieve_type, claim):
                     collect_list[4] = '1'
                 if claim_con[5] == '1':
                     collect_list[5] = '1'
-            new_str = '/'.join(collect_list)
-            print(str(new_str))
-            user_achieve[3] = str(new_str)
-            break
-        lines[i] = ', '.join(user_achieve) + '\n'
+                new_str = '/'.join(collect_list)
+                # print(str(new_str))
+                user_achieve[3] = str(new_str)
+                lines[i] = ', '.join(user_achieve) + '\n'
 
+                break
+        
     if achieve_type == 'arcade':
         for i, line in enumerate(lines):
             user_achieve = line.strip().split(", ")
@@ -1237,11 +1239,12 @@ def update_achieve(username, achieve_type, claim):
                     collect_list[4] = '1'
                 if claim_con[5] == '1':
                     collect_list[5] = '1'
-            new_str = '/'.join(collect_list)
-            user_achieve[2] = str(new_str)
-            break
-        lines[i] = ', '.join(user_achieve) + '\n'
+                new_str = '/'.join(collect_list)
+                user_achieve[2] = str(new_str)
+                lines[i] = ', '.join(user_achieve) + '\n'
 
+                break
+        
     with open('user_achievement.txt', 'w') as file:
         file.writelines(lines)
 
