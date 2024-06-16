@@ -11,7 +11,3 @@ lhs, LHMM8328, 20, 1270, 1000, 0, normal, no/no/no/no/no
 Angelyn, 1234, 20, 420, 1000, 0, normal, no/no/no/no/no
 pog, 1234, 20, 330, 1000, 0, normal, no/no/no/no/no
 wc, 12, 1, 10000, 500, 0, normal, no/no/no/no/no
-tpl123, 123, 1, 10000, 3500, 0, normal, no/no/no/no/no
-cb, cb, 1, 10000, 0, 0, normal, no/no/no/no/no
-eh, 1234, 8, 10000, 610, 0, normal, no/no/no/no/no
-wtfbro, 1234, 2, 10000, 0, 0, normal, no/no/no/no/no
